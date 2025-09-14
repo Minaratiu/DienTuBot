@@ -1,0 +1,19 @@
+version: "3.1"
+
+stories:
+- story: kịch bản chào hỏi vui vẻ
+  steps:
+  - intent: chao_hoi
+  - action: utter_chao_hoi
+
+- story: kịch bản hỏi học phí
+  steps:
+  - intent: hoi_hoc_phi
+  - action: utter_hoi_hoc_phi
+  - intent: tam_biet
+  - action: utter_tam_biet
+
+- story: kịch bản hỏi điểm chuẩn
+  steps:
+  - intent: hoi_diem_chuan
+  - action: utter_hoi_diem_chuan

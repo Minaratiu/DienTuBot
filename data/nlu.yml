@@ -1,0 +1,44 @@
+version: "3.1"
+
+nlu:
+- intent: chao_hoi
+  examples: |
+    - chào ad
+    - hello shop
+    - xin chào
+    - ad ơi
+    - Chào bạn
+    - Hi
+    - Hello
+    - Xin chào
+    - Chào bot
+    - Bắt đầu tư vấn
+
+- intent: tam_biet
+  examples: |
+    - tạm biệt
+    - bye ad
+    - cảm ơn nhiều
+    - ok ad
+    - Bye
+    - Goodbye
+    - Kết thúc
+
+- intent: cam_on
+  examples: |
+    - Cảm ơn 
+    - Cảm ơn bạn nhiều 
+    - Thanks
+    - Ok cảm ơn
+    - Cảm ơn bot
+- intent: gioi_thieu_bot
+  examples: |
+    - Bạn là ai?
+    - Mày là ai?
+    - Bot là ai?
+    - Tôi đang nói chuyện với ai?
+- intent: diem_chuan_nganh_ky_thuat_dieu_khien_va_tu_dong_hoa
+  examples: |
+    - Mã ngành của ngành [Kỹ thuật điều khiển và tự động hóa](ten_nganh) là gì?
+    - [Điểm chuẩn](diem_chuan) của ngành [Kỹ thuật điều khiển và tự động hóa](ten_nganh) là bao nhiêu?
+    - Ngành [Kỹ thuật điều khiển và tự động hóa](ten_nganh) thuộc khoa nào trong [học viện công nghệ bưu chính viễn thông](hoc_vien)?

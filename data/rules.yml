@@ -1,0 +1,12 @@
+version: "3.1"
+
+rules:
+- rule: Luôn chào lại khi người dùng chào
+  steps:
+  - intent: chao_hoi
+  - action: utter_chao_hoi
+
+- rule: Luôn tạm biệt khi người dùng kết thúc
+  steps:
+  - intent: tam_biet
+  - action: utter_tam_biet

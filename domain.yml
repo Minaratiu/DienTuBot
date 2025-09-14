@@ -1,0 +1,31 @@
+version: "3.1"
+
+intents:
+  - chao_hoi
+  - tam_biet
+  - cam_on
+  - gioi_thieu_bot
+  - diem_chuan_nganh_ky_thuat_dieu_khien_va_tu_dong_hoa
+
+entities:
+  - ten_nganh
+  - hoc_vien
+  - diem_chuan
+
+responses:
+  utter_chao_hoi:
+    - text: "Chào bạn, tôi là chatbot tư vấn tuyển sinh của Khoa Điện tử - Học viện Công nghệ Bưu chính Viễn thông (PTIT). Tôi có thể giúp gì cho bạn?"
+    - text: "Xin chào! Bạn cần tư vấn thông tin gì về các ngành của Khoa Điện tử PTIT ạ?"
+
+  utter_tam_biet:
+    - text: "Tạm biệt bạn! Chúc bạn một ngày tốt lành!"
+    - text:  "Hẹn gặp lại bạn nhé!"
+
+  utter_cam_on:
+    - text: "Rất vui được giúp bạn!"
+    - text: "Không có gì ạ. Nếu bạn cần thêm thông tin, đừng ngần ngại hỏi nhé!"
+
+  utter_gioi_thieu_bot:
+    - text: "Tôi là chatbot được tạo ra để cung cấp thông tin tuyển sinh về Khoa Điện tử của Học viện Công nghệ Bưu chính Viễn thông."
+  utter_diem_chuan_nganh_ky_thuat_dieu_khien_va_tu_dong_hoa:
+    -
