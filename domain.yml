@@ -1,16 +1,42 @@
 version: "3.1"
-
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true
+  #file domain.yml này là để viết những câu trả lời đơn giản mà mặc định người dùng hỏi A thì phải trả lời là B (thường áp dụng cho các câu hỏi cơ bản như chào hỏi, tạm biệt, giới thiệt bot...)
+  # với những câu hỏi có trả lời mặc định như chào hỏi,tạm biệt cảm ơn... thì sẽ viết câu trả lời trong responses như phía bên dưới:
+  #  VD   utter_chao_hoi: - text: "Chào bạn, tôi là chatbot tư vấn tuyển sinh của Khoa Điện tử - Học viện Công nghệ Bưu chính Viễn thông (PTIT). Tôi có thể giúp gì cho bạn?"
+  #    - text: "Xin chào! Bạn cần tư vấn thông tin gì về các ngành của Khoa Điện tử PTIT ạ?"
+  # với những câu hỏi phức tạp hơn thì sẽ được viết dạng trả lời vào trong file actions như class ActionTraCuuDiemChuanNam2025(Action):... sau đó mới viết lại các action đó vào mục actions trong file domain.yml.
+  # tương ứng thì intents cũng sẽ phải được khai báo vào trong mục intents bên dưới.
 intents:
   - chao_hoi
   - tam_biet
   - cam_on
   - gioi_thieu_bot
-  - diem_chuan_nganh_ky_thuat_dieu_khien_va_tu_dong_hoa
-
+  - tra_cuu_diem_chuan_thpt_nam_2025
+  - tra_cuu_ma_nganh
+  - tra_cuu_diem_xet_tuyen_tai_nang
+  - tra_cuu_diem_theo_chung_chi_sat
+  - tra_cuu_diem_theo_chung_chi_act
+  - tra_cuu_diem_theo_bai_thi_hsa
+  - tra_cuu_diem_theo_bai_thi_tsa
+  - tra_cuu_diem_theo_bai_thi_spt
+  - tra_cuu_diem_theo_bai_thi_apt
+  - tra_cuu_diem_theo_xet_tuyen_ket_hop
 entities:
   - ten_nganh
-  - hoc_vien
-  - diem_chuan
+
+actions:
+  - action_tra_cuu_diem_chuan_thpt_nam_2025
+  - action_tra_cuu_ma_nganh
+  - action_tra_cuu_diem_xet_tuyen_tai_nang
+  - action_tra_cuu_diem_theo_chung_chi_sat
+  - action_tra_cuu_diem_theo_chung_chi_act
+  - action_tra_cuu_diem_theo_bai_thi_hsa
+  - action_tra_cuu_diem_theo_bai_thi_tsa
+  - action_tra_cuu_diem_theo_bai_thi_spt
+  - action_tra_cuu_diem_theo_bai_thi_apt
+  - action_tra_cuu_diem_theo_xet_tuyen_ket_hop
 
 responses:
   utter_chao_hoi:
@@ -27,5 +53,4 @@ responses:
 
   utter_gioi_thieu_bot:
     - text: "Tôi là chatbot được tạo ra để cung cấp thông tin tuyển sinh về Khoa Điện tử của Học viện Công nghệ Bưu chính Viễn thông."
-  utter_diem_chuan_nganh_ky_thuat_dieu_khien_va_tu_dong_hoa:
-    -
+

@@ -6,14 +6,60 @@ stories:
   - intent: chao_hoi
   - action: utter_chao_hoi
 
-- story: kịch bản hỏi học phí
+- story: kịch bản người dùng cảm ơn
   steps:
-  - intent: hoi_hoc_phi
-  - action: utter_hoi_hoc_phi
+  - intent: cam_on
+  - action: utter_cam_on
+
+- story: kịch bản người dùng hỏi bot là ai
+  steps:
+  - intent: gioi_thieu_bot
+  - action: utter_gioi_thieu_bot
+
+- story: kịch bản chào tạm biệt
+  steps:
   - intent: tam_biet
   - action: utter_tam_biet
 
-- story: kịch bản hỏi điểm chuẩn
+- story: kịch bản tra cứu điểm chuẩn THPT 2025
   steps:
-  - intent: hoi_diem_chuan
-  - action: utter_hoi_diem_chuan
+  - intent: tra_cuu_diem_chuan_thpt_nam_2025
+  - action: action_tra_cuu_diem_chuan_thpt_nam_2025
+
+- story: Kịch bản tra cứu mã ngành
+  steps:
+    - intent: tra_cuu_ma_nganh
+    - action: action_tra_cuu_ma_nganh
+
+- story: Kịch bản tra cứu điểm xét tuyển tài năng
+  steps:
+    - intent: tra_cuu_diem_xet_tuyen_tai_nang
+    - action: action_tra_cuu_diem_xet_tuyen_tai_nang
+- story: Kịch bản tra cứu điểm theo chứng chỉ SAT
+  steps:
+    - intent: tra_cuu_diem_theo_chung_chi_sat
+    - action: action_tra_cuu_diem_theo_chung_chi_sat
+- story: Kịch bản tra cứu điểm theo chứng chỉ ACT
+  steps:
+    - intent: tra_cuu_diem_theo_chung_chi_act
+    - action: action_tra_cuu_diem_theo_chung_chi_act
+- story: Kịch bản tra cứu điểm theo bài thi HSA
+  steps:
+    - intent: tra_cuu_diem_theo_bai_thi_hsa
+    - action: action_tra_cuu_diem_theo_bai_thi_hsa
+- story: Kịch bản tra cứu điểm theo bài thi TSA
+  steps:
+    - intent: tra_cuu_diem_theo_bai_thi_tsa
+    - action: action_tra_cuu_diem_theo_bai_thi_tsa
+- story: Kịch bản tra cứu điểm theo bài thi spt
+  steps:
+    - intent: tra_cuu_diem_theo_bai_thi_spt
+    - action: action_tra_cuu_diem_theo_bai_thi_spt
+- story: Kịch bản tra cứu điểm theo bài thi APT
+  steps:
+    - intent: tra_cuu_diem_theo_bai_thi_apt
+    - action: action_tra_cuu_diem_theo_bai_thi_apt
+- story: Kịch bản tra cứu điểm theo xét tuyển kết hợp
+  steps:
+    - intent: tra_cuu_diem_theo_xet_tuyen_ket_hop
+    - action: action_tra_cuu_diem_theo_xet_tuyen_ket_hop

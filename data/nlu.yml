@@ -13,6 +13,7 @@ nlu:
     - Xin chào
     - Chào bot
     - Bắt đầu tư vấn
+    - User
 
 - intent: tam_biet
   examples: |
@@ -23,6 +24,7 @@ nlu:
     - Bye
     - Goodbye
     - Kết thúc
+    - Stop
 
 - intent: cam_on
   examples: |
@@ -37,8 +39,60 @@ nlu:
     - Mày là ai?
     - Bot là ai?
     - Tôi đang nói chuyện với ai?
-- intent: diem_chuan_nganh_ky_thuat_dieu_khien_va_tu_dong_hoa
+- intent: tra_cuu_diem_chuan_thpt_nam_2025
   examples: |
-    - Mã ngành của ngành [Kỹ thuật điều khiển và tự động hóa](ten_nganh) là gì?
-    - [Điểm chuẩn](diem_chuan) của ngành [Kỹ thuật điều khiển và tự động hóa](ten_nganh) là bao nhiêu?
-    - Ngành [Kỹ thuật điều khiển và tự động hóa](ten_nganh) thuộc khoa nào trong [học viện công nghệ bưu chính viễn thông](hoc_vien)?
+    - điểm chuẩn thpt của ngành [kỹ thuật điều khiển và tự động hóa](ten_nganh) là bao nhiêu
+    - cho tôi hỏi điểm thpt ngành [công nghệ kỹ thuật điện, điện tử](ten_nganh)
+    - ngành [công nghệ vi mạch bán dẫn](ten_nganh) lấy bao nhiêu điểm thpt
+    - điểm thpt ngành [kỹ thuật điều khiển và tự động hóa](ten_nganh)?
+    - [kỹ thuật điều khiển và tự động hóa](ten_nganh) điểm thpt?
+    - xem điểm thpt của ngành [kỹ thuật điều khiển và tự động hóa](ten_nganh) 
+    - 26 điểm có đỗ ngành [Công nghệ vi mạch bán dẫn](ten_nganh) không?
+- intent: tra_cuu_ma_nganh
+  examples: |
+    - mã ngành của ngành [kỹ thuật điều khiển và tự động hóa](ten_nganh) là gì
+    - ngành [công nghệ kỹ thuật điện, điện tử](ten_nganh) có mã ngành là gì
+    - cho tôi biết mã ngành của ngành [công nghệ vi mạch bán dẫn](ten_nganh)
+- intent: tra_cuu_diem_xet_tuyen_tai_nang
+  examples: |
+    - điểm xét tuyển tài năng của ngành [kỹ thuật điều khiển và tự động hóa](ten_nganh) là bao nhiêu
+    - ngành [công nghệ kỹ thuật điện, điện tử](ten_nganh) có điểm xét tuyển tài năng là bao nhiêu
+    - diểm xét tuyển tài năng của ngành [kỹ thuật điều khiển và tự động hóa](ten_nganh)?
+- intent: tra_cuu_diem_theo_chung_chi_sat
+  examples: |
+    - điểm theo chứng chỉ SAT của ngành [kỹ thuật điều khiển và tự động hóa](ten_nganh) là bao nhiêu
+    - ngành [công nghệ kỹ thuật điện, điện tử](ten_nganh) có điểm xét theo chứng chỉ SAT là bao nhiêu
+    - điểm xét theo chứng chỉ SAT của ngành [kỹ thuật điều khiển và tự động hóa](ten_nganh)?
+- intent: tra_cuu_diem_theo_chung_chi_act
+  examples: |
+    - điểm theo chứng chỉ ACT của ngành [kỹ thuật điều khiển và tự động hóa](ten_nganh) là bao nhiêu
+    - ngành [công nghệ kỹ thuật điện, điện tử](ten_nganh) có điểm xét theo chứng chỉ ACT là bao nhiêu
+    - điểm xét theo chứng chỉ ACT của ngành [kỹ thuật điều khiển và tự động hóa](ten_nganh)?
+- intent: tra_cuu_diem_theo_bai_thi_hsa
+  examples: |
+    - điểm theo bài thi HSA của ngành [kỹ thuật điều khiển và tự động hóa](ten_nganh) là bao nhiêu
+    - ngành [công nghệ kỹ thuật điện, điện tử](ten_nganh) có điểm xét theo bài thi HSA là bao nhiêu
+    - điểm xét theo bài thi HSA của ngành [kỹ thuật điều khiển và tự động hóa](ten_nganh)?
+- intent: tra_cuu_diem_theo_bai_thi_tsa
+  examples: |
+    - điểm theo bài thi TSA của ngành [kỹ thuật điều khiển và tự động hóa](ten_nganh) là bao nhiêu
+    - ngành [công nghệ kỹ thuật điện, điện tử](ten_nganh) có điểm xét theo bài thi TSA là bao nhiêu
+    - điểm xét theo bài thi TSA của ngành [kỹ thuật điều khiển và tự động hóa](ten_nganh)?
+- intent: tra_cuu_diem_theo_bai_thi_spt
+  examples: |
+    - điểm theo bài thi SPT của ngành [kỹ thuật điều khiển và tự động hóa](ten_nganh) là bao nhiêu
+    - ngành [công nghệ kỹ thuật điện, điện tử](ten_nganh) có điểm xét theo bài thi SPT là bao nhiêu
+    - điểm xét theo bài thi SPT của ngành [kỹ thuật điều khiển và tự động hóa](ten_nganh)?
+- intent: tra_cuu_diem_theo_bai_thi_apt
+  examples: |
+    - điểm theo bài thi APT của ngành [kỹ thuật điều khiển và tự động hóa](ten_nganh) là bao nhiêu
+    - ngành [công nghệ kỹ thuật điện, điện tử](ten_nganh) có điểm xét theo bài thi APT là bao nhiêu
+    - điểm xét theo bài thi APT của ngành [kỹ thuật điều khiển và tự động hóa](ten_nganh)?
+- intent: tra_cuu_diem_theo_xet_tuyen_ket_hop
+  examples: |
+    - điểm theo phương thức xét tuyển kết hợp của ngành [kỹ thuật điều khiển và tự động hóa](ten_nganh) là bao nhiêu
+    - ngành [công nghệ kỹ thuật điện, điện tử](ten_nganh) có điểm xét theo phương thức xét tuyển kết hợp là bao nhiêu
+    - điểm xét theo phương thức xét tuyển kết hợp của ngành [kỹ thuật điều khiển và tự động hóa](ten_nganh)? 
+    
+    
+    

@@ -10,3 +10,54 @@ rules:
   steps:
   - intent: tam_biet
   - action: utter_tam_biet
+- rule: Giới thiệu bản thân khi được hỏi
+  steps:
+  - intent: gioi_thieu_bot
+  - action: utter_gioi_thieu_bot
+
+- rule: Luôn cảm ơn khi người dùng cảm ơn
+  steps:
+  - intent: cam_on
+  - action: utter_cam_on
+- rule: Trả lời điểm chuẩn THPT
+  steps:
+  - intent: tra_cuu_diem_chuan_thpt_nam_2025
+  - action: action_tra_cuu_diem_chuan_thpt_nam_2025
+
+- rule: Trả lời mã ngành
+  steps:
+  - intent: tra_cuu_ma_nganh
+  - action: action_tra_cuu_ma_nganh
+
+- rule: Trả lời điểm xét tuyển tài năng
+  steps:
+  - intent: tra_cuu_diem_xet_tuyen_tai_nang
+  - action: action_tra_cuu_diem_xet_tuyen_tai_nang
+- rule: Trả lời điểm xét tuyển kết hợp
+  steps:
+  - intent: tra_cuu_diem_theo_xet_tuyen_ket_hop
+  - action: action_tra_cuu_diem_theo_xet_tuyen_ket_hop
+- rule: Trả lời điểm xét điểm xét tuyển theo chứng chỉ SAT
+  steps:
+    - intent: tra_cuu_diem_theo_chung_chi_sat
+    - action: action_tra_cuu_diem_theo_chung_chi_sat
+- rule: Trả lời điểm xét tuyển theo chứng chỉ ACT
+  steps:
+    - intent: tra_cuu_diem_theo_chung_chi_act
+    - action: action_tra_cuu_diem_theo_chung_chi_act
+- rule: Trả lời điểm xét tuyển theo bài thi HSA
+  steps:
+    - intent: tra_cuu_diem_theo_bai_thi_hsa
+    - action: action_tra_cuu_diem_theo_bai_thi_hsa
+- rule: Trả lời điểm xét tuyển theo chứng chỉ TSA
+  steps:
+    - intent: tra_cuu_diem_theo_bai_thi_tsa
+    - action: action_tra_cuu_diem_theo_bai_thi_tsa
+- rule: Trả lời điểm xét tuyển theo chứng chỉ SPT
+  steps:
+    - intent: tra_cuu_diem_theo_bai_thi_spt
+    - action: action_tra_cuu_diem_theo_bai_thi_spt
+- rule: Trả lời điểm xét tuyển theo chứng chỉ APT
+  steps:
+    - intent: tra_cuu_diem_theo_bai_thi_apt
+    - action: action_tra_cuu_diem_theo_bai_thi_apt
