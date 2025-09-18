@@ -1035,3 +1035,55 @@ nlu:
     - Tôi cần gặp quản lý tốt nghiệp
     - Phòng tốt nghiệp có fanpage hoặc website không?
     - Tôi cần hỗ trợ về tốt nghiệp liên hệ ai?    
+
+- intent: thi_tieng_anh_doi_tuong_dien_tu
+  examples: |
+    - Ai phải thi tiếng Anh đầu vào ngành [Điều khiển và Tự động hóa](ten_nganh)?
+    - Sinh viên [Công nghệ Kỹ thuật Điện, điện tử](ten_nganh) có phải thi không?
+    - Tôi học [Vi mạch Bán dẫn](ten_nganh) có được miễn thi nếu có chứng chỉ TOEFL?
+    - Sinh viên mới nhập học khoa Điện tử có phải dự thi không?
+    - Có ngoại lệ cho những người có chứng chỉ tiếng Anh quốc tế không?
+- intent: thi_tieng_anh_hinh_thuc_dien_tu
+  examples: |
+    - Bài thi tiếng Anh đầu vào 3 ngành gồm những phần nào?
+    - Hình thức thi là trắc nghiệm hay viết luận?
+    - Có kiểm tra nghe, nói, đọc, viết không?
+    - Thời gian thi mỗi phần bao lâu?
+    - Thi trên máy hay trên giấy?
+- intent: thi_tieng_anh_diem_chuan_dien_tu
+  examples: |
+    - Điểm chuẩn tiếng Anh đầu vào ngành [CNTT](ten_nganh) là bao nhiêu?
+    - Ngành [Điều khiển và Tự động hóa](ten_nganh) cần đạt bao nhiêu điểm để đậu?
+    - Chuẩn đầu ra tiếng Anh cho sinh viên 3 ngành khoa Điện tử là gì?
+    - Nếu không đạt điểm chuẩn, tôi phải làm gì?
+    - Có điểm chuẩn khác nhau cho từng ngành không?
+- intent: thi_tieng_anh_lich_dien_tu
+  examples: |
+    - Khi nào tổ chức kỳ thi tiếng Anh đầu vào 3 ngành khoa Điện tử?
+    - Lịch thi tiếng Anh đầu vào năm 2025 của PTIT là gì?
+    - Có lịch thi bổ sung không?
+    - Tôi thi ở cơ sở Hà Nội hay TP.HCM?
+    - Địa điểm thi từng ngành có khác nhau không?
+- intent: thi_tieng_anh_thu_tuc_dien_tu
+  examples: |
+    - Thủ tục đăng ký thi tiếng Anh đầu vào 3 ngành như thế nào?
+    - Tôi cần nộp hồ sơ ở đâu?
+    - Có lệ phí thi không?
+    - Đăng ký online hay trực tiếp?
+    - Hạn cuối đăng ký kỳ thi tiếng Anh đầu vào là khi nào?
+- intent: thi_tieng_anh_truong_hop_dac_biet_dien_tu
+  examples: |
+    - Tôi đã có chứng chỉ TOEFL/IELTS có phải thi không?
+    - Nếu trượt kỳ thi đầu vào có được thi lại không?
+    - Sinh viên năm cuối có phải thi không?
+    - Có miễn thi cho sinh viên giỏi ngoại ngữ không?
+    - Có hình thức thi thay thế cho những trường hợp đặc biệt không?
+- intent: thi_tieng_anh_lien_he_dien_tu
+  examples: |
+    - Ai phụ trách kỳ thi tiếng Anh đầu vào khoa Điện tử?
+    - Liên hệ tư vấn kỳ thi qua email hoặc số điện thoại?
+    - Tôi cần gặp quản lý kỳ thi tiếng Anh
+    - Phòng khảo thí có website hoặc fanpage không?
+    - Tôi cần hỗ trợ thông tin về thi tiếng Anh liên hệ ai?
+
+
