@@ -34,14 +34,7 @@ nlu:
     - Ok cảm ơn
     - Cảm ơn bot
 
-- intent: xin_loi
-  examples: |
-    - Xin lỗi
-    - Sorry
-    - Mình nhầm rồi
-    - Mình xin lỗi vì sự cố
-    - Sorry bạn nhé
-    
+
 - intent: gioi_thieu_bot
   examples: |
     - Bạn là ai?
