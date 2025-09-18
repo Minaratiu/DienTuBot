@@ -587,8 +587,6 @@ nlu:
     - Tôi cần hỗ trợ thông tin về PTIT liên hệ ai?
 
 
-
-
 - intent: tra_cuu_giang_vien
   examples: |
     - Cho tôi biết giảng viên ngành [Điện tử](ten_nganh) là ai?
@@ -613,10 +611,6 @@ nlu:
     - Lịch học môn [Tự động hóa](ten_mon) của giảng viên nào?
     - Ai dạy môn [vi mạch](ten_nganh) học kỳ này?
     - Giờ office giảng viên [Điều khiển](ten_nganh) là khi nào?
-
-
-
-
 
 
 - intent: cau_lac_bo_danh_sach
@@ -784,7 +778,6 @@ nlu:
     - Hoạt động ngoại khóa của thư viện là gì?
     - Tôi muốn tham gia event của thư viện
     - Thư viện có chương trình hướng dẫn tìm tài liệu không?
-
 
 
 - intent: phong_giao_vu_danh_sach
