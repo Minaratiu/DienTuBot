@@ -8,35 +8,335 @@ session_config:
   #    - text: "Xin chào! Bạn cần tư vấn thông tin gì về các ngành của Khoa Điện tử PTIT ạ?"
   # với những câu hỏi phức tạp hơn thì sẽ được viết dạng trả lời vào trong file actions như class ActionTraCuuDiemChuanNam2025(Action):... sau đó mới viết lại các action đó vào mục actions trong file domain.yml.
   # tương ứng thì intents cũng sẽ phải được khai báo vào trong mục intents bên dưới.
+
 intents:
   - chao_hoi
   - tam_biet
-  - cam_on
   - gioi_thieu_bot
+  - cam_on
   - tra_cuu_diem_chuan_thpt_nam_2025
   - tra_cuu_ma_nganh
   - tra_cuu_diem_xet_tuyen_tai_nang
+  - tra_cuu_diem_theo_xet_tuyen_ket_hop
   - tra_cuu_diem_theo_chung_chi_sat
   - tra_cuu_diem_theo_chung_chi_act
   - tra_cuu_diem_theo_bai_thi_hsa
   - tra_cuu_diem_theo_bai_thi_tsa
   - tra_cuu_diem_theo_bai_thi_spt
   - tra_cuu_diem_theo_bai_thi_apt
-  - tra_cuu_diem_theo_xet_tuyen_ket_hop
+  - tra_cuu_kha_nang_trung_tuyen
+  - xet_tuyen_nguyen_vong_dien_tu
+  - xet_tuyen_dieu_kien_dien_tu
+  - xet_tuyen_thu_tuc_dien_tu
+  - xet_tuyen_truong_hop_dac_biet_dien_tu
+  - xet_tuyen_uu_tien_dien_tu
+  - xet_tuyen_lien_he_dien_tu
+  - tra_cuu_chi_tieu_nganh
+  - tra_cuu_chi_tieu_theo_co_so
+  - tra_cuu_chi_tieu_theo_phuong_thuc
+  - tra_cuu_chi_tieu_tong_quat
+  - tra_cuu_thoi_gian_tuyen_sinh
+  - tra_cuu_thoi_gian_nhap_hoc
+  - tra_cuu_tong_quan_nganh
+  - tra_cuu_thoi_gian_dao_tao
+  - tra_cuu_to_hop_xet_tuyen
+  - tra_cuu_hoc_phi_nganh
+  - tra_cuu_lotrinh_tang_hoc_phi
+  - tra_cuu_hoc_phi_theo_tin_chi
+  - tra_cuu_co_so_dao_tao
+  - tra_cuu_co_hoc_bong
+  - tra_cuu_loai_hoc_bong
+  - tra_cuu_dieu_kien_hoc_bong
+  - tra_cuu_gia_tri_hoc_bong
+  - tra_cuu_khai_niem_nghien_cuu_khoa_hoc
+  - tra_cuu_co_hoi_nghien_cuu_khoa_hoc
+  - tra_cuu_dieu_kien_nghien_cuu_khoa_hoc
+  - tra_cuu_loi_ich_nghien_cuu_khoa_hoc
+  - tra_cuu_noi_dung_nghien_cuu_khoa_hoc
+  - phong_lab_danh_sach
+  - phong_lab_thiet_bi
+  - phong_lab_dieu_kien_su_dung
+  - phong_lab_gio_mo_cua
+  - phong_lab_khoa_hoc_thuc_hanh
+  - phong_lab_lien_he
+  - phong_lab_lien_ket_doanh_nghiep
+  - tra_cuu_co_hoi_viec_lam
+  - tra_cuu_nhu_cau_tuyen_dung
+  - tra_cuu_viec_lam_quoc_te
+  - tra_cuu_luong_nganh
+  - tra_cuu_dieu_kien_tuyen_sinh
+  - tra_cuu_quy_trinh_nhap_hoc
+  - tra_cuu_ho_so_nhap_hoc
+  - tra_cuu_kien_thuc_co_ban
+  - tra_cuu_kien_thuc_chuyen_mon
+  - tra_cuu_ky_nang_nghe_nghiep
+  - tra_cuu_ky_nang_mem
+  - tra_cuu_chuong_trinh_hoc_nganh
+  - tra_cuu_chuyen_nganh_trong_nganh
+  - tra_cuu_tin_chi_thuc_tap_do_an
+  - tra_cuu_ket_noi_doanh_nghiep
+  - tra_cuu_thong_tin_lien_he
+  - tra_cuu_phu_hop_nu
+  - tra_cuu_dac_thu_cong_viec_nu
+  - tra_cuu_viec_lam_cho_nu
+  - tra_cuu_co_hoi_thang_tien_nu
+  - ptit_gioi_thieu_lich_su
+  - ptit_gioi_thieu_su_menh_tam_nhin
+  - ptit_gioi_thieu_co_cau_to_chuc
+  - ptit_gioi_thieu_dia_chi
+  - ptit_gioi_thieu_quy_mo_dao_tao
+  - ptit_gioi_thieu_thanh_tuu_noi_bat
+  - ptit_gioi_thieu_lien_he
+  - tra_cuu_giang_vien
+  - tra_cuu_trinh_do_giang_vien
+  - tra_cuu_chuyen_mon_giang_vien
+  - tra_cuu_lich_day_giang_vien
+  - cau_lac_bo_danh_sach
+  - cau_lac_bo_dieu_kien
+  - cau_lac_bo_su_kien
+  - cau_lac_bo_cuoc_thi
+  - cau_lac_bo_lien_ket
+  - ktx_danh_sach
+  - ktx_dieu_kien
+  - ktx_chi_phi
+  - ktx_gio_mo_cua
+  - ktx_tien_nghi
+  - ktx_dang_ky
+  - ktx_lien_he
+  - ktx_quy_dinh
+  - thu_vien_danh_sach
+  - thu_vien_gio_mo_cua
+  - thu_vien_tai_nguyen
+  - thu_vien_phong_doc
+  - thu_vien_thiet_bi
+  - thu_vien_dieu_kien_su_dung
+  - thu_vien_dang_ky
+  - thu_vien_lien_he
+  - thu_vien_su_kien_hoat_dong
+  - phong_giao_vu_danh_sach
+  - phong_giao_vu_gio_lam_viec
+  - phong_giao_vu_thu_tuc_dang_ky_hoc
+  - phong_giao_vu_hoc_bong
+  - phong_giao_vu_diem_so
+  - phong_giao_vu_nop_ho_so
+  - phong_giao_vu_thong_bao_ke_hoach
+  - phong_giao_vu_lien_he
+  - coso_danh_sach
+  - coso_phong_hoc
+  - coso_san_bai_the_thao
+  - coso_tien_nghi_chung
+  - coso_dieu_kien_su_dung
+  - coso_lien_he
+  - song_nganh_danh_sach
+  - song_nganh_dieu_kien_dang_ky
+  - song_nganh_thu_tuc
+  - song_nganh_thoi_gian_hoc
+  - song_nganh_co_hoi_nghe_nghiep
+  - song_nganh_hoc_phi
+  - song_nganh_lien_he
+  - baoluu_dieu_kien
+  - baoluu_thu_tuc
+  - baoluu_thoi_gian
+  - baoluu_ho_so
+  - baoluu_hoc_phi
+  - baoluu_quyen_loi_nghia_vu
+  - baoluu_lien_he
+  - tot_nghiep_dieu_kien
+  - tot_nghiep_thu_tuc
+  - tot_nghiep_thoi_gian
+  - tot_nghiep_ho_so
+  - tot_nghiep_diem_so
+  - tot_nghiep_chung_nhan
+  - tot_nghiep_lien_he
+  - thi_tieng_anh_doi_tuong_dien_tu
+  - thi_tieng_anh_hinh_thuc_dien_tu
+  - thi_tieng_anh_diem_chuan_dien_tu
+  - thi_tieng_anh_lich_dien_tu
+  - thi_tieng_anh_thu_tuc_dien_tu
+  - thi_tieng_anh_truong_hop_dac_biet_dien_tu
+  - thi_tieng_anh_lien_he_dien_tu
 entities:
   - ten_nganh
+  - nam
+  - co_so
+  - phuong_thuc
+  - khoa
+  - ten_khoa
+  - ten_lab
+  - ten_mon
 
+slots:
+  # Slots quan trọng để dự đoán hành động
+  ten_nganh:
+    type: text
+    influence_conversation: true
+  co_so:
+    type: text
+    influence_conversation: true
+  phuong_thuc:
+    type: text
+    influence_conversation: true
+
+  # Slots chỉ để lưu thông tin
+  nam:
+    type: text
+    influence_conversation: false
+  khoa:
+    type: text
+    influence_conversation: false
+  ten_khoa:
+    type: text
+    influence_conversation: false
+  ten_lab:
+    type: text
+    influence_conversation: false
+  ten_mon:
+    type: text
+    influence_conversation: false
+    
 actions:
   - action_tra_cuu_diem_chuan_thpt_nam_2025
   - action_tra_cuu_ma_nganh
   - action_tra_cuu_diem_xet_tuyen_tai_nang
+  - action_tra_cuu_diem_theo_xet_tuyen_ket_hop
   - action_tra_cuu_diem_theo_chung_chi_sat
   - action_tra_cuu_diem_theo_chung_chi_act
   - action_tra_cuu_diem_theo_bai_thi_hsa
   - action_tra_cuu_diem_theo_bai_thi_tsa
   - action_tra_cuu_diem_theo_bai_thi_spt
   - action_tra_cuu_diem_theo_bai_thi_apt
-  - action_tra_cuu_diem_theo_xet_tuyen_ket_hop
+  - action_tra_cuu_kha_nang_trung_tuyen
+  - action_xet_tuyen_nguyen_vong_dien_tu
+  - action_xet_tuyen_dieu_kien_dien_tu
+  - action_xet_tuyen_thu_tuc_dien_tu
+  - action_xet_tuyen_truong_hop_dac_biet_dien_tu
+  - action_xet_tuyen_uu_tien_dien_tu
+  - action_xet_tuyen_lien_he_dien_tu
+  - action_tra_cuu_chi_tieu_nganh
+  - action_tra_cuu_chi_tieu_theo_co_so
+  - action_tra_cuu_chi_tieu_theo_phuong_thuc
+  - action_tra_cuu_chi_tieu_tong_quat
+  - action_tra_cuu_thoi_gian_tuyen_sinh
+  - action_tra_cuu_thoi_gian_nhap_hoc
+  - action_tra_cuu_tong_quan_nganh
+  - action_tra_cuu_thoi_gian_dao_tao
+  - action_tra_cuu_to_hop_xet_tuyen
+  - action_tra_cuu_hoc_phi_nganh
+  - action_tra_cuu_lotrinh_tang_hoc_phi
+  - action_tra_cuu_hoc_phi_theo_tin_chi
+  - action_tra_cuu_co_so_dao_tao
+  - action_tra_cuu_co_hoc_bong
+  - action_tra_cuu_loai_hoc_bong
+  - action_tra_cuu_dieu_kien_hoc_bong
+  - action_tra_cuu_gia_tri_hoc_bong
+  - action_tra_cuu_khai_niem_nghien_cuu_khoa_hoc
+  - action_tra_cuu_co_hoi_nghien_cuu_khoa_hoc
+  - action_tra_cuu_dieu_kien_nghien_cuu_khoa_hoc
+  - action_tra_cuu_loi_ich_nghien_cuu_khoa_hoc
+  - action_tra_cuu_noi_dung_nghien_cuu_khoa_hoc
+  - action_phong_lab_danh_sach
+  - action_phong_lab_thiet_bi
+  - action_phong_lab_dieu_kien_su_dung
+  - action_phong_lab_gio_mo_cua
+  - action_phong_lab_khoa_hoc_thuc_hanh
+  - action_phong_lab_lien_he
+  - action_phong_lab_lien_ket_doanh_nghiep
+  - action_tra_cuu_co_hoi_viec_lam
+  - action_tra_cuu_nhu_cau_tuyen_dung
+  - action_tra_cuu_viec_lam_quoc_te
+  - action_tra_cuu_luong_nganh
+  - action_tra_cuu_dieu_kien_tuyen_sinh
+  - action_tra_cuu_quy_trinh_nhap_hoc
+  - action_tra_cuu_ho_so_nhap_hoc
+  - action_tra_cuu_kien_thuc_co_ban
+  - action_tra_cuu_kien_thuc_chuyen_mon
+  - action_tra_cuu_ky_nang_nghe_nghiep
+  - action_tra_cuu_ky_nang_mem
+  - action_tra_cuu_chuong_trinh_hoc_nganh
+  - action_tra_cuu_chuyen_nganh_trong_nganh
+  - action_tra_cuu_tin_chi_thuc_tap_do_an
+  - action_tra_cuu_ket_noi_doanh_nghiep
+  - action_tra_cuu_thong_tin_lien_he
+  - action_tra_cuu_phu_hop_nu
+  - action_tra_cuu_dac_thu_cong_viec_nu
+  - action_tra_cuu_viec_lam_cho_nu
+  - action_tra_cuu_co_hoi_thang_tien_nu
+  - action_ptit_gioi_thieu_lich_su
+  - action_ptit_gioi_thieu_su_menh_tam_nhin
+  - action_ptit_gioi_thieu_co_cau_to_chuc
+  - action_ptit_gioi_thieu_dia_chi
+  - action_ptit_gioi_thieu_quy_mo_dao_tao
+  - action_ptit_gioi_thieu_thanh_tuu_noi_bat
+  - action_ptit_gioi_thieu_lien_he
+  - action_tra_cuu_giang_vien
+  - action_tra_cuu_trinh_do_giang_vien
+  - action_tra_cuu_chuyen_mon_giang_vien
+  - action_tra_cuu_lich_day_giang_vien
+  - action_cau_lac_bo_danh_sach
+  - action_cau_lac_bo_dieu_kien
+  - action_cau_lac_bo_su_kien
+  - action_cau_lac_bo_cuoc_thi
+  - action_cau_lac_bo_lien_ket
+  - action_ktx_danh_sach
+  - action_ktx_dieu_kien
+  - action_ktx_chi_phi
+  - action_ktx_gio_mo_cua
+  - action_ktx_tien_nghi
+  - action_ktx_dang_ky
+  - action_ktx_lien_he
+  - action_ktx_quy_dinh
+  - action_thu_vien_danh_sach
+  - action_thu_vien_gio_mo_cua
+  - action_thu_vien_tai_nguyen
+  - action_thu_vien_phong_doc
+  - action_thu_vien_thiet_bi
+  - action_thu_vien_dieu_kien_su_dung
+  - action_thu_vien_dang_ky
+  - action_thu_vien_lien_he
+  - action_thu_vien_su_kien_hoat_dong
+  - action_phong_giao_vu_danh_sach
+  - action_phong_giao_vu_gio_lam_viec
+  - action_phong_giao_vu_thu_tuc_dang_ky_hoc
+  - action_phong_giao_vu_hoc_bong
+  - action_phong_giao_vu_diem_so
+  - action_phong_giao_vu_nop_ho_so
+  - action_phong_giao_vu_thong_bao_ke_hoach
+  - action_phong_giao_vu_lien_he
+  - action_coso_danh_sach
+  - action_coso_phong_hoc
+  - action_coso_san_bai_the_thao
+  - action_coso_tien_nghi_chung
+  - action_coso_dieu_kien_su_dung
+  - action_coso_lien_he
+  - action_song_nganh_danh_sach
+  - action_song_nganh_dieu_kien_dang_ky
+  - action_song_nganh_thu_tuc
+  - action_song_nganh_thoi_gian_hoc
+  - action_song_nganh_co_hoi_nghe_nghiep
+  - action_song_nganh_hoc_phi
+  - action_song_nganh_lien_he
+  - action_baoluu_dieu_kien
+  - action_baoluu_thu_tuc
+  - action_baoluu_thoi_gian
+  - action_baoluu_ho_so
+  - action_baoluu_hoc_phi
+  - action_baoluu_quyen_loi_nghia_vu
+  - action_baoluu_lien_he
+  - action_tot_nghiep_dieu_kien
+  - action_tot_nghiep_thu_tuc
+  - action_tot_nghiep_thoi_gian
+  - action_tot_nghiep_ho_so
+  - action_tot_nghiep_diem_so
+  - action_tot_nghiep_chung_nhan
+  - action_tot_nghiep_lien_he
+  - action_thi_tieng_anh_doi_tuong_dien_tu
+  - action_thi_tieng_anh_hinh_thuc_dien_tu
+  - action_thi_tieng_anh_diem_chuan_dien_tu
+  - action_thi_tieng_anh_lich_dien_tu
+  - action_thi_tieng_anh_thu_tuc_dien_tu
+  - action_thi_tieng_anh_truong_hop_dac_biet_dien_tu
+  - action_thi_tieng_anh_lien_he_dien_tu
+
 
 responses:
   utter_chao_hoi:
