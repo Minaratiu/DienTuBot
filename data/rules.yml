@@ -61,3 +61,662 @@ rules:
   steps:
     - intent: tra_cuu_diem_theo_bai_thi_apt
     - action: action_tra_cuu_diem_theo_bai_thi_apt
+
+
+- rule: Trả lời điểm xét tuyển theo phương thức kết hợp
+  steps:
+    - intent: tra_cuu_diem_theo_xet_tuyen_ket_hop
+    - action: action_tra_cuu_diem_xet_tuyen_ket_hop
+
+- rule: Trả lời khả năng trúng tuyển theo điểm
+  steps:
+    - intent: tra_cuu_kha_nang_trung_tuyen
+    - action: action_tra_cuu_kha_nang_trung_tuyen
+
+- rule: Trả lời về xét tuyển theo nguyện vọng khoa Điện tử
+  steps:
+    - intent: xet_tuyen_nguyen_vong_dien_tu
+    - action: action_xet_tuyen_nguyen_vong_dien_tu
+
+- rule: Trả lời về điều kiện xét tuyển khoa Điện tử
+  steps:
+    - intent: xet_tuyen_dieu_kien_dien_tu
+    - action: action_xet_tuyen_dieu_kien_dien_tu
+
+- rule: Trả lời về thủ tục xét tuyển khoa Điện tử
+  steps:
+    - intent: xet_tuyen_thu_tuc_dien_tu
+    - action: action_xet_tuyen_thu_tuc_dien_tu
+
+- rule: Trả lời về các trường hợp đặc biệt trong xét tuyển khoa Điện tử
+  steps:
+    - intent: xet_tuyen_truong_hop_dac_biet_dien_tu
+    - action: action_xet_tuyen_truong_hop_dac_biet_dien_tu
+
+- rule: Trả lời về ưu tiên trong xét tuyển khoa Điện tử
+  steps:
+    - intent: xet_tuyen_uu_tien_dien_tu
+    - action: action_xet_tuyen_uu_tien_dien_tu
+
+- rule: Trả lời thông tin liên hệ về xét tuyển khoa Điện tử
+  steps:
+    - intent: xet_tuyen_lien_he_dien_tu
+    - action: action_xet_tuyen_lien_he_dien_tu
+
+- rule: Trả lời chỉ tiêu tuyển sinh theo ngành
+  steps:
+    - intent: tra_cuu_chi_tieu_nganh
+    - action: action_tra_cuu_chi_tieu_nganh
+
+- rule: Trả lời chỉ tiêu tuyển sinh theo cơ sở
+  steps:
+    - intent: tra_cuu_chi_tieu_theo_co_so
+    - action: action_tra_cuu_chi_tieu_theo_co_so
+
+- rule: Trả lời chỉ tiêu tuyển sinh theo phương thức
+  steps:
+    - intent: tra_cuu_chi_tieu_theo_phuong_thuc
+    - action: action_tra_cuu_chi_tieu_theo_phuong_thuc
+
+- rule: Trả lời chỉ tiêu tuyển sinh tổng quát
+  steps:
+    - intent: tra_cuu_chi_tieu_tong_quat
+    - action: action_tra_cuu_chi_tieu_tong_quat
+
+- rule: Trả lời thời gian tuyển sinh
+  steps:
+    - intent: tra_cuu_thoi_gian_tuyen_sinh
+    - action: action_tra_cuu_thoi_gian_tuyen_sinh
+
+- rule: Trả lời thời gian nhập học
+  steps:
+    - intent: tra_cuu_thoi_gian_nhap_hoc
+    - action: action_tra_cuu_thoi_gian_nhap_hoc
+- rule: Trả lời tổng quan ngành
+  steps:
+    - intent: tra_cuu_tong_quan_nganh
+    - action: action_tra_cuu_tong_quan_nganh
+
+- rule: Trả lời mã ngành
+  steps:
+    - intent: tra_cuu_ma_nganh
+    - action: action_tra_cuu_ma_nganh
+
+- rule: Trả lời thời gian đào tạo ngành
+  steps:
+    - intent: tra_cuu_thoi_gian_dao_tao
+    - action: action_tra_cuu_thoi_gian_dao_tao
+
+- rule: Trả lời tổ hợp xét tuyển
+  steps:
+    - intent: tra_cuu_to_hop_xet_tuyen
+    - action: action_tra_cuu_to_hop_xet_tuyen
+
+- rule: Trả lời học phí ngành
+  steps:
+    - intent: tra_cuu_hoc_phi_nganh
+    - action: action_tra_cuu_hoc_phi_nganh
+
+- rule: Trả lời lộ trình tăng học phí
+  steps:
+    - intent: tra_cuu_lotrinh_tang_hoc_phi
+    - action: action_tra_cuu_lotrinh_tang_hoc_phi
+
+- rule: Trả lời học phí theo tín chỉ
+  steps:
+    - intent: tra_cuu_hoc_phi_theo_tin_chi
+    - action: action_tra_cuu_hoc_phi_theo_tin_chi
+
+- rule: Trả lời cơ sở đào tạo
+  steps:
+    - intent: tra_cuu_co_so_dao_tao
+    - action: action_tra_cuu_co_so_dao_tao
+
+- rule: Trả lời thông tin có học bổng
+  steps:
+    - intent: tra_cuu_co_hoc_bong
+    - action: action_tra_cuu_co_hoc_bong
+
+- rule: Trả lời loại học bổng
+  steps:
+    - intent: tra_cuu_loai_hoc_bong
+    - action: action_tra_cuu_loai_hoc_bong
+
+- rule: Trả lời điều kiện học bổng
+  steps:
+    - intent: tra_cuu_dieu_kien_hoc_bong
+    - action: action_tra_cuu_dieu_kien_hoc_bong
+
+- rule: Trả lời giá trị học bổng
+  steps:
+    - intent: tra_cuu_gia_tri_hoc_bong
+    - action: action_tra_cuu_gia_tri_hoc_bong
+- rule: Trả lời khái niệm nghiên cứu khoa học
+  steps:
+    - intent: tra_cuu_khai_niem_nghien_cuu_khoa_hoc
+    - action: action_tra_cuu_khai_niem_nghien_cuu_khoa_hoc
+
+- rule: Trả lời cơ hội nghiên cứu khoa học
+  steps:
+    - intent: tra_cuu_co_hoi_nghien_cuu_khoa_hoc
+    - action: action_tra_cuu_co_hoi_nghien_cuu_khoa_hoc
+
+- rule: Trả lời điều kiện nghiên cứu khoa học
+  steps:
+    - intent: tra_cuu_dieu_kien_nghien_cuu_khoa_hoc
+    - action: action_tra_cuu_dieu_kien_nghien_cuu_khoa_hoc
+
+- rule: Trả lời lợi ích nghiên cứu khoa học
+  steps:
+    - intent: tra_cuu_loi_ich_nghien_cuu_khoa_hoc
+    - action: action_tra_cuu_loi_ich_nghien_cuu_khoa_hoc
+
+- rule: Trả lời nội dung nghiên cứu khoa học
+  steps:
+    - intent: tra_cuu_noi_dung_nghien_cuu_khoa_hoc
+    - action: action_tra_cuu_noi_dung_nghien_cuu_khoa_hoc
+
+- rule: Trả lời danh sách phòng lab
+  steps:
+    - intent: phong_lab_danh_sach
+    - action: action_phong_lab_danh_sach
+
+- rule: Trả lời thiết bị phòng lab
+  steps:
+    - intent: phong_lab_thiet_bi
+    - action: action_phong_lab_thiet_bi
+
+- rule: Trả lời điều kiện sử dụng phòng lab
+  steps:
+    - intent: phong_lab_dieu_kien_su_dung
+    - action: action_phong_lab_dieu_kien_su_dung
+
+- rule: Trả lời giờ mở cửa phòng lab
+  steps:
+    - intent: phong_lab_gio_mo_cua
+    - action: action_phong_lab_gio_mo_cua
+
+- rule: Trả lời khóa học thực hành phòng lab
+  steps:
+    - intent: phong_lab_khoa_hoc_thuc_hanh
+    - action: action_phong_lab_khoa_hoc_thuc_hanh
+
+- rule: Trả lời liên hệ phòng lab
+  steps:
+    - intent: phong_lab_lien_he
+    - action: action_phong_lab_lien_he
+
+- rule: Trả lời liên kết doanh nghiệp phòng lab
+  steps:
+    - intent: phong_lab_lien_ket_doanh_nghiep
+    - action: action_phong_lab_lien_ket_doanh_nghiep
+
+- rule: Trả lời cơ hội việc làm
+  steps:
+    - intent: tra_cuu_co_hoi_viec_lam
+    - action: action_tra_cuu_co_hoi_viec_lam
+
+- rule: Trả lời nhu cầu tuyển dụng
+  steps:
+    - intent: tra_cuu_nhu_cau_tuyen_dung
+    - action: action_tra_cuu_nhu_cau_tuyen_dung
+
+- rule: Trả lời việc làm quốc tế
+  steps:
+    - intent: tra_cuu_viec_lam_quoc_te
+    - action: action_tra_cuu_viec_lam_quoc_te
+
+- rule: Trả lời lương ngành
+  steps:
+    - intent: tra_cuu_luong_nganh
+    - action: action_tra_cuu_luong_nganh
+
+- rule: Trả lời điều kiện tuyển sinh
+  steps:
+    - intent: tra_cuu_dieu_kien_tuyen_sinh
+    - action: action_tra_cuu_dieu_kien_tuyen_sinh
+
+- rule: Trả lời quy trình nhập học
+  steps:
+    - intent: tra_cuu_quy_trinh_nhap_hoc
+    - action: action_tra_cuu_quy_trinh_nhap_hoc
+
+- rule: Trả lời hồ sơ nhập học
+  steps:
+    - intent: tra_cuu_ho_so_nhap_hoc
+    - action: action_tra_cuu_ho_so_nhap_hoc
+
+- rule: Trả lời kiến thức cơ bản
+  steps:
+    - intent: tra_cuu_kien_thuc_co_ban
+    - action: action_tra_cuu_kien_thuc_co_ban
+
+- rule: Trả lời kiến thức chuyên môn
+  steps:
+    - intent: tra_cuu_kien_thuc_chuyen_mon
+    - action: action_tra_cuu_kien_thuc_chuyen_mon
+
+- rule: Trả lời kỹ năng nghề nghiệp
+  steps:
+    - intent: tra_cuu_ky_nang_nghe_nghiep
+    - action: action_tra_cuu_ky_nang_nghe_nghiep
+
+- rule: Trả lời kỹ năng mềm
+  steps:
+    - intent: tra_cuu_ky_nang_mem
+    - action: action_tra_cuu_ky_nang_mem
+
+- rule: Trả lời chương trình học ngành
+  steps:
+    - intent: tra_cuu_chuong_trinh_hoc_nganh
+    - action: action_tra_cuu_chuong_trinh_hoc_nganh
+
+- rule: Trả lời chuyên ngành trong ngành
+  steps:
+    - intent: tra_cuu_chuyen_nganh_trong_nganh
+    - action: action_tra_cuu_chuyen_nganh_trong_nganh
+
+- rule: Trả lời tín chỉ thực tập và đồ án
+  steps:
+    - intent: tra_cuu_tin_chi_thuc_tap_do_an
+    - action: action_tra_cuu_tin_chi_thuc_tap_do_an
+
+- rule: Trả lời kết nối doanh nghiệp
+  steps:
+    - intent: tra_cuu_ket_noi_doanh_nghiep
+    - action: action_tra_cuu_ket_noi_doanh_nghiep
+- rule: Trả lời thông tin liên hệ
+  steps:
+    - intent: tra_cuu_thong_tin_lien_he
+    - action: action_tra_cuu_thong_tin_lien_he
+
+- rule: Trả lời về ngành phù hợp cho nữ
+  steps:
+    - intent: tra_cuu_phu_hop_nu
+    - action: action_tra_cuu_phu_hop_nu
+
+- rule: Trả lời đặc thù công việc cho nữ
+  steps:
+    - intent: tra_cuu_dac_thu_cong_viec_nu
+    - action: action_tra_cuu_dac_thu_cong_viec_nu
+
+- rule: Trả lời cơ hội việc làm cho nữ
+  steps:
+    - intent: tra_cuu_viec_lam_cho_nu
+    - action: action_tra_cuu_viec_lam_cho_nu
+
+- rule: Trả lời cơ hội thăng tiến cho nữ
+  steps:
+    - intent: tra_cuu_co_hoi_thang_tien_nu
+    - action: action_tra_cuu_co_hoi_thang_tien_nu
+
+- rule: Trả lời lịch sử PTIT
+  steps:
+    - intent: ptit_gioi_thieu_lich_su
+    - action: action_ptit_gioi_thieu_lich_su
+
+- rule: Trả lời sứ mệnh và tầm nhìn PTIT
+  steps:
+    - intent: ptit_gioi_thieu_su_menh_tam_nhin
+    - action: action_ptit_gioi_thieu_su_menh_tam_nhin
+
+- rule: Trả lời cơ cấu tổ chức PTIT
+  steps:
+    - intent: ptit_gioi_thieu_co_cau_to_chuc
+    - action: action_ptit_gioi_thieu_co_cau_to_chuc
+
+- rule: Trả lời địa chỉ PTIT
+  steps:
+    - intent: ptit_gioi_thieu_dia_chi
+    - action: action_ptit_gioi_thieu_dia_chi
+
+- rule: Trả lời quy mô đào tạo PTIT
+  steps:
+    - intent: ptit_gioi_thieu_quy_mo_dao_tao
+    - action: action_ptit_gioi_thieu_quy_mo_dao_tao
+
+- rule: Trả lời thành tựu nổi bật PTIT
+  steps:
+    - intent: ptit_gioi_thieu_thanh_tuu_noi_bat
+    - action: action_ptit_gioi_thieu_thanh_tuu_noi_bat
+
+- rule: Trả lời liên hệ PTIT
+  steps:
+    - intent: ptit_gioi_thieu_lien_he
+    - action: action_ptit_gioi_thieu_lien_he
+
+- rule: Tra cứu giảng viên
+  steps:
+    - intent: tra_cuu_giang_vien
+    - action: action_tra_cuu_giang_vien
+
+- rule: Tra cứu trình độ giảng viên
+  steps:
+    - intent: tra_cuu_trinh_do_giang_vien
+    - action: action_tra_cuu_trinh_do_giang_vien
+
+- rule: Tra cứu chuyên môn giảng viên
+  steps:
+    - intent: tra_cuu_chuyen_mon_giang_vien
+    - action: action_tra_cuu_chuyen_mon_giang_vien
+
+- rule: Tra cứu lịch dạy giảng viên
+  steps:
+    - intent: tra_cuu_lich_day_giang_vien
+    - action: action_tra_cuu_lich_day_giang_vien
+
+- rule: Tra cứu danh sách câu lạc bộ
+  steps:
+    - intent: cau_lac_bo_danh_sach
+    - action: action_cau_lac_bo_danh_sach
+- rule: Tra cứu điều kiện câu lạc bộ
+  steps:
+    - intent: cau_lac_bo_dieu_kien
+    - action: action_cau_lac_bo_dieu_kien
+
+- rule: Tra cứu sự kiện câu lạc bộ
+  steps:
+    - intent: cau_lac_bo_su_kien
+    - action: action_cau_lac_bo_su_kien
+
+- rule: Tra cứu cuộc thi câu lạc bộ
+  steps:
+    - intent: cau_lac_bo_cuoc_thi
+    - action: action_cau_lac_bo_cuoc_thi
+
+- rule: Tra cứu liên kết câu lạc bộ
+  steps:
+    - intent: cau_lac_bo_lien_ket
+    - action: action_cau_lac_bo_lien_ket
+
+- rule: Tra cứu danh sách KTX
+  steps:
+    - intent: ktx_danh_sach
+    - action: action_ktx_danh_sach
+
+- rule: Tra cứu điều kiện KTX
+  steps:
+    - intent: ktx_dieu_kien
+    - action: action_ktx_dieu_kien
+
+- rule: Tra cứu chi phí KTX
+  steps:
+    - intent: ktx_chi_phi
+    - action: action_ktx_chi_phi
+
+- rule: Tra cứu giờ mở cửa KTX
+  steps:
+    - intent: ktx_gio_mo_cua
+    - action: action_ktx_gio_mo_cua
+
+- rule: Tra cứu tiện nghi KTX
+  steps:
+    - intent: ktx_tien_nghi
+    - action: action_ktx_tien_nghi
+
+- rule: Tra cứu đăng ký KTX
+  steps:
+    - intent: ktx_dang_ky
+    - action: action_ktx_dang_ky
+
+- rule: Tra cứu liên hệ KTX
+  steps:
+    - intent: ktx_lien_he
+    - action: action_ktx_lien_he
+
+- rule: Tra cứu quy định KTX
+  steps:
+    - intent: ktx_quy_dinh
+    - action: action_ktx_quy_dinh
+- rule: Tra cứu danh sách thư viện
+  steps:
+    - intent: thu_vien_danh_sach
+    - action: action_thu_vien_danh_sach
+
+- rule: Tra cứu giờ mở cửa thư viện
+  steps:
+    - intent: thu_vien_gio_mo_cua
+    - action: action_thu_vien_gio_mo_cua
+
+- rule: Tra cứu tài nguyên thư viện
+  steps:
+    - intent: thu_vien_tai_nguyen
+    - action: action_thu_vien_tai_nguyen
+
+- rule: Tra cứu phòng đọc thư viện
+  steps:
+    - intent: thu_vien_phong_doc
+    - action: action_thu_vien_phong_doc
+
+- rule: Tra cứu thiết bị thư viện
+  steps:
+    - intent: thu_vien_thiet_bi
+    - action: action_thu_vien_thiet_bi
+
+- rule: Tra cứu điều kiện sử dụng thư viện
+  steps:
+    - intent: thu_vien_dieu_kien_su_dung
+    - action: action_thu_vien_dieu_kien_su_dung
+
+- rule: Tra cứu đăng ký thư viện
+  steps:
+    - intent: thu_vien_dang_ky
+    - action: action_thu_vien_dang_ky
+
+- rule: Tra cứu liên hệ thư viện
+  steps:
+    - intent: thu_vien_lien_he
+    - action: action_thu_vien_lien_he
+
+- rule: Tra cứu sự kiện hoạt động thư viện
+  steps:
+    - intent: thu_vien_su_kien_hoat_dong
+    - action: action_thu_vien_su_kien_hoat_dong
+
+- rule: Tra cứu danh sách phòng giáo vụ
+  steps:
+    - intent: phong_giao_vu_danh_sach
+    - action: action_phong_giao_vu_danh_sach
+
+- rule: Tra cứu giờ làm việc phòng giáo vụ
+  steps:
+    - intent: phong_giao_vu_gio_lam_viec
+    - action: action_phong_giao_vu_gio_lam_viec
+
+- rule: Tra cứu thủ tục đăng ký học ở phòng giáo vụ
+  steps:
+    - intent: phong_giao_vu_thu_tuc_dang_ky_hoc
+    - action: action_phong_giao_vu_thu_tuc_dang_ky_hoc
+- rule: Tra cứu học bổng phòng giáo vụ
+  steps:
+    - intent: phong_giao_vu_hoc_bong
+    - action: action_phong_giao_vu_hoc_bong
+
+- rule: Tra cứu điểm số phòng giáo vụ
+  steps:
+    - intent: phong_giao_vu_diem_so
+    - action: action_phong_giao_vu_diem_so
+
+- rule: Tra cứu nộp hồ sơ phòng giáo vụ
+  steps:
+    - intent: phong_giao_vu_nop_ho_so
+    - action: action_phong_giao_vu_nop_ho_so
+
+- rule: Tra cứu thông báo và kế hoạch phòng giáo vụ
+  steps:
+    - intent: phong_giao_vu_thong_bao_ke_hoach
+    - action: action_phong_giao_vu_thong_bao_ke_hoach
+
+- rule: Tra cứu liên hệ phòng giáo vụ
+  steps:
+    - intent: phong_giao_vu_lien_he
+    - action: action_phong_giao_vu_lien_he
+
+- rule: Tra cứu danh sách cơ sở vật chất
+  steps:
+    - intent: coso_danh_sach
+    - action: action_coso_danh_sach
+
+- rule: Tra cứu phòng học
+  steps:
+    - intent: coso_phong_hoc
+    - action: action_coso_phong_hoc
+
+- rule: Tra cứu sân bãi thể thao
+  steps:
+    - intent: coso_san_bai_the_thao
+    - action: action_coso_san_bai_the_thao
+
+- rule: Tra cứu tiện nghi chung
+  steps:
+    - intent: coso_tien_nghi_chung
+    - action: action_coso_tien_nghi_chung
+
+- rule: Tra cứu điều kiện sử dụng cơ sở vật chất
+  steps:
+    - intent: coso_dieu_kien_su_dung
+    - action: action_coso_dieu_kien_su_dung
+
+- rule: Tra cứu liên hệ cơ sở vật chất
+  steps:
+    - intent: coso_lien_he
+    - action: action_coso_lien_he
+
+- rule: Tra cứu danh sách song ngành
+  steps:
+    - intent: song_nganh_danh_sach
+    - action: action_song_nganh_danh_sach
+
+- rule: Tra cứu điều kiện đăng ký song ngành
+  steps:
+    - intent: song_nganh_dieu_kien_dang_ky
+    - action: action_song_nganh_dieu_kien_dang_ky
+- rule: Tra cứu thủ tục song ngành
+  steps:
+    - intent: song_nganh_thu_tuc
+    - action: action_song_nganh_thu_tuc
+
+- rule: Tra cứu thời gian học song ngành
+  steps:
+    - intent: song_nganh_thoi_gian_hoc
+    - action: action_song_nganh_thoi_gian_hoc
+
+- rule: Tra cứu cơ hội nghề nghiệp song ngành
+  steps:
+    - intent: song_nganh_co_hoi_nghe_nghiep
+    - action: action_song_nganh_co_hoi_nghe_nghiep
+
+- rule: Tra cứu học phí song ngành
+  steps:
+    - intent: song_nganh_hoc_phi
+    - action: action_song_nganh_hoc_phi
+
+- rule: Tra cứu liên hệ song ngành
+  steps:
+    - intent: song_nganh_lien_he
+    - action: action_song_nganh_lien_he
+
+- rule: Tra cứu điều kiện bảo lưu
+  steps:
+    - intent: baoluu_dieu_kien
+    - action: action_baoluu_dieu_kien
+
+- rule: Tra cứu thủ tục bảo lưu
+  steps:
+    - intent: baoluu_thu_tuc
+    - action: action_baoluu_thu_tuc
+
+- rule: Tra cứu thời gian bảo lưu
+  steps:
+    - intent: baoluu_thoi_gian
+    - action: action_baoluu_thoi_gian
+
+- rule: Tra cứu hồ sơ bảo lưu
+  steps:
+    - intent: baoluu_ho_so
+    - action: action_baoluu_ho_so
+
+- rule: Tra cứu học phí bảo lưu
+  steps:
+    - intent: baoluu_hoc_phi
+    - action: action_baoluu_hoc_phi
+
+- rule: Tra cứu quyền lợi và nghĩa vụ khi bảo lưu
+  steps:
+    - intent: baoluu_quyen_loi_nghia_vu
+    - action: action_baoluu_quyen_loi_nghia_vu
+
+- rule: Tra cứu liên hệ bảo lưu
+  steps:
+    - intent: baoluu_lien_he
+    - action: action_baoluu_lien_he
+
+- rule: Tra cứu điều kiện tốt nghiệp
+  steps:
+    - intent: tot_nghiep_dieu_kien
+    - action: action_tot_nghiep_dieu_kien
+
+- rule: Tra cứu thủ tục tốt nghiệp
+  steps:
+    - intent: tot_nghiep_thu_tuc
+    - action: action_tot_nghiep_thu_tuc
+
+- rule: Tra cứu thời gian tốt nghiệp
+  steps:
+    - intent: tot_nghiep_thoi_gian
+    - action: action_tot_nghiep_thoi_gian
+- rule: Tra cứu hồ sơ tốt nghiệp
+  steps:
+    - intent: tot_nghiep_ho_so
+    - action: action_tot_nghiep_ho_so
+
+- rule: Tra cứu điểm tốt nghiệp
+  steps:
+    - intent: tot_nghiep_diem_so
+    - action: action_tot_nghiep_diem_so
+
+- rule: Tra cứu chứng nhận tốt nghiệp
+  steps:
+    - intent: tot_nghiep_chung_nhan
+    - action: action_tot_nghiep_chung_nhan
+
+- rule: Tra cứu liên hệ tốt nghiệp
+  steps:
+    - intent: tot_nghiep_lien_he
+    - action: action_tot_nghiep_lien_he
+
+- rule: Tra cứu đối tượng phải thi tiếng Anh đầu vào
+  steps:
+    - intent: thi_tieng_anh_doi_tuong_dien_tu
+    - action: action_thi_tieng_anh_doi_tuong_dien_tu
+
+- rule: Tra cứu hình thức thi tiếng Anh đầu vào
+  steps:
+    - intent: thi_tieng_anh_hinh_thuc_dien_tu
+    - action: action_thi_tieng_anh_hinh_thuc_dien_tu
+
+- rule: Tra cứu điểm chuẩn thi tiếng Anh đầu vào
+  steps:
+    - intent: thi_tieng_anh_diem_chuan_dien_tu
+    - action: action_thi_tieng_anh_diem_chuan_dien_tu
+
+- rule: Tra cứu lịch thi tiếng Anh đầu vào
+  steps:
+    - intent: thi_tieng_anh_lich_dien_tu
+    - action: action_thi_tieng_anh_lich_dien_tu
+
+- rule: Tra cứu thủ tục thi tiếng Anh đầu vào
+  steps:
+    - intent: thi_tieng_anh_thu_tuc_dien_tu
+    - action: action_thi_tieng_anh_thu_tuc_dien_tu
+
+- rule: Tra cứu trường hợp đặc biệt thi tiếng Anh đầu vào
+  steps:
+    - intent: thi_tieng_anh_truong_hop_dac_biet_dien_tu
+    - action: action_thi_tieng_anh_truong_hop_dac_biet_dien_tu
+
+- rule: Tra cứu liên hệ kỳ thi tiếng Anh đầu vào
+  steps:
+    - intent: thi_tieng_anh_lien_he_dien_tu
+    - action: action_thi_tieng_anh_lien_he_dien_tu
+
