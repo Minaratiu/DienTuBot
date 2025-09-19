@@ -63,3 +63,235 @@ stories:
   steps:
     - intent: tra_cuu_diem_theo_xet_tuyen_ket_hop
     - action: action_tra_cuu_diem_theo_xet_tuyen_ket_hop
+
+
+- story: Kịch bản đa bước - nhóm xet_tuyen
+  steps:
+  - intent: tra_cuu_diem_xet_tuyen_tai_nang
+  - action: action_tra_cuu_diem_xet_tuyen_tai_nang
+  - intent: tra_cuu_diem_theo_xet_tuyen_ket_hop
+  - action: action_tra_cuu_diem_theo_xet_tuyen_ket_hop
+  - intent: xet_tuyen_nguyen_vong_dien_tu
+  - action: action_xet_tuyen_nguyen_vong_dien_tu
+  - intent: xet_tuyen_dieu_kien_dien_tu
+  - action: action_xet_tuyen_dieu_kien_dien_tu
+  - intent: xet_tuyen_thu_tuc_dien_tu
+  - action: action_xet_tuyen_thu_tuc_dien_tu
+
+- story: Kịch bản đa bước - nhóm chi_tieu
+  steps:
+  - intent: tra_cuu_chi_tieu_nganh
+  - action: action_tra_cuu_chi_tieu_nganh
+  - intent: tra_cuu_chi_tieu_theo_co_so
+  - action: action_tra_cuu_chi_tieu_theo_co_so
+  - intent: tra_cuu_chi_tieu_theo_phuong_thuc
+  - action: action_tra_cuu_chi_tieu_theo_phuong_thuc
+  - intent: tra_cuu_chi_tieu_tong_quat
+  - action: action_tra_cuu_chi_tieu_tong_quat
+
+- story: Kịch bản đa bước - nhóm thoi_gian
+  steps:
+  - intent: tra_cuu_thoi_gian_tuyen_sinh
+  - action: action_tra_cuu_thoi_gian_tuyen_sinh
+  - intent: tra_cuu_thoi_gian_nhap_hoc
+  - action: action_tra_cuu_thoi_gian_nhap_hoc
+  - intent: tra_cuu_thoi_gian_dao_tao
+  - action: action_tra_cuu_thoi_gian_dao_tao
+
+- story: Kịch bản đa bước - nhóm hoc_phi
+  steps:
+  - intent: tra_cuu_hoc_phi_nganh
+  - action: action_tra_cuu_hoc_phi_nganh
+  - intent: tra_cuu_lotrinh_tang_hoc_phi
+  - action: action_tra_cuu_lotrinh_tang_hoc_phi
+  - intent: tra_cuu_hoc_phi_theo_tin_chi
+  - action: action_tra_cuu_hoc_phi_theo_tin_chi
+
+- story: Kịch bản đa bước - nhóm hoc_bong
+  steps:
+  - intent: tra_cuu_co_hoc_bong
+  - action: action_tra_cuu_co_hoc_bong
+  - intent: tra_cuu_loai_hoc_bong
+  - action: action_tra_cuu_loai_hoc_bong
+  - intent: tra_cuu_dieu_kien_hoc_bong
+  - action: action_tra_cuu_dieu_kien_hoc_bong
+  - intent: tra_cuu_gia_tri_hoc_bong
+  - action: action_tra_cuu_gia_tri_hoc_bong
+
+- story: Kịch bản đa bước - nhóm nghien_cuu
+  steps:
+  - intent: tra_cuu_khai_niem_nghien_cuu_khoa_hoc
+  - action: action_tra_cuu_khai_niem_nghien_cuu_khoa_hoc
+  - intent: tra_cuu_co_hoi_nghien_cuu_khoa_hoc
+  - action: action_tra_cuu_co_hoi_nghien_cuu_khoa_hoc
+  - intent: tra_cuu_dieu_kien_nghien_cuu_khoa_hoc
+  - action: action_tra_cuu_dieu_kien_nghien_cuu_khoa_hoc
+  - intent: tra_cuu_loi_ich_nghien_cuu_khoa_hoc
+  - action: action_tra_cuu_loi_ich_nghien_cuu_khoa_hoc
+  - intent: tra_cuu_noi_dung_nghien_cuu_khoa_hoc
+  - action: action_tra_cuu_noi_dung_nghien_cuu_khoa_hoc
+
+- story: Kịch bản đa bước - nhóm phong_lab
+  steps:
+  - intent: phong_lab_danh_sach
+  - action: action_phong_lab_danh_sach
+  - intent: phong_lab_thiet_bi
+  - action: action_phong_lab_thiet_bi
+  - intent: phong_lab_dieu_kien_su_dung
+  - action: action_phong_lab_dieu_kien_su_dung
+  - intent: phong_lab_gio_mo_cua
+  - action: action_phong_lab_gio_mo_cua
+  - intent: phong_lab_khoa_hoc_thuc_hanh
+  - action: action_phong_lab_khoa_hoc_thuc_hanh
+
+- story: Kịch bản đa bước - nhóm viec_lam
+  steps:
+  - intent: tra_cuu_co_hoi_viec_lam
+  - action: action_tra_cuu_co_hoi_viec_lam
+  - intent: tra_cuu_nhu_cau_tuyen_dung
+  - action: action_tra_cuu_nhu_cau_tuyen_dung
+  - intent: tra_cuu_viec_lam_quoc_te
+  - action: action_tra_cuu_viec_lam_quoc_te
+  - intent: tra_cuu_luong_nganh
+  - action: action_tra_cuu_luong_nganh
+
+- story: Kịch bản đa bước - nhóm thu_vien
+  steps:
+  - intent: thu_vien_danh_sach
+  - action: action_thu_vien_danh_sach
+  - intent: thu_vien_gio_mo_cua
+  - action: action_thu_vien_gio_mo_cua
+  - intent: thu_vien_tai_nguyen
+  - action: action_thu_vien_tai_nguyen
+  - intent: thu_vien_phong_doc
+  - action: action_thu_vien_phong_doc
+  - intent: thu_vien_thiet_bi
+  - action: action_thu_vien_thiet_bi
+
+- story: Kịch bản đa bước - nhóm ktx
+  steps:
+  - intent: ktx_danh_sach
+  - action: action_ktx_danh_sach
+  - intent: ktx_dieu_kien
+  - action: action_ktx_dieu_kien
+  - intent: ktx_chi_phi
+  - action: action_ktx_chi_phi
+  - intent: ktx_gio_mo_cua
+  - action: action_ktx_gio_mo_cua
+  - intent: ktx_tien_nghi
+  - action: action_ktx_tien_nghi
+
+- story: Kịch bản đa bước - nhóm phong_giao_vu
+  steps:
+  - intent: phong_giao_vu_danh_sach
+  - action: action_phong_giao_vu_danh_sach
+  - intent: phong_giao_vu_gio_lam_viec
+  - action: action_phong_giao_vu_gio_lam_viec
+  - intent: phong_giao_vu_thu_tuc_dang_ky_hoc
+  - action: action_phong_giao_vu_thu_tuc_dang_ky_hoc
+  - intent: phong_giao_vu_hoc_bong
+  - action: action_phong_giao_vu_hoc_bong
+  - intent: phong_giao_vu_diem_so
+  - action: action_phong_giao_vu_diem_so
+
+- story: Kịch bản đa bước - nhóm coso
+  steps:
+  - intent: coso_danh_sach
+  - action: action_coso_danh_sach
+  - intent: coso_phong_hoc
+  - action: action_coso_phong_hoc
+  - intent: coso_san_bai_the_thao
+  - action: action_coso_san_bai_the_thao
+  - intent: coso_tien_nghi_chung
+  - action: action_coso_tien_nghi_chung
+  - intent: coso_dieu_kien_su_dung
+  - action: action_coso_dieu_kien_su_dung
+
+- story: Kịch bản đa bước - nhóm song_nganh
+  steps:
+  - intent: song_nganh_danh_sach
+  - action: action_song_nganh_danh_sach
+  - intent: song_nganh_dieu_kien_dang_ky
+  - action: action_song_nganh_dieu_kien_dang_ky
+  - intent: song_nganh_thu_tuc
+  - action: action_song_nganh_thu_tuc
+  - intent: song_nganh_thoi_gian_hoc
+  - action: action_song_nganh_thoi_gian_hoc
+  - intent: song_nganh_co_hoi_nghe_nghiep
+  - action: action_song_nganh_co_hoi_nghe_nghiep
+
+- story: Kịch bản đa bước - nhóm baoluu
+  steps:
+  - intent: baoluu_dieu_kien
+  - action: action_baoluu_dieu_kien
+  - intent: baoluu_thu_tuc
+  - action: action_baoluu_thu_tuc
+  - intent: baoluu_thoi_gian
+  - action: action_baoluu_thoi_gian
+  - intent: baoluu_ho_so
+  - action: action_baoluu_ho_so
+  - intent: baoluu_hoc_phi
+  - action: action_baoluu_hoc_phi
+
+- story: Kịch bản đa bước - nhóm tot_nghiep
+  steps:
+  - intent: tot_nghiep_dieu_kien
+  - action: action_tot_nghiep_dieu_kien
+  - intent: tot_nghiep_thu_tuc
+  - action: action_tot_nghiep_thu_tuc
+  - intent: tot_nghiep_thoi_gian
+  - action: action_tot_nghiep_thoi_gian
+  - intent: tot_nghiep_ho_so
+  - action: action_tot_nghiep_ho_so
+  - intent: tot_nghiep_diem_so
+  - action: action_tot_nghiep_diem_so
+
+- story: Kịch bản đa bước - nhóm thi_tieng_anh
+  steps:
+  - intent: thi_tieng_anh_doi_tuong_dien_tu
+  - action: action_thi_tieng_anh_doi_tuong_dien_tu
+  - intent: thi_tieng_anh_hinh_thuc_dien_tu
+  - action: action_thi_tieng_anh_hinh_thuc_dien_tu
+  - intent: thi_tieng_anh_diem_chuan_dien_tu
+  - action: action_thi_tieng_anh_diem_chuan_dien_tu
+  - intent: thi_tieng_anh_lich_dien_tu
+  - action: action_thi_tieng_anh_lich_dien_tu
+  - intent: thi_tieng_anh_thu_tuc_dien_tu
+  - action: action_thi_tieng_anh_thu_tuc_dien_tu
+
+- story: Kịch bản đa bước - nhóm cau_lac_bo
+  steps:
+  - intent: cau_lac_bo_danh_sach
+  - action: action_cau_lac_bo_danh_sach
+  - intent: cau_lac_bo_dieu_kien
+  - action: action_cau_lac_bo_dieu_kien
+  - intent: cau_lac_bo_su_kien
+  - action: action_cau_lac_bo_su_kien
+  - intent: cau_lac_bo_cuoc_thi
+  - action: action_cau_lac_bo_cuoc_thi
+  - intent: cau_lac_bo_lien_ket
+  - action: action_cau_lac_bo_lien_ket
+
+- story: Kịch bản đa bước - nhóm ptit_gioi_thieu
+  steps:
+  - intent: ptit_gioi_thieu_lich_su
+  - action: action_ptit_gioi_thieu_lich_su
+  - intent: ptit_gioi_thieu_su_menh_tam_nhin
+  - action: action_ptit_gioi_thieu_su_menh_tam_nhin
+  - intent: ptit_gioi_thieu_co_cau_to_chuc
+  - action: action_ptit_gioi_thieu_co_cau_to_chuc
+  - intent: ptit_gioi_thieu_dia_chi
+  - action: action_ptit_gioi_thieu_dia_chi
+  - intent: ptit_gioi_thieu_quy_mo_dao_tao
+  - action: action_ptit_gioi_thieu_quy_mo_dao_tao
+
+- story: Kịch bản đa bước - nhóm giang_vien
+  steps:
+  - intent: tra_cuu_giang_vien
+  - action: action_tra_cuu_giang_vien
+  - intent: tra_cuu_trinh_do_giang_vien
+  - action: action_tra_cuu_trinh_do_giang_vien
+  - intent: tra_cuu_chuyen_mon_giang_vien
+  - action: action_tra_cuu_chuyen_mon_giang_vien
+  - intent: tra_cuu_lich_day_giang_vien
+  - action: action_tra_cuu_lich_day_giang_vien
