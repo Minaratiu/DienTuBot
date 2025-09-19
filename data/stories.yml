@@ -295,3 +295,48 @@ stories:
   - action: action_tra_cuu_chuyen_mon_giang_vien
   - intent: tra_cuu_lich_day_giang_vien
   - action: action_tra_cuu_lich_day_giang_vien
+
+- story: Kịch bản đa bước - nhóm chuong_trinh_hoc
+  steps:
+  - intent: tra_cuu_tong_quan_nganh
+  - action: action_tra_cuu_tong_quan_nganh
+  - intent: tra_cuu_to_hop_xet_tuyen
+  - action: action_tra_cuu_to_hop_xet_tuyen
+  - intent: tra_cuu_quy_trinh_nhap_hoc
+  - action: action_tra_cuu_quy_trinh_nhap_hoc
+  - intent: tra_cuu_ho_so_nhap_hoc
+  - action: action_tra_cuu_ho_so_nhap_hoc
+  - intent: tra_cuu_chuong_trinh_hoc_nganh
+  - action: action_tra_cuu_chuong_trinh_hoc_nganh
+
+- story: Kịch bản đa bước - nhóm nu_sinh
+  steps:
+  - intent: tra_cuu_phu_hop_nu
+  - action: action_tra_cuu_phu_hop_nu
+  - intent: tra_cuu_dac_thu_cong_viec_nu
+  - action: action_tra_cuu_dac_thu_cong_viec_nu
+  - intent: tra_cuu_viec_lam_cho_nu
+  - action: action_tra_cuu_viec_lam_cho_nu
+  - intent: tra_cuu_co_hoi_thang_tien_nu
+  - action: action_tra_cuu_co_hoi_thang_tien_nu
+
+- story: Kịch bản đa bước - nhóm lien_he
+  steps:
+  - intent: tra_cuu_thong_tin_lien_he
+  - action: action_tra_cuu_thong_tin_lien_he
+  - intent: phong_lab_lien_he
+  - action: action_phong_lab_lien_he
+  - intent: phong_giao_vu_lien_he
+  - action: action_phong_giao_vu_lien_he
+  - intent: ktx_lien_he
+  - action: action_ktx_lien_he
+  - intent: thu_vien_lien_he
+  - action: action_thu_vien_lien_he
+
+- story: Kịch bản đa bước - nhóm su_kien
+  steps:
+  - intent: thu_vien_su_kien_hoat_dong
+  - action: action_thu_vien_su_kien_hoat_dong
+  - intent: phong_giao_vu_thong_bao_ke_hoach
+  - action: action_phong_giao_vu_thong_bao_ke_hoach
+
