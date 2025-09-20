@@ -1977,3 +1977,288 @@ class ActionKTXGioMoCua(Action):
                  "Lịch sinh hoạt chung (giờ giấc, vệ sinh, nội quy) được dán tại bảng tin từng tòa nhà."
         )
         return []
+class ActionKTXTienNghi(Action):
+    def name(self) -> Text:
+        return "action_ktx_tien_nghi"
+
+    def run(self, dispatcher, tracker, domain):
+        dispatcher.utter_message(
+            text="Ký túc xá PTIT được trang bị đầy đủ tiện nghi cơ bản cho sinh viên: "
+                 "giường tầng, bàn ghế, tủ để đồ, wifi tốc độ cao. "
+                 "Ngoài ra, KTX có phòng tự học, khu thể thao, căn tin, máy giặt và hệ thống camera an ninh. "
+                 "Một số tòa còn có phòng sinh hoạt chung và khu bếp dùng chung."
+        )
+        return []
+
+
+class ActionKTXDangKy(Action):
+    def name(self) -> Text:
+        return "action_ktx_dang_ky"
+
+    def run(self, dispatcher, tracker, domain):
+        dispatcher.utter_message(
+            text="Để đăng ký ở KTX PTIT, sinh viên cần theo thông báo hàng năm của Học viện. "
+                 "Thường đăng ký trực tuyến qua cổng thông tin sinh viên hoặc nộp đơn tại Ban quản lý KTX. "
+                 "Hồ sơ gồm: đơn đăng ký, thẻ sinh viên/giấy báo nhập học, CMND/CCCD. "
+                 "Thời gian đăng ký thường mở vào đầu năm học và có số lượng chỗ giới hạn."
+        )
+        return []
+
+
+class ActionKTXLienHe(Action):
+    def name(self) -> Text:
+        return "action_ktx_lien_he"
+
+    def run(self, dispatcher, tracker, domain):
+        dispatcher.utter_message(
+            text="Ban quản lý ký túc xá PTIT là đơn vị phụ trách trực tiếp. "
+                 "Sinh viên có thể liên hệ qua số điện thoại và email được công bố trên website chính thức của Học viện. "
+                 "Ngoài ra, mỗi cơ sở KTX đều có văn phòng trực để giải đáp thắc mắc. "
+                 "Thông tin liên hệ chi tiết được cập nhật tại bảng thông báo KTX và fanpage PTIT."
+        )
+        return []
+class ActionKTXQuyDinh(Action):
+    def name(self) -> Text:
+        return "action_ktx_quy_dinh"
+
+    def run(self, dispatcher, tracker, domain):
+        dispatcher.utter_message(
+            text="Sinh viên ở ký túc xá PTIT cần tuân thủ các nội quy sau: "
+                 "- Giữ gìn an ninh, trật tự, vệ sinh chung. "
+                 "- Không hút thuốc, uống rượu bia, hoặc mang chất cấm vào KTX. "
+                 "- Ra vào đúng giờ quy định, xuất trình thẻ khi cần thiết. "
+                 "- Không tự ý cho người ngoài vào phòng. "
+                 "- Tôn trọng nội quy về phòng cháy chữa cháy, sử dụng điện nước an toàn."
+        )
+        return []
+
+
+class ActionThuVienDanhSach(Action):
+    def name(self) -> Text:
+        return "action_thu_vien_danh_sach"
+
+    def run(self, dispatcher, tracker, domain):
+        dispatcher.utter_message(
+            text="Học viện PTIT có hệ thống thư viện phục vụ học tập và nghiên cứu. "
+                 "Hiện nay có: Thư viện trung tâm tại Hà Đông (Hà Nội), "
+                 "Thư viện cơ sở Hồ Chí Minh, cùng các phòng đọc, phòng tra cứu điện tử. "
+                 "Sinh viên có thể mượn sách, tra cứu tài liệu giấy và tài nguyên số tại đây."
+        )
+        return []
+
+
+class ActionThuVienGioMoCua(Action):
+    def name(self) -> Text:
+        return "action_thu_vien_gio_mo_cua"
+
+    def run(self, dispatcher, tracker, domain):
+        dispatcher.utter_message(
+            text="Thư viện PTIT mở cửa từ **8h00 - 21h00** các ngày trong tuần (từ thứ 2 đến thứ 7). "
+                 "Chủ nhật và ngày lễ thường đóng cửa. "
+                 "Trong mùa thi, thư viện có thể kéo dài giờ phục vụ để hỗ trợ sinh viên."
+        )
+        return []
+
+
+class ActionThuVienTaiNguyen(Action):
+    def name(self) -> Text:
+        return "action_thu_vien_tai_nguyen"
+
+    def run(self, dispatcher, tracker, domain):
+        dispatcher.utter_message(
+            text="Thư viện PTIT cung cấp nhiều loại tài nguyên: "
+                 "- Giáo trình, sách tham khảo cho tất cả các ngành. "
+                 "- Tạp chí, báo khoa học chuyên ngành. "
+                 "- Luận văn, khóa luận tốt nghiệp. "
+                 "- Cơ sở dữ liệu điện tử, e-book và tài liệu số. "
+                 "Sinh viên có thể tra cứu trực tiếp hoặc truy cập qua hệ thống thư viện số của Học viện."
+        )
+        return []
+class ActionThuVienPhongDoc(Action):
+    def name(self) -> Text:
+        return "action_thu_vien_phong_doc"
+
+    def run(self, dispatcher, tracker, domain):
+        dispatcher.utter_message(
+            text="Thư viện PTIT có không gian phòng đọc rộng rãi, yên tĩnh, "
+                 "được trang bị wifi miễn phí, ánh sáng và điều hòa đầy đủ. "
+                 "Ngoài ra còn có phòng học nhóm, khu tự học và phòng tra cứu tài liệu điện tử, "
+                 "tạo điều kiện thuận lợi cho sinh viên nghiên cứu và trao đổi học tập."
+        )
+        return []
+
+
+class ActionThuVienThietBi(Action):
+    def name(self) -> Text:
+        return "action_thu_vien_thiet_bi"
+
+    def run(self, dispatcher, tracker, domain):
+        dispatcher.utter_message(
+            text="Thư viện PTIT trang bị đầy đủ các thiết bị hỗ trợ sinh viên: "
+                 "- Máy tính tra cứu tài liệu. "
+                 "- Máy in, máy photocopy, máy scan. "
+                 "- Hệ thống mượn/trả sách tự động. "
+                 "Sinh viên có thể liên hệ trực tiếp với thủ thư tại quầy dịch vụ để được hỗ trợ sử dụng thiết bị."
+        )
+        return []
+
+
+class ActionThuVienDieuKienSuDung(Action):
+    def name(self) -> Text:
+        return "action_thu_vien_dieu_kien_su_dung"
+
+    def run(self, dispatcher, tracker, domain):
+        dispatcher.utter_message(
+            text="Đối tượng được phép sử dụng thư viện PTIT gồm: sinh viên, học viên, cán bộ, giảng viên của Học viện. "
+                 "Sinh viên cần đăng ký thẻ thư viện để mượn tài liệu. "
+                 "Khi sử dụng thư viện, người đọc phải tuân thủ nội quy: giữ trật tự, không mang đồ ăn thức uống, "
+                 "bảo quản sách và trang thiết bị. "
+                 "Khách bên ngoài có thể được phép sử dụng tài liệu tham khảo khi có sự đồng ý của quản lý thư viện."
+        )
+        return []
+class ActionThuVienDangKy(Action):
+    def name(self) -> Text:
+        return "action_thu_vien_dang_ky"
+
+    def run(self, dispatcher, tracker, domain):
+        dispatcher.utter_message(
+            text="Sinh viên muốn sử dụng thư viện PTIT cần đăng ký thẻ thư viện. "
+                 "Thủ tục gồm: điền phiếu đăng ký tại quầy thủ thư, mang theo thẻ sinh viên hoặc giấy tờ tùy thân. "
+                 "Sau khi có thẻ, sinh viên có thể mượn sách, tài liệu và sử dụng đầy đủ tiện ích trong thư viện."
+        )
+        return []
+
+
+class ActionThuVienLienHe(Action):
+    def name(self) -> Text:
+        return "action_thu_vien_lien_he"
+
+    def run(self, dispatcher, tracker, domain):
+        dispatcher.utter_message(
+            text="Liên hệ Thư viện Học viện Công nghệ Bưu chính Viễn thông:\n"
+                 "- 📍 Cơ sở Hà Nội: Km10, Nguyễn Trãi, Hà Đông, Hà Nội\n"
+                 "- ☎️ Điện thoại: (024) 33528122\n"
+                 "- 🌐 Website: http://ptit.edu.vn\n"
+                 "- 📧 Email: library@ptit.edu.vn\n"
+                 "Bạn có thể đến trực tiếp quầy thủ thư để được hỗ trợ."
+        )
+        return []
+
+
+class ActionThuVienSuKienHoatDong(Action):
+    def name(self) -> Text:
+        return "action_thu_vien_su_kien_hoat_dong"
+
+    def run(self, dispatcher, tracker, domain):
+        dispatcher.utter_message(
+            text="Thư viện PTIT thường xuyên tổ chức các hoạt động: workshop kỹ năng tìm kiếm tài liệu, "
+                 "hướng dẫn sử dụng cơ sở dữ liệu điện tử, talk show chia sẻ kinh nghiệm học tập và nghiên cứu. "
+                 "Ngoài ra còn có các chương trình giao lưu, triển lãm sách, giới thiệu tài liệu mới. "
+                 "Thông tin chi tiết sẽ được thông báo trên website và fanpage thư viện."
+        )
+        return []
+
+
+class ActionPhongGiaoVuDanhSach(Action):
+    def name(self) -> Text:
+        return "action_phong_giao_vu_danh_sach"
+
+    def run(self, dispatcher, tracker, domain):
+        dispatcher.utter_message(
+            text="Tại PTIT, mỗi khoa đều có phòng giáo vụ phụ trách công tác đào tạo và sinh viên. "
+                 "Ví dụ: Khoa Công nghệ Thông tin, Khoa Điện tử, Khoa Đa phương tiện… đều có giáo vụ riêng. "
+                 "Phòng giáo vụ chịu trách nhiệm quản lý hồ sơ, đăng ký học phần, điểm thi và hỗ trợ thủ tục cho sinh viên."
+        )
+        return []
+
+
+class ActionPhongGiaoVuGioLamViec(Action):
+    def name(self) -> Text:
+        return "action_phong_giao_vu_gio_lam_viec"
+
+    def run(self, dispatcher, tracker, domain):
+        dispatcher.utter_message(
+            text="Giờ làm việc của các phòng giáo vụ PTIT:\n"
+                 "- Từ thứ Hai đến thứ Sáu: 8h00 – 11h30 và 13h30 – 17h00.\n"
+                 "- Nghỉ thứ Bảy, Chủ Nhật và các ngày lễ.\n"
+                 "Sinh viên nên đến trong giờ hành chính để được hỗ trợ kịp thời."
+        )
+        return []
+class ActionPhongGiaoVuThuTucDangKyHoc(Action):
+    def name(self) -> Text:
+        return "action_phong_giao_vu_thu_tuc_dang_ky_hoc"
+
+    def run(self, dispatcher, tracker, domain):
+        dispatcher.utter_message(
+            text="Thủ tục đăng ký học phần tại PTIT được thực hiện trực tuyến trên hệ thống quản lý đào tạo "
+                 "(http://qldt.ptit.edu.vn). Sinh viên đăng nhập bằng tài khoản cá nhân, chọn môn học và thời khóa biểu phù hợp. "
+                 "Phòng giáo vụ sẽ hỗ trợ giải đáp khi gặp sự cố hoặc thắc mắc."
+        )
+        return []
+
+
+class ActionPhongGiaoVuHocBong(Action):
+    def name(self) -> Text:
+        return "action_phong_giao_vu_hoc_bong"
+
+    def run(self, dispatcher, tracker, domain):
+        dispatcher.utter_message(
+            text="Phòng giáo vụ PTIT quản lý các loại học bổng như: học bổng khuyến khích học tập, học bổng tài trợ từ doanh nghiệp "
+                 "và các chương trình hỗ trợ tài chính khác. Sinh viên có thể nộp hồ sơ xét học bổng theo thông báo của từng học kỳ. "
+                 "Mọi thông tin chi tiết sẽ được công bố trên website và bảng tin của khoa/phòng."
+        )
+        return []
+
+
+class ActionPhongGiaoVuDiemSo(Action):
+    def name(self) -> Text:
+        return "action_phong_giao_vu_diem_so"
+
+    def run(self, dispatcher, tracker, domain):
+        dispatcher.utter_message(
+            text="Điểm số các môn học được cập nhật trên hệ thống quản lý đào tạo (qldt.ptit.edu.vn). "
+                 "Sinh viên có thể tự tra cứu bảng điểm cá nhân. Nếu có sai sót hoặc cần in bảng điểm, "
+                 "hãy liên hệ trực tiếp phòng giáo vụ của khoa để được hỗ trợ."
+        )
+        return []
+
+
+class ActionPhongGiaoVuNopHoSo(Action):
+    def name(self) -> Text:
+        return "action_phong_giao_vu_nop_ho_so"
+
+    def run(self, dispatcher, tracker, domain):
+        dispatcher.utter_message(
+            text="Hồ sơ sinh viên nộp cho phòng giáo vụ thường gồm: đơn nhập học, sơ yếu lý lịch, bản sao công chứng giấy khai sinh, "
+                 "các giấy tờ liên quan đến điểm thi, bằng tốt nghiệp hoặc giấy chứng nhận tốt nghiệp tạm thời. "
+                 "Phòng giáo vụ sẽ có hướng dẫn chi tiết vào mỗi kỳ tuyển sinh hoặc khi sinh viên có yêu cầu cập nhật hồ sơ."
+        )
+        return []
+
+
+class ActionPhongGiaoVuThongBaoKeHoach(Action):
+    def name(self) -> Text:
+        return "action_phong_giao_vu_thong_bao_ke_hoach"
+
+    def run(self, dispatcher, tracker, domain):
+        dispatcher.utter_message(
+            text="Phòng giáo vụ thường xuyên đăng tải thông báo về lịch học, lịch thi, kế hoạch học tập từng học kỳ "
+                 "trên website của Học viện và bảng tin khoa. Sinh viên nên theo dõi kênh thông tin chính thức hoặc fanpage để cập nhật kịp thời."
+        )
+        return []
+
+
+class ActionPhongGiaoVuLienHe(Action):
+    def name(self) -> Text:
+        return "action_phong_giao_vu_lien_he"
+
+    def run(self, dispatcher, tracker, domain):
+        dispatcher.utter_message(
+            text="Thông tin liên hệ phòng giáo vụ PTIT:\n"
+                 "- 📍 Cơ sở Hà Nội: Km10, Nguyễn Trãi, Hà Đông, Hà Nội\n"
+                 "- 📍 Cơ sở TP.HCM: 97 Man Thiện, TP. Thủ Đức, TP.HCM\n"
+                 "- ☎️ Điện thoại: (024) 33528122\n"
+                 "- 🌐 Website: http://ptit.edu.vn\n"
+                 "Sinh viên có thể liên hệ trực tiếp giáo vụ của từng khoa để được hỗ trợ nhanh chóng."
+        )
+        return []
