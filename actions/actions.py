@@ -2262,3 +2262,560 @@ class ActionPhongGiaoVuLienHe(Action):
                  "Sinh viên có thể liên hệ trực tiếp giáo vụ của từng khoa để được hỗ trợ nhanh chóng."
         )
         return []
+
+# Danh sách cơ sở vật chất
+class ActionCosoDanhSach(Action):
+    def name(self) -> str:
+        return "action_coso_danh_sach"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: dict):
+        dispatcher.utter_message(
+            text="Trường hiện có hệ thống giảng đường, phòng học hiện đại, phòng thí nghiệm – phòng lab chuyên ngành, thư viện điện tử, ký túc xá, khu thể thao và khu dịch vụ hỗ trợ sinh viên. Các cơ sở vật chất được đầu tư để phục vụ tối đa cho học tập, nghiên cứu và sinh hoạt."
+        )
+        return []
+
+
+# Phòng học
+class ActionCosoPhongHoc(Action):
+    def name(self) -> str:
+        return "action_coso_phong_hoc"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: dict):
+        dispatcher.utter_message(
+            text="Phòng học được trang bị máy chiếu, điều hòa, âm thanh, ánh sáng đầy đủ, bàn ghế tiêu chuẩn. Một số giảng đường lớn có hệ thống ghi hình, hỗ trợ học trực tuyến. Phòng học của khoa Điện tử được thiết kế phù hợp cho thí nghiệm và thực hành."
+        )
+        return []
+
+
+# Sân bãi thể thao
+class ActionCosoSanBaiTheThao(Action):
+    def name(self) -> str:
+        return "action_coso_san_bai_the_thao"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: dict):
+        dispatcher.utter_message(
+            text="Trường có sân bóng đá, bóng rổ, bóng chuyền, sân tennis, phòng gym, khu thể chất đa năng. Sinh viên có thể đăng ký mượn sân bãi theo lịch sắp xếp của phòng công tác sinh viên. Một số sân bãi mở cửa tự do ngoài giờ học."
+        )
+        return []
+
+
+# Tiện nghi chung
+class ActionCosoTienNghiChung(Action):
+    def name(self) -> str:
+        return "action_coso_tien_nghi_chung"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: dict):
+        dispatcher.utter_message(
+            text="Trường có wifi miễn phí, hệ thống căng tin, phòng máy tính, máy in – photocopy, phòng họp, hội trường và khu sinh hoạt chung. Sinh viên có thể sử dụng hầu hết tiện nghi này trong giờ hành chính và ngoài giờ theo quy định."
+        )
+        return []
+
+
+# Điều kiện sử dụng
+class ActionCosoDieuKienSuDung(Action):
+    def name(self) -> str:
+        return "action_coso_dieu_kien_su_dung"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: dict):
+        dispatcher.utter_message(
+            text="Sinh viên có thể sử dụng phòng học và thư viện theo thời khóa biểu. Phòng lab cần đăng ký trước với trợ giảng hoặc giảng viên phụ trách. Sân bãi thể thao được quản lý theo lịch đăng ký, sinh viên cần tuân thủ nội quy sử dụng cơ sở vật chất."
+        )
+        return []
+
+
+# Liên hệ
+class ActionCosoLienHe(Action):
+    def name(self) -> str:
+        return "action_coso_lien_he"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: dict):
+        dispatcher.utter_message(
+            text="Phòng Quản trị cơ sở vật chất là đơn vị phụ trách. Sinh viên có thể liên hệ qua số điện thoại, email hoặc trực tiếp tại văn phòng để được hỗ trợ. Thông tin liên hệ chi tiết được đăng tải trên website chính thức của trường."
+        )
+        return []
+# Danh sách chương trình song ngành
+class ActionSongNganhDanhSach(Action):
+    def name(self) -> str:
+        return "action_song_nganh_danh_sach"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: dict):
+        dispatcher.utter_message(
+            text="Hiện tại trường triển khai các chương trình song ngành cho sinh viên có nhu cầu mở rộng kiến thức ở nhiều lĩnh vực. Một số lựa chọn phổ biến bao gồm: Công nghệ thông tin, Kỹ thuật điện tử - viễn thông, Quản trị kinh doanh, Tài chính – ngân hàng... Sinh viên khoa Điện tử có thể chọn học song ngành để bổ sung kiến thức về CNTT hoặc kinh tế."
+        )
+        return []
+
+
+# Điều kiện đăng ký song ngành
+class ActionSongNganhDieuKienDangKy(Action):
+    def name(self) -> str:
+        return "action_song_nganh_dieu_kien_dang_ky"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: dict):
+        dispatcher.utter_message(
+            text="Điều kiện đăng ký song ngành tại PTIT thường bao gồm: \
+- Sinh viên đã học ít nhất 1 năm và không bị cảnh báo học tập. \
+- Điểm trung bình tích lũy đạt từ mức khá trở lên (≥2.5/4). \
+- Đảm bảo hoàn thành đủ số tín chỉ của ngành chính. \
+Sinh viên đủ điều kiện có thể nộp đơn đăng ký tại phòng Đào tạo/Phòng Giáo vụ."
+        )
+        return []
+
+
+# Thủ tục đăng ký song ngành
+class ActionSongNganhThuTuc(Action):
+    def name(self) -> str:
+        return "action_song_nganh_thu_tuc"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: dict):
+        dispatcher.utter_message(
+            text="Thủ tục đăng ký song ngành tại PTIT như sau:\n\
+1. Sinh viên chuẩn bị đơn xin học song ngành (theo mẫu của trường).\n\
+2. Xin xác nhận của khoa quản lý ngành chính.\n\
+3. Nộp hồ sơ tại phòng Đào tạo/Phòng Giáo vụ trong thời gian thông báo.\n\
+4. Chờ xét duyệt và thông báo kết quả.\n\
+Mỗi năm nhà trường sẽ có thông báo cụ thể về thời gian và hướng dẫn chi tiết trên website và cổng thông tin sinh viên."
+        )
+        return []
+# Thời gian và lộ trình học song ngành
+class ActionSongNganhThoiGianHoc(Action):
+    def name(self) -> str:
+        return "action_song_nganh_thoi_gian_hoc"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: dict):
+        dispatcher.utter_message(
+            text="Thời gian học song ngành tại PTIT thường kéo dài thêm 1–1.5 năm so với chương trình chính, tùy vào khối lượng tín chỉ sinh viên đăng ký mỗi kỳ. Lộ trình học sẽ được sắp xếp song song với ngành chính, đảm bảo không trùng lịch học. Sinh viên cần hoàn thành đầy đủ số tín chỉ quy định của ngành thứ hai mới được công nhận tốt nghiệp song ngành."
+        )
+        return []
+
+
+# Cơ hội nghề nghiệp sau khi học song ngành
+class ActionSongNganhCoHoiNgheNghiep(Action):
+    def name(self) -> str:
+        return "action_song_nganh_co_hoi_nghe_nghiep"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: dict):
+        dispatcher.utter_message(
+            text="Sinh viên học song ngành sẽ có lợi thế cạnh tranh khi ra trường. Ví dụ: vừa học Điện tử vừa học CNTT có thể làm việc trong lĩnh vực thiết kế vi mạch, hệ thống nhúng, AI – IoT; hoặc kết hợp với Quản trị kinh doanh/Tài chính thì có thêm cơ hội trong lĩnh vực quản lý dự án, khởi nghiệp công nghệ. Doanh nghiệp đánh giá cao sinh viên song ngành vì khả năng đa kỹ năng và tư duy liên ngành."
+        )
+        return []
+
+
+# Học phí song ngành
+class ActionSongNganhHocPhi(Action):
+    def name(self) -> str:
+        return "action_song_nganh_hoc_phi"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: dict):
+        dispatcher.utter_message(
+            text="Học phí chương trình song ngành tại PTIT được tính dựa trên số tín chỉ đăng ký, tương tự ngành chính. Mức học phí thường khoảng **500.000 – 600.000 VNĐ/tín chỉ** (theo khung hiện hành). Sinh viên đóng học phí theo từng kỳ học, không có phí đăng ký riêng. Nếu đăng ký ít tín chỉ thì học phí thấp hơn, và ngược lại."
+        )
+        return []
+from rasa_sdk import Action, Tracker
+from rasa_sdk.executor import CollectingDispatcher
+
+
+# Liên hệ song ngành
+class ActionSongNganhLienHe(Action):
+    def name(self) -> str:
+        return "action_song_nganh_lien_he"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: dict):
+        dispatcher.utter_message(
+            text="Chương trình song ngành tại PTIT do **Phòng Đào tạo** phụ trách. "
+                 "Sinh viên có thể liên hệ qua email: daotao@ptit.edu.vn hoặc trực tiếp tại văn phòng Phòng Đào tạo để được tư vấn. "
+                 "Thông tin cũng được cập nhật thường xuyên trên website: https://ptit.edu.vn."
+        )
+        return []
+
+
+# Điều kiện bảo lưu
+class ActionBaoLuuDieuKien(Action):
+    def name(self) -> str:
+        return "action_baoluu_dieu_kien"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: dict):
+        dispatcher.utter_message(
+            text="Sinh viên PTIT được phép xin bảo lưu nếu có lý do chính đáng như: "
+                 "sức khỏe, hoàn cảnh gia đình, nghĩa vụ quân sự hoặc các trường hợp đặc biệt khác. "
+                 "Thông thường, sinh viên cần đã hoàn thành ít nhất 1 học kỳ và không đang trong diện cảnh báo học vụ."
+        )
+        return []
+
+
+# Thủ tục bảo lưu
+class ActionBaoLuuThuTuc(Action):
+    def name(self) -> str:
+        return "action_baoluu_thu_tuc"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: dict):
+        dispatcher.utter_message(
+            text="Thủ tục bảo lưu tại PTIT gồm: \n"
+                 "1. Viết đơn xin bảo lưu (theo mẫu của trường). \n"
+                 "2. Có xác nhận của cố vấn học tập/khoa quản lý. \n"
+                 "3. Nộp đơn và giấy tờ liên quan cho **Phòng Đào tạo**. \n"
+                 "Thời gian nộp đơn thường là trước hoặc ngay đầu học kỳ."
+        )
+        return []
+
+
+# Thời gian bảo lưu
+class ActionBaoLuuThoiGian(Action):
+    def name(self) -> str:
+        return "action_baoluu_thoi_gian"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: dict):
+        dispatcher.utter_message(
+            text="Sinh viên được bảo lưu tối đa **2 năm liên tục** (4 học kỳ). "
+                 "Thời gian bảo lưu không được tính vào thời gian đào tạo tối đa của chương trình học. "
+                 "Sau khi hết thời hạn bảo lưu, sinh viên cần làm thủ tục quay lại học tập theo kế hoạch của trường."
+        )
+        return []
+# Hồ sơ bảo lưu
+class ActionBaoLuuHoSo(Action):
+    def name(self) -> str:
+        return "action_baoluu_ho_so"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: dict):
+        dispatcher.utter_message(
+            text="Hồ sơ xin bảo lưu tại PTIT thường gồm: \n"
+                 "1. Đơn xin bảo lưu (theo mẫu của trường). \n"
+                 "2. Giấy tờ minh chứng lý do bảo lưu (giấy khám bệnh, giấy gọi nhập ngũ, v.v.). \n"
+                 "3. Xác nhận của khoa hoặc cố vấn học tập. \n"
+                 "Sinh viên nộp hồ sơ tại **Phòng Đào tạo** trước thời hạn quy định (thường ngay đầu học kỳ)."
+        )
+        return []
+
+
+# Học phí trong thời gian bảo lưu
+class ActionBaoLuuHocPhi(Action):
+    def name(self) -> str:
+        return "action_baoluu_hoc_phi"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: dict):
+        dispatcher.utter_message(
+            text="Trong thời gian bảo lưu, sinh viên **không phải đóng học phí** cho các học kỳ bảo lưu. "
+                 "Tuy nhiên, các khoản học phí hoặc công nợ của các học kỳ trước (nếu có) cần được thanh toán đầy đủ "
+                 "trước khi nộp đơn bảo lưu. "
+                 "Việc bảo lưu không phát sinh thêm chi phí đăng ký."
+        )
+        return []
+
+
+# Quyền lợi và nghĩa vụ khi bảo lưu
+class ActionBaoLuuQuyenLoiNghiaVu(Action):
+    def name(self) -> str:
+        return "action_baoluu_quyen_loi_nghia_vu"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: dict):
+        dispatcher.utter_message(
+            text="Trong thời gian bảo lưu, sinh viên PTIT có quyền: \n"
+                 "- Giữ nguyên kết quả học tập đã tích lũy. \n"
+                 "- Quay lại học tập đúng ngành đã đăng ký sau thời gian bảo lưu. \n\n"
+                 "Nghĩa vụ của sinh viên: \n"
+                 "- Hoàn tất thủ tục bảo lưu đúng thời hạn. \n"
+                 "- Thông báo với trường khi quay lại học. \n"
+                 "- Trong thời gian bảo lưu, sinh viên **không tham gia chính thức các lớp học** và không được hưởng học bổng. "
+                 "Tuy nhiên, vẫn có thể tham gia một số hoạt động ngoại khóa nếu được khoa/trường chấp thuận."
+        )
+        return []
+
+
+# Liên hệ về bảo lưu
+class ActionBaoLuuLienHe(Action):
+    def name(self) -> str:
+        return "action_baoluu_lien_he"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: dict):
+        dispatcher.utter_message(
+            text="Các vấn đề liên quan đến bảo lưu học tập được phụ trách bởi **Phòng Đào tạo – PTIT**. \n"
+                 "- Email: daotao@ptit.edu.vn \n"
+                 "- Điện thoại: (024) 3756 2186 \n"
+                 "- Website: https://ptit.edu.vn \n"
+                 "Sinh viên nên liên hệ trực tiếp với Phòng Đào tạo để được hướng dẫn chi tiết."
+        )
+        return []
+# Điều kiện tốt nghiệp
+class ActionTotNghiepDieuKien(Action):
+    def name(self) -> str:
+        return "action_tot_nghiep_dieu_kien"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: dict):
+        dispatcher.utter_message(
+            text="Điều kiện để sinh viên PTIT được công nhận tốt nghiệp: \n"
+                 "- Hoàn thành toàn bộ chương trình đào tạo và tích lũy đủ số tín chỉ theo ngành học. \n"
+                 "- Điểm trung bình chung tích lũy đạt từ **2.00/4.00** trở lên. \n"
+                 "- Không còn nợ học phần bắt buộc hoặc học phần điều kiện. \n"
+                 "- Đạt chuẩn đầu ra ngoại ngữ (VD: TOEIC 450 hoặc tương đương). \n"
+                 "- Hoàn thành đầy đủ nghĩa vụ tài chính với nhà trường."
+        )
+        return []
+
+
+# Thủ tục tốt nghiệp
+class ActionTotNghiepThuTuc(Action):
+    def name(self) -> str:
+        return "action_tot_nghiep_thu_tuc"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: dict):
+        dispatcher.utter_message(
+            text="Thủ tục tốt nghiệp tại PTIT gồm các bước: \n"
+                 "1. Kiểm tra kết quả học tập và công nợ học phí. \n"
+                 "2. Sinh viên nộp hồ sơ tốt nghiệp tại **Phòng Công tác Sinh viên**. \n"
+                 "3. Nhà trường xét công nhận tốt nghiệp. \n"
+                 "4. Sinh viên tham dự lễ trao bằng theo thông báo của trường."
+        )
+        return []
+
+
+# Thời gian tốt nghiệp
+class ActionTotNghiepThoiGian(Action):
+    def name(self) -> str:
+        return "action_tot_nghiep_thoi_gian"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: dict):
+        dispatcher.utter_message(
+            text="PTIT thường xét tốt nghiệp vào **cuối mỗi học kỳ**. \n"
+                 "- Học kỳ 2: tháng 6–7. \n"
+                 "- Học kỳ 1: tháng 12–1. \n"
+                 "Lễ trao bằng tốt nghiệp thường tổ chức vào **tháng 7 hoặc tháng 12 hằng năm**. "
+                 "Thông báo cụ thể được đăng trên website và gửi qua email sinh viên."
+        )
+        return []
+
+
+# Hồ sơ tốt nghiệp
+class ActionTotNghiepHoSo(Action):
+    def name(self) -> str:
+        return "action_tot_nghiep_ho_so"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: dict):
+        dispatcher.utter_message(
+            text="Hồ sơ tốt nghiệp tại PTIT thường gồm: \n"
+                 "- Đơn xin xét tốt nghiệp (theo mẫu). \n"
+                 "- Bản sao bằng THPT hoặc tương đương (có công chứng). \n"
+                 "- Bản sao chứng chỉ ngoại ngữ (chuẩn đầu ra). \n"
+                 "- Ảnh 3x4 theo quy định. \n"
+                 "- Xác nhận hoàn thành nghĩa vụ thư viện, học phí. \n"
+                 "Hồ sơ nộp tại **Phòng Công tác Sinh viên** trong thời hạn trường thông báo."
+        )
+        return []
+# Điểm tốt nghiệp
+class ActionTotNghiepDiemSo(Action):
+    def name(self) -> str:
+        return "action_tot_nghiep_diem_so"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: dict):
+        dispatcher.utter_message(
+            text="Điểm xét tốt nghiệp của sinh viên PTIT được tổng hợp từ toàn bộ kết quả học tập. \n"
+                 "- Sinh viên có thể tra cứu điểm qua **cổng thông tin đào tạo (qldt.ptit.edu.vn)**. \n"
+                 "- Sau khi được công nhận tốt nghiệp, bảng điểm chính thức sẽ do **Phòng Đào tạo** cấp. \n"
+                 "- Nếu có thắc mắc, sinh viên liên hệ trực tiếp phòng để được hỗ trợ."
+        )
+        return []
+
+
+# Chứng nhận / bằng tốt nghiệp
+class ActionTotNghiepChungNhan(Action):
+    def name(self) -> str:
+        return "action_tot_nghiep_chung_nhan"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: dict):
+        dispatcher.utter_message(
+            text="Sau khi được công nhận tốt nghiệp, sinh viên PTIT sẽ nhận: \n"
+                 "- **Giấy chứng nhận tốt nghiệp tạm thời**: cấp ngay sau khi công bố quyết định tốt nghiệp. \n"
+                 "- **Bằng tốt nghiệp chính thức**: phát tại lễ trao bằng (thường tháng 7 hoặc 12) hoặc nhận tại **Phòng Công tác Sinh viên**. \n"
+                 "Sinh viên cần mang theo **CMND/CCCD** để nhận bằng, hoặc làm giấy ủy quyền nếu nhờ người khác nhận hộ."
+        )
+        return []
+
+
+# Liên hệ tốt nghiệp
+class ActionTotNghiepLienHe(Action):
+    def name(self) -> str:
+        return "action_tot_nghiep_lien_he"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: dict):
+        dispatcher.utter_message(
+            text="Mọi thông tin về tốt nghiệp tại PTIT, sinh viên liên hệ: \n"
+                 "- **Phòng Công tác Sinh viên (CTSV)** hoặc **Phòng Đào tạo**. \n"
+                 "- Điện thoại: (024) 3352 2485. \n"
+                 "- Email: ctsv@ptit.edu.vn. \n"
+                 "- Website: https://ptit.edu.vn. \n"
+                 "- Hoặc theo dõi thông báo trên cổng thông tin sinh viên để cập nhật lịch và thủ tục mới nhất."
+        )
+        return []
+# 1. Đối tượng phải thi
+class ActionThiTiengAnhDoiTuongDienTu(Action):
+    def name(self) -> str:
+        return "action_thi_tieng_anh_doi_tuong_dien_tu"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: dict):
+        dispatcher.utter_message(
+            text="Sinh viên mới nhập học các ngành thuộc Khoa Điện tử (Điều khiển & Tự động hóa, Công nghệ Vi mạch Bán dẫn, Công nghệ Kỹ thuật Điện - Điện tử) **bắt buộc dự thi tiếng Anh đầu vào**.\n"
+                 "- Trường hợp đã có chứng chỉ quốc tế (TOEFL iBT, IELTS, TOEIC…) còn hiệu lực và đạt mức chuẩn theo quy định của PTIT có thể được **miễn thi**.\n"
+                 "- Sinh viên cần nộp bản sao chứng chỉ cho Phòng Đào tạo để được xét miễn."
+        )
+        return []
+
+
+# 2. Hình thức thi
+class ActionThiTiengAnhHinhThucDienTu(Action):
+    def name(self) -> str:
+        return "action_thi_tieng_anh_hinh_thuc_dien_tu"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: dict):
+        dispatcher.utter_message(
+            text="Kỳ thi tiếng Anh đầu vào của PTIT dành cho sinh viên khoa Điện tử được tổ chức theo hình thức:\n"
+                 "- **Thi trên máy tính** tại phòng máy của Học viện.\n"
+                 "- Nội dung gồm 4 kỹ năng: Nghe, Đọc, Viết (ngắn), Trắc nghiệm ngữ pháp - từ vựng.\n"
+                 "- Thời lượng: khoảng **90 phút**.\n"
+                 "- Không tổ chức phần thi Nói trực tiếp.\n"
+                 "Kết quả thi sẽ được thông báo trên cổng thông tin sinh viên."
+        )
+        return []
+
+
+# 3. Điểm chuẩn
+class ActionThiTiengAnhDiemChuanDienTu(Action):
+    def name(self) -> str:
+        return "action_thi_tieng_anh_diem_chuan_dien_tu"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: dict):
+        dispatcher.utter_message(
+            text="Điểm chuẩn tiếng Anh đầu vào không phân biệt ngành, áp dụng chung cho sinh viên PTIT:\n"
+                 "- Nếu đạt chuẩn, sinh viên được phân vào **lớp học tiếng Anh phù hợp** hoặc được miễn học một số học phần.\n"
+                 "- Nếu chưa đạt chuẩn, sinh viên phải tham gia các học phần tiếng Anh tăng cường do Học viện tổ chức.\n"
+                 "- Chuẩn đầu ra tiếng Anh của sinh viên 3 ngành Khoa Điện tử là tương đương **IELTS 5.5 trở lên** hoặc theo quy định mới nhất của PTIT."
+        )
+        return []
+
+
+# 4. Lịch thi
+class ActionThiTiengAnhLichDienTu(Action):
+    def name(self) -> str:
+        return "action_thi_tieng_anh_lich_dien_tu"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: dict):
+        dispatcher.utter_message(
+            text="Kỳ thi tiếng Anh đầu vào dành cho sinh viên mới của Khoa Điện tử thường được tổ chức **đầu năm học (tháng 9)**.\n"
+                 "- Lịch thi cụ thể sẽ được thông báo trên website: https://ptit.edu.vn và cổng thông tin sinh viên.\n"
+                 "- Có thể có đợt thi bổ sung cho sinh viên nhập học muộn.\n"
+                 "- Sinh viên dự thi tại **cơ sở Hà Nội hoặc TP.HCM** tùy theo nơi theo học.\n"
+                 "- Địa điểm thi chi tiết được ghi rõ trong giấy báo thi hoặc thông báo của Phòng Đào tạo."
+        )
+        return []
+
+
+# 5. Thủ tục đăng ký
+class ActionThiTiengAnhThuTucDienTu(Action):
+    def name(self) -> str:
+        return "action_thi_tieng_anh_thu_tuc_dien_tu"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: dict):
+        dispatcher.utter_message(
+            text="Thủ tục đăng ký thi tiếng Anh đầu vào cho sinh viên 3 ngành Khoa Điện tử:\n"
+                 "- Sinh viên **không cần đăng ký riêng**, danh sách dự thi được lập dựa trên hồ sơ nhập học.\n"
+                 "- Nếu có chứng chỉ quốc tế để được miễn thi, cần nộp bản sao chứng chỉ cho Phòng Đào tạo trước hạn chót.\n"
+                 "- Không thu lệ phí thi đầu vào.\n"
+                 "- Mọi thông báo chính thức sẽ gửi qua email sinh viên và đăng trên website PTIT."
+        )
+        return []
+# 6. Trường hợp đặc biệt
+class ActionThiTiengAnhTruongHopDacBietDienTu(Action):
+    def name(self) -> str:
+        return "action_thi_tieng_anh_truong_hop_dac_biet_dien_tu"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: dict):
+        dispatcher.utter_message(
+            text="Một số trường hợp đặc biệt trong kỳ thi tiếng Anh đầu vào:\n"
+                 "- **Miễn thi**: Sinh viên có chứng chỉ TOEFL iBT, IELTS, TOEIC... đạt mức chuẩn theo quy định của PTIT và còn hiệu lực sẽ được xét miễn thi.\n"
+                 "- **Trượt kỳ thi**: Sinh viên chưa đạt chuẩn sẽ được xếp lớp học tiếng Anh tăng cường, không tổ chức thi lại ngay.\n"
+                 "- **Sinh viên năm cuối**: Không phải thi, vì kỳ thi chỉ áp dụng cho sinh viên mới nhập học.\n"
+                 "- Không có hình thức thay thế khác ngoài việc nộp chứng chỉ ngoại ngữ hợp lệ."
+        )
+        return []
+
+
+# 7. Liên hệ
+class ActionThiTiengAnhLienHeDienTu(Action):
+    def name(self) -> str:
+        return "action_thi_tieng_anh_lien_he_dien_tu"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: dict):
+        dispatcher.utter_message(
+            text="Mọi thắc mắc về kỳ thi tiếng Anh đầu vào Khoa Điện tử, sinh viên liên hệ:\n"
+                 "- **Phòng Khảo thí & Đảm bảo chất lượng** Học viện Công nghệ Bưu chính Viễn thông (PTIT).\n"
+                 "- Email: khaothi@ptit.edu.vn\n"
+                 "- Điện thoại: (024) 33528122 (cơ sở Hà Nội) / (028) 38297220 (cơ sở TP.HCM)\n"
+                 "- Website: https://ptit.edu.vn\n"
+                 "Sinh viên nên theo dõi cổng thông tin và email để nhận thông báo chính thức."
+        )
+        return []
