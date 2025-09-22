@@ -1080,3 +1080,26 @@ nlu:
     - Tôi cần hỗ trợ thông tin về thi tiếng Anh liên hệ ai?
 
 
+# synonym cho Kỹ thuật Điều khiển và Tự động hóa
+- synonym: Kỹ thuật Điều khiển và Tự động hóa
+  examples: |
+    - Tự động hóa
+    - ngành Tự động hóa
+    - Kỹ thuật Tự động hóa
+    - Điều khiển và Tự động hóa
+
+# synonym cho Công nghệ Kỹ thuật Điện, điện tử
+- synonym: Công nghệ Kỹ thuật Điện, điện tử
+  examples: |
+    - ngành điện
+    - Điện, điện tử
+    - Kỹ thuật điện
+    - Công nghệ điện
+
+# synonym cho Công nghệ Vi mạch bán dẫn
+- synonym: Công nghệ Vi mạch bán dẫn
+  examples: |
+    - Vi mạch
+    - ngành vi mạch
+    - Kỹ thuật bán dẫn
+    - Bán dẫn
