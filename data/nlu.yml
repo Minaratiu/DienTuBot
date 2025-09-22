@@ -1088,7 +1088,16 @@ nlu:
     - Kỹ thuật Tự động hóa
     - Điều khiển và Tự động hóa
     - tdh
-    
+    - Điều khiển tự động hóa
+    - điều khiển & tự động hóa
+    - kỹ thuật điều khiển & tự động hóa
+    - kỹ thuật điều khiển tự động hóa
+    - KTĐK-TĐH
+    - KTĐK và TĐH
+    - ngành điều khiển tự động
+    - automation
+    - control and automation
+    - control automation engineering
 
 # synonym cho Công nghệ Kỹ thuật Điện, điện tử
 - synonym: Công nghệ Kỹ thuật Điện, điện tử
@@ -1103,8 +1112,16 @@ nlu:
     - kỹ thuật điện tử
     - đt
     - điện
-    
-  
+    - điện tử & điện
+    - kỹ thuật điện, điện tử
+    - kỹ thuật điện điện tử
+    - CNKT điện
+    - CNKT điện tử
+    - ngành điện điện tử
+    - Electrical Engineering
+    - Electrical and Electronic Engineering
+    - EE
+    - EEE
  
 # synonym cho Công nghệ Vi mạch bán dẫn
 - synonym: Công nghệ Vi mạch bán dẫn
@@ -1118,3 +1135,20 @@ nlu:
     - Bán dẫn
     - vmbd
     - công nghệ vmbd
+    - vi mạch & bán dẫn
+    - công nghệ vi mạch bán dẫn
+    - ngành vi mạch
+    - bán dẫn
+    - công nghệ bán dẫn
+    - vi mạch
+    - kỹ thuật vi mạch
+    - vi mạch & bán dẫn
+    - công nghệ vi mạch bán dẫn
+    - CN vi mạch
+    - CN bán dẫn
+    - Semiconductor
+    - Semiconductor Engineering
+    - IC design
+    - Integrated Circuit
+    - ngành IC
+    - thiết kế vi mạch
