@@ -1087,19 +1087,34 @@ nlu:
     - ngành Tự động hóa
     - Kỹ thuật Tự động hóa
     - Điều khiển và Tự động hóa
+    - tdh
+    
 
 # synonym cho Công nghệ Kỹ thuật Điện, điện tử
 - synonym: Công nghệ Kỹ thuật Điện, điện tử
   examples: |
     - ngành điện
+    - ngành điện tử
     - Điện, điện tử
     - Kỹ thuật điện
     - Công nghệ điện
-
+    - Điện tử 
+    - điện tử
+    - kỹ thuật điện tử
+    - đt
+    - điện
+    
+  
+ 
 # synonym cho Công nghệ Vi mạch bán dẫn
 - synonym: Công nghệ Vi mạch bán dẫn
   examples: |
     - Vi mạch
+    - vi mạch bán dẫn
+    - Vi Mạch Bán Dẫn
     - ngành vi mạch
+    - ngành vi mạch bán dẫn
     - Kỹ thuật bán dẫn
     - Bán dẫn
+    - vmbd
+    - công nghệ vmbd
