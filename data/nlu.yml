@@ -34,300 +34,556 @@ nlu:
     - Ok cảm ơn
     - Cảm ơn bot
 
-
 - intent: gioi_thieu_bot
   examples: |
     - Bạn là ai?
     - Mày là ai?
     - Bot là ai?
     - Tôi đang nói chuyện với ai?
-- intent: tra_cuu_diem_chuan_thpt_nam_2025
+
+- intent: lien_he_khoa_phong_giao_vu
   examples: |
-    - điểm chuẩn thpt của ngành [kỹ thuật điều khiển và tự động hóa](ten_nganh) là bao nhiêu
-    - cho tôi hỏi điểm thpt ngành [công nghệ kỹ thuật điện, điện tử](ten_nganh)
-    - ngành [công nghệ vi mạch bán dẫn](ten_nganh) lấy bao nhiêu điểm thpt
-    - điểm thpt ngành [kỹ thuật điều khiển và tự động hóa](ten_nganh)?
-    - [kỹ thuật điều khiển và tự động hóa](ten_nganh) điểm thpt?
-    - xem điểm thpt của ngành [kỹ thuật điều khiển và tự động hóa](ten_nganh) 
-    - 26 điểm có đỗ ngành [Công nghệ vi mạch bán dẫn](ten_nganh) không?
+    - Tôi muốn liên hệ với khoa Điện tử
+    - Cho tôi xin số điện thoại của phòng giáo vụ
+    - Tôi muốn hỏi phòng đào tạo thì liên hệ ai?
+    - Cần liên hệ phòng công tác sinh viên thì làm thế nào?
+    - Số điện thoại của khoa Công nghệ thông tin là gì?
+    - Làm sao để gọi cho thầy cô trong khoa?
+    - Tôi muốn liên hệ phòng quản lý đào tạo
+    - Trường có fanpage chính thức không?
+    - Có thể gửi tin nhắn cho phòng giáo vụ qua Facebook được không?
+    - Tôi cần hỏi lịch học, liên hệ phòng nào?
+    - Liên hệ khoa Điện tử để xin giấy xác nhận học tập ở đâu?
+    - Phòng giáo vụ có email không?
+    - Tôi muốn gặp cô phụ trách học vụ
+    - Trường có tổng đài hoặc hotline chung không?
+    - Cho tôi xin link fanpage chính thức của học viện
+    - Tôi muốn liên hệ trực tiếp văn phòng khoa Điện tử
+    - Tôi cần hỏi thông tin về sinh viên, gọi ai?
+    - Có thể nhắn tin cho phòng đào tạo qua Zalo không?
+    - Địa chỉ của phòng giáo vụ ở đâu?
+    - Làm sao để gửi đơn lên phòng đào tạo?
+    - Có số điện thoại của cô giáo vụ không?
+    - Tôi muốn biết địa chỉ email của phòng đào tạo
+    - Có nhóm Facebook chính thức của khoa không?
+    - Muốn hỏi điểm rèn luyện thì liên hệ ai?
+    - Cần liên hệ với trường về học phí thì gọi số nào?
+    - Em muốn hỏi phòng đào tạo ở đâu vậy ạ?
+    - Cô giáo vụ làm việc buổi sáng hay chiều ạ?
+    - Phòng đào tạo mở cửa mấy giờ thế ạ?
+    - Cho em hỏi văn phòng khoa nằm ở tòa nào?
+    - Em muốn gặp thầy cô khoa Điện tử thì đến đâu?
+    - Trường có nhóm Zalo chính thức không?
+    - Có thể nhắn tin hỏi qua fanpage của trường không?
+    - Em muốn liên hệ phòng CTSV để xin giấy xác nhận
+    - Ai phụ trách học vụ sinh viên năm nhất vậy ạ?
+    - Cần hỏi giấy báo nhập học thì gọi phòng nào?
+    - Em muốn biết ai phụ trách hồ sơ sinh viên của khoa
+
+- intent: hoi_thong_tin_nganh
+  examples: |
+    # ===== KỸ THUẬT ĐIỀU KHIỂN & TỰ ĐỘNG HÓA =====
+    - Ngành [Kỹ thuật Điều khiển và Tự động hóa](ten_nganh) là ngành như thế nào ạ
+    - Thông tin về ngành [Kỹ thuật Điều khiển và Tự động hóa](ten_nganh)
+    - Tư vấn cho mình về ngành [Kỹ thuật Điều khiển và Tự động hóa](ten_nganh) với ạ
+    - Ad cho mình xin info ngành [Kỹ thuật Điều khiển và Tự động hóa](ten_nganh)
+    - Cho em hỏi về ngành [Kỹ thuật Điều khiển và Tự động hóa](ten_nganh)
+    - Ngành [Kỹ thuật Điều khiển và Tự động hóa](ten_nganh) học những gì
+    - Chương trình học ngành [Kỹ thuật Điều khiển và Tự động hóa](ten_nganh) gồm những môn nào
+    - Em muốn biết ngành [Kỹ thuật Điều khiển và Tự động hóa](ten_nganh) đào tạo ra sao
+    - Ngành [Kỹ thuật Điều khiển và Tự động hóa](ten_nganh) có khó học không
+    - Giới thiệu về ngành [Kỹ thuật Điều khiển và Tự động hóa](ten_nganh)
+    - Thông tin về ngành [Kỹ thuật Điều khiển và Tự động hóa](ten_nganh)
+    # ===== CÔNG NGHỆ VI MẠCH BÁN DẪN =====
+    - Ngành [Công nghệ Vi mạch Bán dẫn](ten_nganh) là gì
+    - Thông tin ngành [Công nghệ Vi mạch Bán dẫn](ten_nganh)
+    - Cho mình xin thông tin ngành [Công nghệ Vi mạch Bán dẫn](ten_nganh)
+    - Giới thiệu ngành [Công nghệ Vi mạch Bán dẫn](ten_nganh) giúp em
+    - Em muốn được tư vấn ngành [Công nghệ Vi mạch Bán dẫn](ten_nganh)
+    - Ngành [Công nghệ Vi mạch Bán dẫn](ten_nganh) học những gì
+    - Ngành [Công nghệ Vi mạch Bán dẫn](ten_nganh) đào tạo như thế nào
+    - Ad cho em hỏi chương trình đào tạo ngành [Công nghệ Vi mạch Bán dẫn](ten_nganh)
+    - Ngành [Công nghệ Vi mạch Bán dẫn](ten_nganh) có khó không
+    - Em cần thông tin tổng quan về ngành [Công nghệ Vi mạch Bán dẫn](ten_nganh)
+    - Thông tin về ngành Công nghệ Vi mạch Bán dẫn](ten_nganh)
+    # ===== CÔNG NGHỆ KỸ THUẬT ĐIỆN, ĐIỆN TỬ =====
+    - Ngành [Công nghệ Kỹ thuật Điện, Điện tử](ten_nganh) là ngành như thế nào ạ
+    - Thông tin về ngành [Công nghệ Kỹ thuật Điện, Điện tử](ten_nganh)
+    - Tư vấn cho mình về ngành [Công nghệ Kỹ thuật Điện, Điện tử](ten_nganh) với ạ
+    - Ad cho mình xin info ngành [Công nghệ Kỹ thuật Điện, Điện tử](ten_nganh)
+    - Cho em hỏi về ngành [Công nghệ Kỹ thuật Điện, Điện tử](ten_nganh)
+    - Ngành [Công nghệ Kỹ thuật Điện, Điện tử](ten_nganh) học gì vậy
+    - Ngành [Kỹ thuật Điện - Điện tử](ten_nganh) học những gì
+    - Ngành [CNKT Điện Điện tử](ten_nganh) đào tạo ra sao
+    - Em muốn tìm hiểu chương trình học ngành [Công nghệ Kỹ thuật Điện, Điện tử](ten_nganh)
+    - Ngành [Công nghệ Kỹ thuật Điện, Điện tử](ten_nganh) có khó không
+    - Thông tin về ngành [Công nghệ Kỹ thuật Điện, Điện tử](ten_nganh)
+
+# ==========================
+# TRA CỨU MÃ NGÀNH
+# ==========================
 - intent: tra_cuu_ma_nganh
   examples: |
-    - mã ngành của ngành [kỹ thuật điều khiển và tự động hóa](ten_nganh) là gì
-    - ngành [công nghệ kỹ thuật điện, điện tử](ten_nganh) có mã ngành là gì
-    - cho tôi biết mã ngành của ngành [công nghệ vi mạch bán dẫn](ten_nganh)
-- intent: tra_cuu_diem_xet_tuyen_tai_nang
+    - Mã ngành của ngành [Kỹ thuật điều khiển và tự động hóa](ten_nganh) là gì?
+    - Cho tôi biết mã ngành [Công nghệ kỹ thuật điện, điện tử](ten_nganh)
+    - Ngành [Công nghệ vi mạch bán dẫn](ten_nganh) có mã số là bao nhiêu?
+    - [Điều khiển và tự động hóa](ten_nganh) có mã ngành mấy?
+    - Mã của ngành [Công nghệ thông tin](ten_nganh) là gì?
+    - Mã tuyển sinh ngành [Kỹ thuật điều khiển và tự động hóa](ten_nganh) bao nhiêu?
+    - Cho mình hỏi mã đăng ký của ngành [Công nghệ kỹ thuật điện, điện tử](ten_nganh)
+    - Ngành [Điều khiển và tự động hóa](ten_nganh) mã bao nhiêu vậy?
+    - [Kỹ thuật điện tử - viễn thông](ten_nganh) có mã tuyển sinh là gì?
+    - Mã số tuyển sinh của ngành [Công nghệ kỹ thuật điện tử, viễn thông](ten_nganh)
+    - Trường mình có biết mã ngành của [Công nghệ kỹ thuật điện, điện tử](ten_nganh) không?
+    - Mình muốn biết mã ngành [Công nghệ thông tin](ten_nganh)
+    - [Điện tử viễn thông](ten_nganh) mã là bao nhiêu?
+    - Mã ngành học của [Công nghệ kỹ thuật điện, điện tử](ten_nganh)
+    - Cho hỏi mã số của ngành [Điều khiển và tự động hóa](ten_nganh)
+    - Mã ngành đăng ký xét tuyển của [Công nghệ kỹ thuật điện, điện tử](ten_nganh) là gì?
+    - Xin mã ngành [Công nghệ kỹ thuật điện, điện tử](ten_nganh)
+    - [Công nghệ kỹ thuật điện, điện tử](ten_nganh) có mã ngành không?
+    - Mã ngành học của [Kỹ thuật điều khiển và tự động hóa](ten_nganh) ở PTIT là gì?
+    - Cho em xin mã tuyển sinh ngành [Công nghệ vi mạch bán dẫn](ten_nganh)
+    - Mã ngành để đăng ký xét tuyển vào ngành [Điều khiển và tự động hóa](ten_nganh)
+    - Mã số ngành [Kỹ thuật điện tử viễn thông](ten_nganh)
+    - [Công nghệ thông tin](ten_nganh) có mã ngành mấy vậy ạ?
+    - Cho biết mã ngành của [Công nghệ kỹ thuật điện, điện tử](ten_nganh) bên PTIT
+    - Mã ngành của [Kỹ thuật điều khiển và tự động hóa](ten_nganh)
+
+
+# ==========================
+# TRA CỨU ĐIỂM CHUẨN
+# ==========================
+- intent: tra_cuu_diem_chuan
   examples: |
-    - điểm xét tuyển tài năng của ngành [kỹ thuật điều khiển và tự động hóa](ten_nganh) là bao nhiêu
-    - ngành [công nghệ kỹ thuật điện, điện tử](ten_nganh) có điểm xét tuyển tài năng là bao nhiêu
-    - diểm xét tuyển tài năng của ngành [kỹ thuật điều khiển và tự động hóa](ten_nganh)?
-- intent: tra_cuu_diem_theo_chung_chi_sat
-  examples: |
-    - điểm theo chứng chỉ SAT của ngành [kỹ thuật điều khiển và tự động hóa](ten_nganh) là bao nhiêu
-    - ngành [công nghệ kỹ thuật điện, điện tử](ten_nganh) có điểm xét theo chứng chỉ SAT là bao nhiêu
-    - điểm xét theo chứng chỉ SAT của ngành [kỹ thuật điều khiển và tự động hóa](ten_nganh)?
-- intent: tra_cuu_diem_theo_chung_chi_act
-  examples: |
-    - điểm theo chứng chỉ ACT của ngành [kỹ thuật điều khiển và tự động hóa](ten_nganh) là bao nhiêu
-    - ngành [công nghệ kỹ thuật điện, điện tử](ten_nganh) có điểm xét theo chứng chỉ ACT là bao nhiêu
-    - điểm xét theo chứng chỉ ACT của ngành [kỹ thuật điều khiển và tự động hóa](ten_nganh)?
-- intent: tra_cuu_diem_theo_bai_thi_hsa
-  examples: |
-    - điểm theo bài thi HSA của ngành [kỹ thuật điều khiển và tự động hóa](ten_nganh) là bao nhiêu
-    - ngành [công nghệ kỹ thuật điện, điện tử](ten_nganh) có điểm xét theo bài thi HSA là bao nhiêu
-    - điểm xét theo bài thi HSA của ngành [kỹ thuật điều khiển và tự động hóa](ten_nganh)?
-- intent: tra_cuu_diem_theo_bai_thi_tsa
-  examples: |
-    - điểm theo bài thi TSA của ngành [kỹ thuật điều khiển và tự động hóa](ten_nganh) là bao nhiêu
-    - ngành [công nghệ kỹ thuật điện, điện tử](ten_nganh) có điểm xét theo bài thi TSA là bao nhiêu
-    - điểm xét theo bài thi TSA của ngành [kỹ thuật điều khiển và tự động hóa](ten_nganh)?
-- intent: tra_cuu_diem_theo_bai_thi_spt
-  examples: |
-    - điểm theo bài thi SPT của ngành [kỹ thuật điều khiển và tự động hóa](ten_nganh) là bao nhiêu
-    - ngành [công nghệ kỹ thuật điện, điện tử](ten_nganh) có điểm xét theo bài thi SPT là bao nhiêu
-    - điểm xét theo bài thi SPT của ngành [kỹ thuật điều khiển và tự động hóa](ten_nganh)?
-- intent: tra_cuu_diem_theo_bai_thi_apt
-  examples: |
-    - điểm theo bài thi APT của ngành [kỹ thuật điều khiển và tự động hóa](ten_nganh) là bao nhiêu
-    - ngành [công nghệ kỹ thuật điện, điện tử](ten_nganh) có điểm xét theo bài thi APT là bao nhiêu
-    - điểm xét theo bài thi APT của ngành [kỹ thuật điều khiển và tự động hóa](ten_nganh)?
-- intent: tra_cuu_diem_theo_xet_tuyen_ket_hop
-  examples: |
-    - điểm theo phương thức xét tuyển kết hợp của ngành [kỹ thuật điều khiển và tự động hóa](ten_nganh) là bao nhiêu
-    - ngành [công nghệ kỹ thuật điện, điện tử](ten_nganh) có điểm xét theo phương thức xét tuyển kết hợp là bao nhiêu
-    - điểm xét theo phương thức xét tuyển kết hợp của ngành [kỹ thuật điều khiển và tự động hóa](ten_nganh)? 
-    
-    
+    - Điểm chuẩn THPT ngành [Kỹ thuật điều khiển và tự động hóa](ten_nganh) là bao nhiêu?
+    - Cho tôi hỏi điểm THPT ngành [Công nghệ kỹ thuật điện, điện tử](ten_nganh)
+    - Ngành [Công nghệ vi mạch bán dẫn](ten_nganh) lấy bao nhiêu điểm THPT?
+    - Điểm ngành [Kỹ thuật điều khiển và tự động hóa](ten_nganh)?
+    - [Kỹ thuật điều khiển và tự động hóa](ten_nganh) điểm chuẩn bao nhiêu?
+    - Điểm xét tuyển tài năng ngành [Công nghệ kỹ thuật điện, điện tử](ten_nganh)
+    - Điểm theo chứng chỉ SAT của ngành [Công nghệ vi mạch bán dẫn](ten_nganh)
+    - Điểm ACT ngành [Kỹ thuật điều khiển và tự động hóa](ten_nganh)
+    - Điểm HSA của ngành [Công nghệ kỹ thuật điện, điện tử](ten_nganh)
+    - Điểm TSA ngành [Công nghệ vi mạch bán dẫn](ten_nganh)
+    - Điểm APT ngành [Kỹ thuật điều khiển và tự động hóa](ten_nganh)
+    - Điểm theo phương thức xét tuyển kết hợp ngành [Công nghệ kỹ thuật điện, điện tử](ten_nganh)
+    - Ngành [Kỹ thuật điều khiển và tự động hóa](ten_nganh) năm nay lấy mấy điểm?
+    - Cho tôi xem điểm chuẩn của ngành [Công nghệ kỹ thuật điện, điện tử](ten_nganh)
+    - Năm nay ngành [Công nghệ vi mạch bán dẫn](ten_nganh) lấy bao nhiêu điểm?
+    - Điểm xét tuyển [SAT](loai_xet_tuyen) ngành [Công nghệ kỹ thuật điện, điện tử](ten_nganh)
+    - Điểm chuẩn [THPT](loai_xet_tuyen) ngành [Kỹ thuật điều khiển và tự động hóa](ten_nganh)
+    - Điểm xét tuyển [tài năng](loai_xet_tuyen) của ngành [Công nghệ vi mạch bán dẫn](ten_nganh)
+    - Cho tôi biết điểm [kết hợp](loai_xet_tuyen) của ngành [Kỹ thuật điều khiển và tự động hóa](ten_nganh)
+    - Ngành [Công nghệ kỹ thuật điện, điện tử](ten_nganh) có điểm chuẩn bao nhiêu vậy?
+    - Điểm chuẩn năm nay của [Công nghệ kỹ thuật điện, điện tử](ten_nganh)
+    - Năm ngoái ngành [Điều khiển và tự động hóa](ten_nganh) lấy bao nhiêu điểm?
+    - Cho em xin điểm chuẩn ngành [Công nghệ vi mạch bán dẫn](ten_nganh) năm nay
+    - Mức điểm trúng tuyển vào ngành [Công nghệ kỹ thuật điện, điện tử](ten_nganh) là bao nhiêu?
+    - Ngành [Công nghệ kỹ thuật điện, điện tử](ten_nganh) năm nay điểm cao không?
+    - Em muốn biết điểm chuẩn ngành [Kỹ thuật điều khiển và tự động hóa](ten_nganh)
+
+
+# ==========================
+# TRA CỨU KHẢ NĂNG TRÚNG TUYỂN
+# ==========================
 - intent: tra_cuu_kha_nang_trung_tuyen
   examples: |
     - Em được [26](diem) điểm có đỗ ngành [Điều khiển và Tự động hóa](ten_nganh) không?
     - Với [25.5](diem) điểm thì có khả năng vào ngành [Công nghệ Kỹ thuật Điện, điện tử](ten_nganh) không?
-    - Được [27](diem) điểm có đỗ ngành [Thiết kế vi mạch bán dẫn](ten_nganh) không?
+    - Được [27](diem) điểm có đỗ ngành [Vi mạch bán dẫn](ten_nganh) không?
     - Điểm em [25](diem) thì có trúng tuyển ngành [Điều khiển và Tự động hóa](ten_nganh) không?
     - Nếu em thi được [24](diem) điểm thì có khả năng đỗ ngành [Công nghệ Kỹ thuật Điện, điện tử](ten_nganh) không?
-    - Với [26](diem) điểm liệu em có vào được ngành [Thiết kế vi mạch bán dẫn](ten_nganh) không?
+    - Với [26](diem) điểm liệu em có vào được ngành [Vi mạch bán dẫn](ten_nganh) không?
     - Em được [26](diem) điểm thì có ngành nào trúng tuyển không?
-    - [25](diem) điểm thì nên chọn ngành nào?
+    - [25](diem) điểm thì nên chọn ngành nào để có khả năng đỗ cao?
     - Với [27](diem) điểm thì có ngành nào đủ điểm chuẩn không?
-    
-    
-    
-- intent: xet_tuyen_nguyen_vong_dien_tu
-  examples: |
-    - Nếu NV1 là [Điều khiển và Tự động hóa](ten_nganh) mà NV2 là [CNTT](ten_nganh) thì có học NV2 được không?
-    - Tôi muốn biết thứ tự ưu tiên nguyện vọng 3 ngành điện tử
-    - Đăng ký NV2 ngành Công nghệ Vi mạch Bán dẫn có được không nếu NV1 trúng tuyển?
-    - Nguyện vọng ưu tiên cao nhất của khoa Điện tử là gì?
-    - Xét tuyển theo nguyện vọng trong khoa điện tử như thế nào?
+    - Em đạt [28](diem) điểm, có cơ hội vào [Điều khiển và Tự động hóa](ten_nganh) không?
+    - Với [25](diem) điểm em có khả năng trúng tuyển không?
+    - Điểm của em là [26](diem), liệu có vào được khoa Điện tử không?
+    - Em được [24.5](diem) điểm có hi vọng đỗ không?
+    - Có thể vào ngành [Công nghệ Kỹ thuật Điện, điện tử](ten_nganh) với [26](diem) điểm không?
+    - Với [25](diem) điểm em có cơ hội vào ngành [Vi mạch bán dẫn](ten_nganh) không?
+    - Em thi được [27](diem) điểm thì có đỗ ngành này không?
+    - Nếu được [24](diem) điểm thì có nên nộp vào ngành [Công nghệ Kỹ thuật Điện, điện tử](ten_nganh) không?
+    - Với [25.5](diem) điểm thì có khả năng trúng tuyển cao không?
+    - Em muốn biết [26](diem) điểm có khả năng vào khoa Điện tử không?
+    - Với số điểm [27](diem), em có thể đỗ ngành [Điều khiển và Tự động hóa](ten_nganh) không?
+    - Nếu được [25](diem) điểm thì tỉ lệ đỗ ngành [Vi mạch bán dẫn](ten_nganh) là bao nhiêu?
+    - [26](diem) điểm có cao hơn điểm chuẩn ngành [Công nghệ Kỹ thuật Điện, điện tử](ten_nganh) không?
+    - Với [27](diem) điểm thì có khả năng đỗ ngành [Điều khiển và Tự động hóa](ten_nganh) không?
+    - Em thi được [24](diem) điểm thì có nên đăng ký ngành [Vi mạch bán dẫn](ten_nganh) không?
+    - Nếu em đạt [26](diem) điểm thì có đỗ được ngành này không?
+
+
 - intent: xet_tuyen_dieu_kien_dien_tu
   examples: |
-    - Điều kiện để trúng tuyển ngành [Công nghệ Vi mạch Bán dẫn](ten_nganh) là gì?
-    - Tôi cần bao nhiêu điểm để xét tuyển vào [Điều khiển và Tự động hóa](ten_nganh)?
-    - Ai được phép đăng ký xét tuyển ngành điện tử?
-    - Xét tuyển ngành [Công nghệ Kỹ thuật Điện, điện tử](ten_nganh) dựa vào điểm thi hay học bạ?
-    - Tôi muốn biết yêu cầu trúng tuyển 3 ngành khoa điện tử
-- intent: xet_tuyen_thu_tuc_dien_tu
-  examples: |
-    - Thủ tục xét tuyển vào khoa Điện tử như thế nào?
-    - Tôi cần nộp hồ sơ ở đâu để xét tuyển 3 ngành?
-    - Hình thức đăng ký xét tuyển gồm những gì?
-    - Khi nào bắt đầu đăng ký xét tuyển các ngành điện tử?
-    - Có cần chứng minh gì khi đăng ký xét tuyển ngành Vi mạch bán dẫn không?
-- intent: xet_tuyen_truong_hop_dac_biet_dien_tu
-  examples: |
-    - Nếu đỗ NV1 nhưng muốn học NV2 có được không?
-    - Tôi đã trúng tuyển ngành [Điều khiển và Tự động hóa](ten_nganh), có thể đổi sang [CNTT](ten_nganh) không?
-    - Trường hợp điểm thi bằng nhau xét ra sao?
-    - Nếu nộp thiếu hồ sơ xét tuyển thì sao?
-    - Có được xét tuyển bổ sung không nếu không trúng tuyển NV1?
+    - Điểm chuẩn tối thiểu để vào [Công nghệ Vi mạch bán dẫn](ten_nganh) là bao nhiêu?
+    - Để trúng tuyển ngành [Điều khiển và Tự động hóa](ten_nganh) cần điều kiện gì?
+    - Cần học lực loại gì để vào khoa Điện tử?
+    - Ngành [Công nghệ Kỹ thuật Điện, điện tử](ten_nganh) lấy điểm học bạ bao nhiêu?
+    - Muốn vào ngành [Điều khiển và Tự động hóa](ten_nganh) thì cần đạt bao nhiêu điểm?
+    - Xét tuyển học bạ ngành [Công nghệ Kỹ thuật Điện, điện tử](ten_nganh) cần điểm trung bình bao nhiêu?
+    - Ngành [Công nghệ Vi mạch bán dẫn](ten_nganh) lấy tổ hợp môn nào?
+    - Trúng tuyển ngành [Điều khiển và Tự động hóa](ten_nganh) có khó không?
+    - Điều kiện xét tuyển ngành [Công nghệ Vi mạch bán dẫn](ten_nganh) là gì?
+    - Học sinh cần đạt học lực gì để được đăng ký ngành [Công nghệ Kỹ thuật Điện, điện tử](ten_nganh)?
+    - Muốn vào khoa Điện tử thì cần điều kiện học tập như thế nào?
+    - Xét tuyển bằng điểm thi THPT ngành [Điều khiển và Tự động hóa](ten_nganh) cần mốc bao nhiêu điểm?
+    - Có yêu cầu điểm từng môn khi xét tuyển ngành [Công nghệ Vi mạch bán dẫn](ten_nganh) không?
+    - Muốn học ngành [Công nghệ Kỹ thuật Điện, điện tử](ten_nganh) thì cần điểm học bạ tối thiểu là bao nhiêu?
+    - Điều kiện chung để được nhận vào ngành [Công nghệ Vi mạch bán dẫn](ten_nganh) là gì?
+
+
 - intent: xet_tuyen_uu_tien_dien_tu
   examples: |
-    - Ai được xét tuyển thẳng vào 3 ngành khoa Điện tử?
-    - Có ưu tiên gì cho sinh viên giỏi quốc gia hay học sinh chuyên không?
-    - Xét tuyển ưu tiên trong 3 ngành như thế nào?
-    - Tôi có thể đăng ký diện ưu tiên học bổng không?
-    - Ưu tiên xét tuyển dựa trên tiêu chí gì trong khoa Điện tử?
-- intent: xet_tuyen_lien_he_dien_tu
+    - Có diện ưu tiên nào khi xét tuyển ngành [Vi mạch bán dẫn](ten_nganh) không?
+    - Thí sinh đạt giải quốc gia có được tuyển thẳng vào [Điều khiển và Tự động hóa](ten_nganh) không?
+    - Học sinh trường chuyên có được cộng điểm ưu tiên không?
+    - Xét tuyển ưu tiên cho đối tượng nào?
+    - Trường có chính sách tuyển thẳng học sinh giỏi không?
+    - Có ưu tiên cho học sinh đạt giải học sinh giỏi quốc gia không?
+    - Con thương binh có được cộng điểm khi xét tuyển ngành [Công nghệ Kỹ thuật Điện, điện tử](ten_nganh) không?
+    - Chính sách ưu tiên khu vực trong tuyển sinh ngành [Vi mạch bán dẫn](ten_nganh) như thế nào?
+    - Có cộng điểm cho học sinh thuộc vùng sâu vùng xa khi xét tuyển ngành [Điều khiển và Tự động hóa](ten_nganh) không?
+    - Ngành [Công nghệ Kỹ thuật Điện, điện tử](ten_nganh) có tuyển thẳng học sinh trường chuyên không?
+    - Thí sinh đạt giải nhất khoa học kỹ thuật có được vào thẳng không?
+    - Học sinh giỏi tỉnh có được xét ưu tiên khi đăng ký ngành [Vi mạch bán dẫn](ten_nganh) không?
+    - Những ai được hưởng chế độ cộng điểm ưu tiên khi xét tuyển?
+    - Trường có xét tuyển thẳng theo diện học sinh giỏi không?
+    - Chính sách ưu tiên đối với khu vực 1, 2, 3 là như thế nào?
+
+
+- intent: xet_tuyen_ho_so
   examples: |
-    - Ai phụ trách xét tuyển khoa Điện tử?
-    - Liên hệ tư vấn xét tuyển 3 ngành điện tử qua email hoặc số điện thoại?
-    - Tôi cần gặp quản lý xét tuyển ngành điện tử
-    - Phòng tuyển sinh khoa Điện tử có website hoặc fanpage không?
-    - Tôi cần hỗ trợ về thủ tục xét tuyển liên hệ ai?
+    - Hồ sơ xét tuyển gồm những gì?
+    - Em cần chuẩn bị giấy tờ gì để nộp hồ sơ xét tuyển ạ?
+    - Nộp hồ sơ xét tuyển ở đâu vậy ạ?
+    - Hồ sơ xét tuyển có cần công chứng không?
+    - Có phải nộp bản sao học bạ không hay bản chính ạ?
+    - Em cần nộp học bạ photo hay công chứng ạ?
+    - Có cần dán ảnh vào hồ sơ không?
+    - Có phải kẹp phong bì trong hồ sơ không ạ?
+    - Hồ sơ xét tuyển nộp qua bưu điện được không?
+    - Có được nộp hồ sơ trực tiếp tại trường không?
+    - Em muốn hỏi địa chỉ nộp hồ sơ xét tuyển của khoa Điện tử.
+    - Nộp hồ sơ xong có cần xác nhận gì không ạ?
+    - Nộp hồ sơ online như thế nào ạ?
+    - Làm sao để đăng ký xét tuyển online?
+    - Khi nào mở cổng đăng ký xét tuyển?
+    - Trường có cho nộp hồ sơ online không ạ?
+    - Em nộp hồ sơ qua mạng rồi có cần mang giấy tờ đến trường không?
+    - Nộp hồ sơ online có cần in ra giấy không ạ?
+    - Em nộp sai hồ sơ có được sửa lại không ạ?
+    - Nếu nộp thiếu giấy tờ thì có bị hủy hồ sơ không?
+    - Sau khi nộp hồ sơ thì bao lâu có kết quả xét tuyển?
+    - Có phải ghi nguyện vọng lên cổng của Bộ không hay nộp riêng cho trường?
+    - Lệ phí xét tuyển là bao nhiêu tiền ạ?
+    - Nộp lệ phí xét tuyển như thế nào?
+    - Có cần phải nộp lệ phí khi đăng ký không?
+    - Khi nào bắt đầu nhận hồ sơ xét tuyển?
+    - Bao giờ mở đợt nộp hồ sơ vậy ạ?
+    - Thời hạn nộp hồ sơ xét tuyển là khi nào?
+    - Hạn cuối nộp hồ sơ là ngày nào vậy ạ?
+    - Nộp hồ sơ muộn vài ngày có được không ạ?
+    - Có thể nộp hồ sơ trước khi có điểm thi tốt nghiệp không?
+    - Nếu đã nộp hồ sơ online rồi thì có cần đến trường xác nhận không?
+    - Có bao nhiêu phương thức xét tuyển cho ngành [Điều khiển và Tự động hóa](ten_nganh)?
+    - Trường có xét học bạ không hay chỉ lấy điểm thi?
+    - Nếu sai thông tin trong hồ sơ xét tuyển thì có được sửa lại không ạ?
 
 
-
-
-- intent: tra_cuu_chi_tieu_nganh
+- intent: tra_cuu_chi_tieu
   examples: |
-    - Chỉ tiêu ngành [Kỹ thuật Điều khiển và Tự động hóa](ten_nganh) năm [2025](nam) là bao nhiêu?
-    - Ngành [Công nghệ Kỹ thuật Điện, điện tử](ten_nganh) tuyển bao nhiêu sinh viên?
-    - Cho tôi biết chỉ tiêu tuyển sinh của ngành [Công nghệ Vi mạch Bán dẫn](ten_nganh).
-    - Năm [2024](nam), ngành [Kỹ thuật Điện tử](ten_nganh) có bao nhiêu chỉ tiêu?
-    - [Kỹ thuật Cơ điện tử](ten_nganh) năm nay được tuyển bao nhiêu người?
-- intent: tra_cuu_chi_tieu_theo_co_so
-  examples: |
-    - Chỉ tiêu tuyển sinh tại cơ sở [Hà Nội](co_so) là bao nhiêu?
-    - Cơ sở [TP.HCM](co_so) năm nay có bao nhiêu chỉ tiêu?
-    - So với [miền Bắc](co_so), chỉ tiêu cơ sở [miền Nam](co_so) có ít hơn không?
-    - Năm [2025](nam), trường tuyển bao nhiêu sinh viên ở cơ sở [Hà Nội](co_so)?
-    - Chỉ tiêu dành cho thí sinh đăng ký ở cơ sở [phía Nam](co_so) là bao nhiêu?
-
-- intent: tra_cuu_chi_tieu_theo_phuong_thuc
-  examples: |
-    - Có bao nhiêu chỉ tiêu dành cho phương thức xét tuyển bằng điểm thi tốt nghiệp THPT?
-    - Năm nay trường dành bao nhiêu chỉ tiêu cho xét học bạ?
-    - Chỉ tiêu tuyển thẳng học sinh giỏi của trường là bao nhiêu?
-    - Phương thức xét tuyển riêng có bao nhiêu chỉ tiêu?
-    - Tỷ lệ chỉ tiêu dành cho [thi THPT](phuong_thuc) và [học bạ](phuong_thuc) là bao nhiêu?
-
-- intent: tra_cuu_chi_tieu_tong_quat
-  examples: |
-    - Tổng chỉ tiêu tuyển sinh của [Khoa Điện tử](khoa) năm [2025](nam) là bao nhiêu?
-    - Trường năm nay dự kiến tuyển bao nhiêu sinh viên tất cả các ngành?
-    - So với năm [2024](nam), chỉ tiêu tuyển sinh của [Khoa Điện tử](khoa) có thay đổi không?
-    - Chỉ tiêu từng ngành trong [Khoa Điện tử](khoa) được phân bổ thế nào?
-    - Có thể xem chi tiết chỉ tiêu tuyển sinh của từng ngành ở đâu?
-
-- intent: tra_cuu_thoi_gian_tuyen_sinh
-  examples: |
-    - Khi nào trường bắt đầu tuyển sinh?
-    - Bao giờ mở đăng ký xét tuyển?
-    - Thời gian tuyển sinh năm [2025](nam) là khi nào?
-    - Lịch tuyển sinh của trường diễn ra vào lúc nào?
-    - Khi nào nhận hồ sơ xét tuyển?
-    - Thời gian nhập học là khi nào?
-    - Cho em hỏi hạn cuối nộp hồ sơ tuyển sinh?
-    - Năm [2024](nam) có lịch tuyển sinh vào tháng mấy?
-- intent: tra_cuu_thoi_gian_nhap_hoc
-  examples: |
-    - Khi nào nhập học?
-    - Bao giờ sinh viên trúng tuyển phải nhập học?
-    - Thời gian nhập học năm [2025](nam) là khi nào?
-    - Trúng tuyển thì mấy giờ nhập học?
-    - Lịch nhập học của tân sinh viên diễn ra khi nào?
-
-
-- intent: tra_cuu_tong_quan_nganh
-  examples: |
-    - Thông tin ngành [Công nghệ Kỹ thuật Điện, điện tử](ten_nganh)
-    - Cho tôi biết tổng quan về ngành [Công nghệ Kỹ thuật Điện, điện tử](ten_nganh)
-    - Ngành [Công nghệ Kỹ thuật Điện, điện tử](ten_nganh) học những gì?
-
-- intent: tra_cuu_ma_nganh
-  examples: |
-    - Ngành [Công nghệ Kỹ thuật Điện, điện tử](ten_nganh) có mã ngành bao nhiêu?
-    - Mã ngành của ngành [Công nghệ Kỹ thuật Điện, điện tử](ten_nganh) là gì?
-    - Cho tôi biết mã ngành [Công nghệ Kỹ thuật Điện, điện tử](ten_nganh)
-
-
-- intent: tra_cuu_thoi_gian_dao_tao
-  examples: |
-    - Cho tôi biết thời gian đào tạo ngành [Công nghệ Kỹ thuật Điện, điện tử](ten_nganh)
-    - Ngành [Công nghệ Kỹ thuật Điện, điện tử](ten_nganh) học trong bao lâu?
-    - Thời gian học của ngành [Công nghệ Kỹ thuật Điện, điện tử](ten_nganh)
-
+    - Chỉ tiêu tuyển sinh của ngành [Điều khiển và tự động hóa](ten_nganh) là bao nhiêu?
+    - Ngành [Công nghệ kỹ thuật điện, điện tử](ten_nganh) có bao nhiêu chỉ tiêu năm nay?
+    - Cho em hỏi ngành [Vi mạch bán dẫn](ten_nganh) năm nay lấy mấy chỉ tiêu?
+    - Số lượng sinh viên được tuyển của ngành [Điều khiển và tự động hóa](ten_nganh) là bao nhiêu?
+    - Năm nay ngành [Công nghệ kỹ thuật điện, điện tử](ten_nganh) tuyển bao nhiêu người?
+    - Chỉ tiêu năm [2024](nam) của ngành [Vi mạch bán dẫn](ten_nganh) là bao nhiêu?
+    - Cho em biết chỉ tiêu của ngành [Điều khiển và tự động hóa](ten_nganh) năm nay?
+    - Ngành [Công nghệ kỹ thuật điện, điện tử](ten_nganh) có chỉ tiêu bao nhiêu trong năm [2023](nam)?
+    - Năm [2025](nam) ngành [Vi mạch bán dẫn](ten_nganh) có bao nhiêu chỉ tiêu?
+    - Học viện tuyển bao nhiêu chỉ tiêu cho ngành [Điều khiển và tự động hóa](ten_nganh)?
+    - Em muốn biết năm nay khoa mình lấy bao nhiêu chỉ tiêu cho ngành [Điện, điện tử](ten_nganh)?
+    - Cho em hỏi tổng chỉ tiêu ngành [Công nghệ kỹ thuật điện, điện tử](ten_nganh) là bao nhiêu?
+    - Ngành [Điều khiển và tự động hóa](ten_nganh) năm nay có giảm chỉ tiêu không?
+    - Chỉ tiêu tuyển sinh của ngành [Vi mạch bán dẫn](ten_nganh) năm nay có thay đổi không?
+    - Khoa có bao nhiêu chỉ tiêu cho ngành [Điện tử viễn thông](ten_nganh)?
+    - Cho em hỏi chỉ tiêu của ngành [Kỹ thuật điều khiển và tự động hóa](ten_nganh) năm nay là bao nhiêu?
+    - Ngành [Điện tử - viễn thông](ten_nganh) có bao nhiêu chỉ tiêu xét tuyển?
+    - Năm [2025](nam) ngành [Công nghệ kỹ thuật điện, điện tử](ten_nganh) lấy bao nhiêu sinh viên?
+    - Số chỉ tiêu tuyển sinh ngành [Điều khiển và tự động hóa](ten_nganh) năm [2024](nam) là bao nhiêu?
+    - Bao nhiêu chỉ tiêu được phân cho ngành [Vi mạch bán dẫn](ten_nganh)?
+    - Cho em biết năm nay ngành [Điện tử viễn thông](ten_nganh) có tăng chỉ tiêu không?
+    - Ngành [Công nghệ kỹ thuật điện, điện tử](ten_nganh) có chỉ tiêu cao hơn năm ngoái không?
+    - Em muốn hỏi khoa mình có bao nhiêu chỉ tiêu cho ngành [Điện tử - viễn thông](ten_nganh)?
+    - Năm nay Học viện lấy bao nhiêu sinh viên cho ngành [Vi mạch bán dẫn](ten_nganh)?
+    - Chỉ tiêu của ngành [Kỹ thuật điều khiển và tự động hóa](ten_nganh) năm [2023](nam) là bao nhiêu?
+    - Năm [2024](nam) ngành [Công nghệ kỹ thuật điện, điện tử](ten_nganh) lấy bao nhiêu chỉ tiêu?
+    - Ngành [Điện tử - viễn thông](ten_nganh) năm nay dự kiến tuyển bao nhiêu người?
+    - Cho em hỏi ngành [Vi mạch bán dẫn](ten_nganh) có bao nhiêu suất tuyển?
+    - Số lượng thí sinh được nhận vào ngành [Công nghệ kỹ thuật điện, điện tử](ten_nganh) là bao nhiêu?
+    - Em muốn biết chỉ tiêu ngành [Điều khiển và tự động hóa](ten_nganh) tại cơ sở Hà Nội?
+    - Ngành [Điện tử viễn thông](ten_nganh) ở cơ sở Hồ Chí Minh có chỉ tiêu bao nhiêu?
+    - Học viện phân bổ bao nhiêu chỉ tiêu cho ngành [Vi mạch bán dẫn](ten_nganh) năm [2025](nam)?
+    - Cho em hỏi chỉ tiêu ngành [Công nghệ kỹ thuật điện, điện tử](ten_nganh) ở khu vực phía Bắc là bao nhiêu?
+    - Năm [2025](nam), ngành [Kỹ thuật điều khiển và tự động hóa](ten_nganh) có tăng chỉ tiêu không?
 
 - intent: tra_cuu_to_hop_xet_tuyen
   examples: |
-    - Tổ hợp xét tuyển ngành [Công nghệ Kỹ thuật Điện, điện tử](ten_nganh) là gì?
-    - Ngành [Công nghệ Kỹ thuật Điện, điện tử](ten_nganh) xét tuyển theo tổ hợp nào?
-    - Cho tôi biết tổ hợp xét tuyển của ngành [Công nghệ Kỹ thuật Điện, điện tử](ten_nganh)
+    - Ngành [Điều khiển và tự động hóa](ten_nganh) xét tuyển khối nào?
+    - Ngành [Công nghệ kỹ thuật điện, điện tử](ten_nganh) lấy khối nào?
+    - Cho em hỏi ngành [Vi mạch bán dẫn](ten_nganh) xét tuyển theo tổ hợp nào?
+    - Ngành [Điện tử viễn thông](ten_nganh) tuyển sinh khối nào?
+    - Ngành [Điện, điện tử](ten_nganh) xét tuyển tổ hợp môn gì?
+    - Em muốn biết ngành [Kỹ thuật điều khiển và tự động hóa](ten_nganh) xét tuyển khối nào?
+    - Ngành [Công nghệ kỹ thuật điện, điện tử](ten_nganh) tuyển theo tổ hợp gì?
+    - Cho em hỏi tổ hợp xét tuyển của ngành [Vi mạch bán dẫn](ten_nganh)?
+    - Ngành [Điện tử - viễn thông](ten_nganh) thi khối gì?
+    - Em cần biết ngành [Điều khiển và tự động hóa](ten_nganh) dùng tổ hợp nào để xét tuyển?
+    - Ngành [Công nghệ kỹ thuật điện, điện tử](ten_nganh) có xét khối A00 không?
+    - Ngành [Điện tử viễn thông](ten_nganh) có tuyển khối A01 không?
+    - Cho em biết tổ hợp môn xét tuyển ngành [Vi mạch bán dẫn](ten_nganh)?
+    - Ngành [Kỹ thuật điều khiển và tự động hóa](ten_nganh) xét tuyển theo khối nào?
+    - Ngành [Công nghệ kỹ thuật điện, điện tử](ten_nganh) lấy tổ hợp môn gì?
+    - Em muốn biết tổ hợp môn của ngành [Điện tử - viễn thông](ten_nganh)?
+    - Ngành [Vi mạch bán dẫn](ten_nganh) có xét khối D07 không?
+    - Ngành [Điều khiển và tự động hóa](ten_nganh) thi môn nào?
+    - Cho em hỏi ngành [Công nghệ kỹ thuật điện, điện tử](ten_nganh) có tuyển theo khối D không?
+    - Năm [2025](nam) ngành [Vi mạch bán dẫn](ten_nganh) xét khối nào?
+    - Ngành [Điện tử viễn thông](ten_nganh) xét những tổ hợp nào?
+    - Ngành [Kỹ thuật điều khiển và tự động hóa](ten_nganh) tuyển theo khối gì?
+    - Em muốn biết năm [2024](nam) ngành [Công nghệ kỹ thuật điện, điện tử](ten_nganh) xét tuyển theo tổ hợp nào?
+    - Ngành [Vi mạch bán dẫn](ten_nganh) có xét khối D01 không?
+    - Ngành [Điện, điện tử](ten_nganh) lấy tổ hợp nào để xét tuyển?
+    - Cho em hỏi ngành [Điện tử viễn thông](ten_nganh) thi những môn gì?
+    - Ngành [Công nghệ kỹ thuật điện, điện tử](ten_nganh) năm [2025](nam) có xét khối A00 không?
+    - Ngành [Vi mạch bán dẫn](ten_nganh) có xét khối A01 không?
+    - Em cần biết tổ hợp xét tuyển của ngành [Điều khiển và tự động hóa](ten_nganh) năm nay?
 
 - intent: tra_cuu_hoc_phi_nganh
   examples: |
-    - Học phí ngành [Điều khiển và Tự động hóa](ten_nganh) là bao nhiêu?
-    - Cho tôi biết học phí ngành [Điện, điện tử](ten_nganh)
-    - Ngành [vi mạch](ten_nganh) học phí bao nhiêu một năm?
+    - Học phí ngành [Kỹ thuật Điều khiển và Tự động hóa](ten_nganh) là bao nhiêu?
+    - Học phí ngành [Kỹ thuật Điều khiển và Tự động hóa](ten_nganh) 
+    - Cho tôi biết học phí ngành [Công nghệ Kỹ thuật Điện, Điện tử](ten_nganh)
+    - Ngành [Công nghệ Vi mạch Bán dẫn](ten_nganh) học phí bao nhiêu một năm?
     - Học phí của ngành [Kỹ thuật Điều khiển tự động](ten_nganh) có cao không?
-    - Ngành [Công nghệ Kỹ thuật Điện tử](ten_nganh) có học phí khác ngành khác không?
+    - Ngành [Điện tử](ten_nganh) có học phí khác ngành khác không?
     - Học phí ngành [Thiết kế chip](ten_nganh) thay đổi thế nào mỗi năm?
+    - Cho tôi biết học phí ngành [Vi mạch](ten_nganh)
+    - Học phí ngành [Điều khiển và Tự động hóa](ten_nganh) là bao nhiêu một kỳ?
+    - Ngành [Điện tử viễn thông](ten_nganh) học phí mỗi tín chỉ bao nhiêu?
+    - Cho em hỏi học phí ngành [Công nghệ kỹ thuật điện, điện tử](ten_nganh) theo tín chỉ là bao nhiêu?
+    - Ngành [Vi mạch bán dẫn](ten_nganh) thu học phí theo kỳ hay theo tín chỉ?
+    - Sinh viên ngành [Điều khiển và tự động hóa](ten_nganh) phải đóng học phí theo tín chỉ đúng không?
+    - Học phí ngành [Điện, điện tử](ten_nganh) được đóng mỗi kỳ hay theo số tín chỉ?
+    - Học phí của ngành [Công nghệ kỹ thuật điện, điện tử](ten_nganh) tính thế nào?
+    - Ngành [Kỹ thuật điều khiển và tự động hóa](ten_nganh) học phí có tăng hằng năm không?
+    - Học phí ngành [Công nghệ vi mạch bán dẫn](ten_nganh) có tăng mỗi năm không?
+    - Trường có quy định tăng học phí cho ngành [Điện tử viễn thông](ten_nganh) không?
+    - Mỗi năm học phí ngành [Điện, điện tử](ten_nganh) tăng bao nhiêu phần trăm?
+    - Học phí ngành [Kỹ thuật điều khiển và tự động hóa](ten_nganh) tăng tối đa bao nhiêu phần trăm mỗi năm?
+    - Em muốn biết ngành [Điện tử viễn thông](ten_nganh) có tăng học phí không?
+    - Học phí ngành [Vi mạch bán dẫn](ten_nganh) năm [2024](nam) là bao nhiêu?
+    - Ngành [Công nghệ kỹ thuật điện, điện tử](ten_nganh) có học phí khác cơ sở khác không?
+    - Em muốn biết học phí trung bình ngành [Điều khiển và tự động hóa](ten_nganh)
+    - Ngành [Công nghệ kỹ thuật điện, điện tử](ten_nganh) có học phí theo chương trình chất lượng cao không?
+    - Học phí của ngành [Điện tử - viễn thông](ten_nganh) khác ngành [Vi mạch bán dẫn](ten_nganh) không?
+    - Cho em hỏi học phí năm [2025](nam) ngành [Công nghệ kỹ thuật điện, điện tử](ten_nganh)
+    - Ngành [Vi mạch bán dẫn](ten_nganh) học phí 1 kỳ là bao nhiêu?
+    - Ngành [Điều khiển và tự động hóa](ten_nganh) học phí 1 tín chỉ bao nhiêu tiền?
 
-- intent: tra_cuu_lotrinh_tang_hoc_phi
+- intent: hoi_hoc_phi_chung
   examples: |
-    - Học phí ngành [Điện, điện tử](ten_nganh) có tăng mỗi năm không?
-    - Học phí ngành [Công nghệ kỹ thuật Điện, điện tử](ten_nganh) có thay đổi hàng năm không?
-    - Mỗi năm học phí ngành [Điều khiển và Tự động hóa](ten_nganh) có tăng không?
-    - Lộ trình tăng học phí ngành [Điện tử Viễn thông](ten_nganh) như thế nào?
-    - Tỷ lệ tối đa học phí tăng của ngành [Điện, điện tử](ten_nganh) là bao nhiêu phần trăm?
-    - Học phí ngành [Điều khiển và Tự động hóa](ten_nganh) có thể tăng tối đa bao nhiêu phần trăm mỗi năm?
-    - Trường có quy định trần tăng học phí cho ngành [Điện, điện tử](ten_nganh) không?
-    - Học phí ngành [Điện tử Viễn thông](ten_nganh) có bị điều chỉnh theo quy định Nhà nước không?
+    - Học phí
+    - Học phí như nào
+    - Học phí là bao nhiêu?
+    - Một tín chỉ bao nhiêu tiền?
+    - Học phí của ngành này?
+    - Học phí thì sao?
+    - Nộp bao nhiêu tiền một tín chỉ?
+    - Học phí thường niên là bao nhiêu?
+    - Học phí ptit
+    - Một học kỳ phải đóng bao nhiêu tiền?
+    - Trường có tăng học phí mỗi năm không?
+    - Học phí tăng nhiều không ?
+    - Học phí khác nhau giữa các cơ sở không?
+    - Học phí năm nay là bao nhiêu?
+    - Học phí có đắt không 
+    - Ngành này học phí cao không?
+    - Học phí theo tín chỉ hay theo kỳ?
+    - Cho em biết học phí ngành này tham khảo?
+    - Ad ơi, học phí ngành này là bao nhiêu?
+    - Tư vấn cho mình học phí ngành này với ạ
+    - Mình cần tư vấn về học phí ngành này
+    - Cho mình xin học phí ngành này với ạ
+    - Học phí 1 kỳ khoảng bao nhiêu?
+    - Một tín chỉ là bao nhiêu tiền?
+    - Học phí ngành này thay đổi thế nào mỗi năm?
 
-- intent: tra_cuu_hoc_phi_theo_tin_chi
+- intent: tra_cuu_hoc_bong_nganh
   examples: |
-    - Học phí ngành [Điều khiển và Tự động hóa](ten_nganh) được tính theo tín chỉ hay theo kỳ?
-    - Học phí ngành [Công nghệ kỹ thuật Điện, điện tử](ten_nganh) tính thế nào?
-    - Ngành [Thiết kế vi mạch bán dẫn](ten_nganh) học phí thu theo kỳ hay theo tín chỉ?
-    - Học phí của ngành [Điện, điện tử](ten_nganh) được đóng mỗi kỳ hay theo số tín chỉ?
-    - Sinh viên ngành [Điều khiển và Tự động hóa](ten_nganh) phải đóng học phí theo tín chỉ đúng không?
-    - Học phí của ngành [Công nghệ kỹ thuật Điện, điện tử](ten_nganh) có cố định từng kỳ không?
+    - Ngành [Điện tử viễn thông](ten_nganh) có học bổng không?
+    - Học bổng ngành [Vi mạch bán dẫn](ten_nganh) là bao nhiêu?
+    - Sinh viên ngành [Điều khiển và Tự động hóa](ten_nganh) nhận học bổng gì?
+    - Có học bổng toàn phần cho ngành [Kỹ thuật Điều khiển và Tự động hóa](ten_nganh) không?
+    - Học bổng ngành [Công nghệ Kỹ thuật Điện, Điện tử](ten_nganh) theo thành tích ra sao?
+    - Ngành này có học bổng khuyến khích học tập không?
+    - Ngành này dành học bổng gì cho sinh viên giỏi?
+    - Học bổng tối đa của ngành [Điện tử](ten_nganh) là bao nhiêu?
+    - Học bổng năm [2025](nam) ngành [Vi mạch bán dẫn](ten_nganh) là gì?
+    - Ngành [Điều khiển và Tự động hóa](ten_nganh) có học bổng cho sinh viên năm nhất không?
+    - Học bổng ngành [Công nghệ Vi mạch Bán dẫn](ten_nganh) cho sinh viên xuất sắc?
+    - Học bổng ngành [Điện tử viễn thông](ten_nganh) năm [2024](nam) là bao nhiêu?
+    - Học bổng ngành [Công nghệ Kỹ thuật Điện, Điện tử](ten_nganh) tối đa bao nhiêu?
+    - Sinh viên ngành [Vi mạch bán dẫn](ten_nganh) nhận học bổng gì trong năm học?
+    - Ngành [Điện tử](ten_nganh) có học bổng theo thành tích học tập không?
+    - Học bổng ngành [Thiết kế chip](ten_nganh) gồm những loại nào?
+    - Ngành [Công nghệ Vi mạch Bán dẫn](ten_nganh) có học bổng cho sinh viên nghèo không?
+    - Cho em hỏi ngành [Vi mạch bán dẫn](ten_nganh) học bổng năm nay là bao nhiêu?
+    - Ngành [Điện tử viễn thông](ten_nganh) có học bổng bán phần không?
+    - Học bổng ngành [Điều khiển và Tự động hóa](ten_nganh) theo năm học 2025?
+    - Ngành [Công nghệ Kỹ thuật Điện, Điện tử](ten_nganh) học bổng khuyến khích học tập cho sinh viên giỏi?
+    - Sinh viên ngành [Vi mạch bán dẫn](ten_nganh) có học bổng toàn phần không?
+    - Học bổng tối đa ngành [Điện tử](ten_nganh) năm [2024](nam) là bao nhiêu?
+    - Ngành [Điều khiển và Tự động hóa](ten_nganh) có học bổng cho sinh viên xuất sắc?
+    - Ngành [Công nghệ Vi mạch Bán dẫn](ten_nganh) học bổng khuyến khích học tập là gì?
+    - Học bổng ngành [Điện tử viễn thông](ten_nganh) thay đổi mỗi năm không?
+    - Ngành [Điện, điện tử](ten_nganh) có học bổng theo thành tích năm [2025](nam)?
+    - Học bổng năm [2025](nam) ngành [Vi mạch bán dẫn](ten_nganh) gồm những loại nào?
+    - Ngành [Điện tử](ten_nganh) có học bổng cho sinh viên giỏi và xuất sắc không?
 
-- intent: tra_cuu_co_so_dao_tao
+- intent: hoi_hoc_bong_chung
   examples: |
-    - Ngành [Điều khiển và Tự động hóa](ten_nganh) học ở cơ sở nào?
-    - Ở cơ sở Hà Nội có đào tạo ngành [Công nghệ Kỹ thuật Điện, điện tử](ten_nganh) không?
-    - Ngành [Vi mạch bán dẫn](ten_nganh) được đào tạo ở đâu?
-    - Tôi muốn học ngành [Kỹ thuật Điều khiển và Tự động hóa](ten_nganh) thì đăng ký cơ sở nào?
-    - Ngành [Công nghệ Kỹ thuật Điện, điện tử](ten_nganh) có dạy ở TP.HCM không?
-    - Ngành [Thiết kế chip](ten_nganh) học ở cơ sở đào tạo nào?
-    - Ở cơ sở Hồ Chí Minh có ngành [Điện, điện tử](ten_nganh) không?
-    - Ngành [Tự động hóa](ten_nganh) đào tạo tại những cơ sở nào?
-   
+    - Ngành này có học bổng không?
+    - Học bổng năm nay là bao nhiêu?
+    - Sinh viên nhận học bổng gì?
+    - Có học bổng cho sinh viên giỏi không?
+    - Học bổng toàn phần hay bán phần?
+    - Ngành này được hưởng học bổng nào?
+    - Cho em hỏi học bổng năm [2025](nam)
+    - Học bổng theo thành tích học tập ra sao?
+    - Học bổng tối đa là bao nhiêu?
+    - Học bổng năm nay thay đổi không?
+    - Học bổng khuyến khích học tập có không?
+    - Học bổng cho sinh viên năm nhất là gì?
+    - Em muốn biết học bổng ngành này
+    - Cho mình xin học bổng tham khảo
+    - Tư vấn cho mình học bổng ngành này với ạ
+    - Học bổng trung bình mỗi năm là bao nhiêu?
+    - Học bổng tối đa cho sinh viên giỏi là bao nhiêu?
+    - Học bổng năm nay tăng không?
+    - Ngành này có học bổng cho sinh viên xuất sắc không?
+    - Học bổng khuyến khích học tập năm nay là gì?
+    - Học bổng
+    - Học bổng như nào
+    - Điều kiện nhận học bổng
+    - Bao nhiêu điểm mới được nhận học bổng
     
-- intent: tra_cuu_co_hoc_bong
-  examples: |
-    - Ngành [Kỹ thuật Điều khiển và Tự động hóa](ten_nganh) có học bổng không?
-    - Ngành [Điện, điện tử](ten_nganh) có học bổng không?
-    - Sinh viên ngành [vi mạch](ten_nganh) có được học bổng không?
-- intent: tra_cuu_loai_hoc_bong
-  examples: |
-    - Sinh viên ngành [Công nghệ Kỹ thuật Điện, điện tử](ten_nganh) có thể nhận học bổng loại nào?
-    - Học bổng cho ngành [Thiết kế vi mạch bán dẫn](ten_nganh) bao gồm những gì?
-    - Ngành [Tự động hóa](ten_nganh) có học bổng tài năng không?
-    - Ngành [chip bán dẫn](ten_nganh) có học bổng doanh nghiệp tài trợ không?
-- intent: tra_cuu_dieu_kien_hoc_bong
-  examples: |
-    - Sinh viên ngành [Điện, điện tử](ten_nganh) muốn xin học bổng thì cần điều kiện gì?
-    - Điều kiện để nhận học bổng tài năng là gì?
-    - Làm sao để được học bổng ngành [Tự động hóa](ten_nganh)?
-    - Sinh viên ngành [Kỹ thuật Điều khiển và Tự động hóa](ten_nganh) đạt điểm cao có được học bổng không?
-- intent: tra_cuu_gia_tri_hoc_bong
-  examples: |
-    - Học bổng cho sinh viên ngành [vi mạch](ten_nganh) trị giá bao nhiêu?
-    - Học bổng tài năng ngành [Điều khiển và Tự động hóa](ten_nganh) được bao nhiêu tiền?
-    - Học bổng của doanh nghiệp tài trợ khoảng bao nhiêu?
-    - Ngành [Điện, điện tử](ten_nganh) có học bổng toàn phần không?
 
-    
 - intent: tra_cuu_khai_niem_nghien_cuu_khoa_hoc
   examples: |
     - Nghiên cứu khoa học là gì?
+    - NCKH là gì
     - Cho tôi biết nghiên cứu khoa học nghĩa là sao?
-    - Nghiên cứu khoa học trong trường đại học là làm gì?
     - NCKH có phải là viết luận văn không?
-- intent: tra_cuu_co_hoi_nghien_cuu_khoa_hoc
-  examples: |
-    - Ngành [Kỹ thuật Điều khiển và Tự động hóa](ten_nganh) có nghiên cứu khoa học không?
-    - Sinh viên ngành [Công nghệ Kỹ thuật Điện, điện tử](ten_nganh) có được làm nghiên cứu khoa học không?
-    - Ngành [Thiết kế vi mạch bán dẫn](ten_nganh) có CLB nghiên cứu không?
-    - Sinh viên ngành [Tự động hóa](ten_nganh) có được giảng viên hướng dẫn nghiên cứu khoa học không?
+    - Định nghĩa nghiên cứu khoa học
+    - Giải thích khái niệm NCKH
+    - NCKH nghĩa là gì?
+    - Em muốn hiểu về nghiên cứu khoa học
+    - Nghiên cứu khoa học được hiểu như thế nào?
+    - Khái niệm NCKH là gì?
+    - Cho em hỏi NCKH là làm những gì?
+    - NCKH và đồ án khác nhau thế nào?
+    - Giải thích NCKH đơn giản
+    - NCKH học để làm gì?
+    - Khái niệm nghiên cứu khoa học trong đại học
+    - Em cần biết NCKH là gì?
+    - NCKH là hoạt động như thế nào?
+    - Thế nào là nghiên cứu khoa học?
+    - NCKH là viết tắt của từ gì?
+    - NCKH có ý nghĩa gì?
+    - Có thể giải thích rõ hơn về NCKH?
+    - NCKH khác môn học bình thường ra sao?
+    - Nghiên cứu khoa học là học phần gì?
+    - NCKH giúp sinh viên học gì?
+    - NCKH bắt đầu từ đâu?
+    - NCKH có bắt buộc phải làm đề tài không?
+    - Em chưa hiểu rõ về NCKH
+    - NCKH là gì trong trường đại học?
+    - Khái niệm NCKH đơn giản
+    - NCKH là môn học hay dự án?
+    - Giải thích ý nghĩa NCKH
+
+
 - intent: tra_cuu_dieu_kien_nghien_cuu_khoa_hoc
   examples: |
-    - Điều kiện để tham gia nghiên cứu khoa học là gì?
-    - Muốn làm đề tài nghiên cứu khoa học cần những yêu cầu nào?
-    - Sinh viên năm mấy thì mới được tham gia nghiên cứu khoa học?
+    - Điều kiện tham gia NCKH là gì?
+    - NCKH yêu cầu gì
+    - Nghiên cứu khoa học yêu cầu gì
+    - Muốn làm đề tài NCKH cần yêu cầu gì?
+    - Sinh viên năm mấy được tham gia NCKH?
+    - Cần GPA bao nhiêu để làm NCKH?
+    - Có cần giảng viên hướng dẫn không?
+    - Thủ tục đăng ký NCKH thế nào?
+    - Làm sao để tham gia NCKH?
+    - Có cần kiến thức chuyên môn không?
+    - Có cần nhóm khi làm NCKH không?
+    - Sinh viên phải chuẩn bị gì để nghiên cứu?
+    - Có giới hạn số lượng đề tài không?
+    - Sinh viên năm nhất có đủ điều kiện không?
+    - Muốn NCKH phải học môn gì trước?
+    - Cần kinh nghiệm gì để tham gia NCKH?
+    - Có điều kiện về điểm rèn luyện không?
+    - Làm NCKH cần chuẩn bị hồ sơ gì?
+    - NCKH có yêu cầu về số tín chỉ không?
+    - Sinh viên phải phỏng vấn để làm NCKH không?
+    - Thời gian nào đăng ký NCKH?
+    - NCKH có yêu cầu đặc biệt gì không?
+    - Làm NCKH có cần nộp giấy tờ không?
+    - Có cần đồng ý của giảng viên không?
+    - Sinh viên cần đăng ký qua hệ thống không?
+    - Có giới hạn số người tham gia không?
+    - Sinh viên có thể đăng ký NCKH online không?
+    - Điều kiện để đăng ký đề tài NCKH?
+    - NCKH có yêu cầu về kỹ năng tin học không?
+    - Sinh viên năm 2 có thể tham gia NCKH không?
+  
+
 - intent: tra_cuu_loi_ich_nghien_cuu_khoa_hoc
   examples: |
-    - Làm nghiên cứu khoa học có ích gì trong tương lai?
-    - Nghiên cứu khoa học giúp gì cho việc làm sau khi ra trường?
+    - Làm NCKH có ích gì?
+    - NCKH giúp gì cho việc làm sau khi ra trường?
     - Tham gia NCKH có được cộng điểm tốt nghiệp không?
     - NCKH có giúp xin học bổng không?
-- intent: tra_cuu_noi_dung_nghien_cuu_khoa_hoc
-  examples: |
-    - Nghiên cứu khoa học là làm về gì?
-    - Sinh viên thường nghiên cứu những mảng nào?
-    - Có đề tài nào sinh viên ngành [vi mạch](ten_nganh) có thể tham gia không?
-
+    - Lợi ích của việc làm NCKH là gì?
+    - NCKH mang lại gì cho sinh viên?
+    - Có ích lợi gì khi tham gia nghiên cứu?
+    - Làm NCKH có giúp xin việc dễ hơn không?
+    - Có được cộng điểm rèn luyện không?
+    - NCKH có lợi cho du học không?
+    - Có được ưu tiên khi xét tốt nghiệp không?
+    - Lợi thế khi có NCKH trong CV?
+    - NCKH giúp phát triển kỹ năng mềm không?
+    - NCKH có hỗ trợ học bổng không?
+    - Có được công bố bài báo không?
+    - Lợi ích thực tế của NCKH?
+    - NCKH có giúp phát triển tư duy không?
+    - NCKH có ảnh hưởng đến kết quả học tập không?
+    - NCKH có được kinh phí hỗ trợ không?
+    - NCKH có cơ hội tham gia hội thảo không?
+    - NCKH giúp học gì thêm?
+    - Sinh viên tham gia NCKH có lợi gì?
+    - NCKH có tăng khả năng networking không?
+    - Có ích khi tham gia nghiên cứu ứng dụng không?
+    - NCKH giúp nâng cao kỹ năng mềm gì?
+    - Tham gia NCKH giúp sinh viên ra sản phẩm gì?
+    - Có được chứng nhận khi tham gia NCKH không?
+    - Tham gia NCKH giúp nâng cao năng lực chuyên môn không?
+    - NCKH có lợi khi phỏng vấn xin việc không?
+    - Tham gia NCKH giúp sinh viên thực hành nhiều hơn không?
+    - NCKH giúp sinh viên phát triển tư duy sáng tạo không?
 
 
 - intent: phong_lab_danh_sach
@@ -338,150 +594,244 @@ nlu:
     - Các lab đang hoạt động tại khoa [Điện tử](ten_khoa)
     - Trường có phòng lab nào cho sinh viên thực hành?
     - Liệt kê các phòng lab hiện có
+    - Khoa [Tự động hóa](ten_khoa) có những lab gì?
+    - Cho em biết phòng lab trong khoa [Vi mạch](ten_khoa)
+    - Lab của trường gồm những phòng nào?
+    - Tôi cần danh sách phòng lab để đăng ký thực hành
+    - Phòng lab nào mở cho sinh viên năm nhất?
+    - Danh sách lab theo khoa
+    - Lab ở trường [Bưu chính Viễn thông] gồm những gì?
+    - Lab nào đang hoạt động trong khoa [Điện tử]?
+    - Tất cả phòng lab cho sinh viên ngành [Điện tử] là gì?
+    - Lab trong trường gồm những phòng nào?
+    - Liệt kê các lab hiện có
+    - Lab thực hành của khoa [Tự động hóa] gồm những gì?
+    - Tôi muốn xem các lab đang mở
+    - Phòng lab của khoa [Điện tử] là những phòng nào?
+    - Lab thực hành trong trường là gì?
+    - Danh sách lab dùng cho sinh viên ngành [Vi mạch]
+    - Lab mở cho sinh viên năm hai
+    - Phòng lab mới trong khoa [Điện tử] là gì?
+    - Lab của khoa có bao nhiêu phòng?
+    - Liệt kê tất cả phòng lab đang hoạt động
+    - Lab nào có thể đăng ký thực hành?
+    - Cho em danh sách các lab hiện có
+    - Phòng lab trong khoa [Điện tử] có bao nhiêu?
+    - Lab ở trường Bưu chính có những phòng nào?
+    - lab ở ptit
+
+
 - intent: phong_lab_thiet_bi
   examples: |
-    - Phòng lab [Điện tử Sáng tạo](ten_lab) có thiết bị gì?
+    - Phòng lab có thiết bị gì?
     - Các máy móc trong phòng lab [Vi mạch bán dẫn](ten_lab)
     - Lab của khoa [Điện tử](ten_khoa) được trang bị những gì?
     - Tôi muốn biết thiết bị thực hành trong phòng lab
-    - Phòng lab [Tự động hóa](ten_lab) có thiết bị robot không?
+    - Phòng lab có thiết bị robot không?
     - Lab có máy đo, thiết bị IoT nào?
+    - Phòng lab có máy tính bao nhiêu bộ?
+    - Lab có oscilloscope không?
+    - Thiết bị thực hành trong lab gồm những gì?
+    - Lab có phòng máy CNC không?
+    - Trang thiết bị lab  là gì?
+    - Lab có thiết bị đo lường chuyên dụng không?
+    - Phòng lab dùng cho AI có thiết bị gì?
+    - Lab có bộ kit IoT cho sinh viên không?
+    - Tôi muốn biết lab có máy hàn không?
+    - Lab có phòng in 3D không?
+    - Thiết bị thực hành trong lab [Điện tử] gồm gì?
+    - Lab có phòng thực hành robot không?
+    - Phòng lab [Tự động hóa] có máy CNC không?
+    - Lab có thiết bị Arduino, Raspberry Pi không?
+    - Lab dùng cho lập trình nhúng có gì?
+    - Lab có thiết bị đo tín hiệu điện không?
+    - Lab có camera, thiết bị IoT không?
+    - Tôi muốn xem danh sách thiết bị của lab
+    - Lab có robot thực hành không?
+    - Lab có mấy máy hàn, máy cắt?
+    - Lab có gì?
+    - Lab có máy quét mạch không?
+    - Phòng lab có thiết bị mô phỏng không?
+    
+
 - intent: phong_lab_dieu_kien_su_dung
   examples: |
-    - Ai được phép sử dụng phòng lab [Điện tử Sáng tạo](ten_lab)?
+    - Ai được phép sử dụng phòng lab ?
     - Điều kiện để vào lab ngành [Kỹ thuật Điều khiển và Tự động hóa](ten_nganh)?
     - Sinh viên năm mấy có thể sử dụng phòng lab?
     - Yêu cầu an toàn khi sử dụng phòng lab là gì?
     - Tôi cần đăng ký gì để được vào phòng lab?
+    - Lab chỉ dành cho sinh viên năm mấy?
+    - Có cần mặc đồ bảo hộ khi vào lab không?
+    - Ai được phép vào phòng lab?
+    - Phòng lab có mở cho tất cả sinh viên không?
+    - Cần giấy phép gì để sử dụng lab?
+    - Lab có yêu cầu gì trước khi tham gia?
+    - Sinh viên năm nhất có thể vào lab không?
+    - Có cần đăng ký trước khi vào lab không?
+    - Có giới hạn số người trong lab không?
+    - Điều kiện an toàn để vào lab?
+    - Có yêu cầu về kinh nghiệm hay kiến thức không?
+    - Sinh viên năm hai có được sử dụng lab không?
+    - Cần ký cam kết gì khi vào lab không?
+    - Ai kiểm tra điều kiện sử dụng lab?
+    - Có giới hạn thời gian sử dụng lab không?
+    - Có yêu cầu về đồng phục khi vào lab?
+    - Lab có khóa an toàn không?
+    - Có được phép mang đồ ăn, nước vào lab không?
+    - Ai hướng dẫn sinh viên khi vào lab?
+    - Lab có đăng ký trực tuyến không?
+    - Cần tham gia khóa học an toàn không?
+    - Có yêu cầu gì về giấy tờ sinh viên?
+    - Lab có giới hạn thiết bị sử dụng không?
+    - Sinh viên được phép vào lab lúc nào?
+    - Có quy định riêng của từng lab không?
+    - Quy định phòng lab
+    - Làm thế nào để vào phòng lab
+    - Phòng lab có yêu cầu gì để vào
+    - Điều kiện vào phòng lab
+
+
 - intent: phong_lab_gio_mo_cua
   examples: |
-    - Phòng lab [Điện tử Sáng tạo](ten_lab) mở cửa mấy giờ?
+    - Phòng lab mở cửa mấy giờ?
     - Giờ hoạt động của phòng lab ngành [Vi mạch bán dẫn](ten_nganh)
     - Lab khoa [Điện tử](ten_khoa) mở cửa những ngày nào?
     - Khi nào tôi có thể vào phòng lab?
     - Lịch lab thực hành của sinh viên là gì?
+    - Phòng lab mở cửa từ mấy giờ đến mấy giờ?
+    - Lab hoạt động những ngày nào?
+    - Giờ mở cửa lab cho sinh viên?
+    - Lab có mở cuối tuần không?
+    - Khi nào lab không hoạt động?
+    - Phòng lab mở cửa sáng hay chiều?
+    - Lab có mở buổi tối không?
+    - Giờ hoạt động của lab [Tự động hóa] là gì?
+    - Lab có mở trong kỳ nghỉ không?
+    - Lab có lịch đăng ký giờ mở cửa không?
+    - Khi nào lab nhận sinh viên vào?
+    - Lab mở cửa vào ngày lễ không?
+    - Phòng lab có lịch cố định không?
+    - Lab có mở giờ linh hoạt không?
+    - Lab hoạt động theo tuần hay tháng?
+    - Lab mở cửa vào thứ mấy?
+    - Lab có lịch học thực hành không?
+    - Tôi muốn biết giờ mở lab [Vi mạch]
+    - Lab mở từ mấy giờ đến mấy giờ?
+    - Lab mở cửa hôm nay không?
+    - Lab có mở ban đêm không?
+    - Lab có lịch biểu cụ thể không?
+    - Khi nào sinh viên có thể vào lab?
+    - Lab mở cửa theo lịch nào?
+    - Lab mở cho sinh viên từ khi nào?
+
+
 - intent: phong_lab_khoa_hoc_thuc_hanh
   examples: |
-    - Phòng lab [Tự động hóa](ten_lab) dùng cho môn học nào?
+    - Phòng lab dùng cho môn học nào?
     - Lab ngành [Điện, điện tử](ten_nganh) có thực hành gì?
     - Khóa học thực hành trong phòng lab [Vi mạch bán dẫn](ten_lab)
     - Tôi muốn biết môn học sử dụng phòng lab
     - Lab này phục vụ sinh viên ngành nào?
+    - Lab dùng cho môn [Điện tử cơ bản]
+    - Phòng lab có thực hành về [Robot] không?
+    - Lab được dùng cho khóa học nào?
+    - Lab có thực hành gì trong học kỳ này?
+    - Phòng lab dùng cho sinh viên ngành [Tự động hóa]
+    - Lab dùng cho môn thực hành AI không?
+    - Lab thực hành cho sinh viên năm hai
+    - Phòng lab cho môn IoT
+    - Lab dùng cho môn Điện tử nâng cao
+    - Lab phục vụ khóa học tự động hóa
+    - Phòng lab dùng cho sinh viên ngành Vi mạch
+    - Lab thực hành cho môn lập trình nhúng
+    - Lab phục vụ môn Robot học
+    - Lab dùng cho khóa học chuyên ngành
+    - Lab dùng cho môn Cơ điện tử
+    - Lab phục vụ học phần AI
+    - Lab dùng cho môn Thực hành PLC
+    - Lab có môn học nào thực hành không?
+    - Lab dành cho sinh viên ngành Điện tử
+    - Lab dùng cho khóa học IoT
+    - Lab thực hành cho môn Điện tử số
+    - Lab phục vụ môn Cảm biến thông minh
+    - Lab dùng cho môn Điện tử cơ bản
+    - Lab dành cho môn học nào?
+    - Lab phục vụ khóa học lập trình nhúng
+    - Phòng lab thực hành gì
+    - Phòng lab học gì
+
+
 - intent: phong_lab_lien_he
   examples: |
-    - Ai phụ trách phòng lab [Điện tử Sáng tạo](ten_lab)?
+    - Ai phụ trách phòng lab
     - Liên hệ lab ngành [Kỹ thuật Điều khiển và Tự động hóa](ten_nganh)
     - Tôi cần gặp người quản lý phòng lab
     - Email hoặc số điện thoại phụ trách lab là gì?
     - Lab này có fanpage hoặc website không?
-- intent: phong_lab_lien_ket_doanh_nghiep
-  examples: |
-    - Phòng lab [Vi mạch bán dẫn](ten_lab) có hợp tác doanh nghiệp nào không?
-    - Lab ngành [Điện tử](ten_khoa) kết nối với công ty nào?
-    - Lab có dự án nghiên cứu liên kết với doanh nghiệp không?
-    - Ai là đối tác của phòng lab này?
-    - Lab có chương trình internship cùng doanh nghiệp không?
-
-
+    - Ai là quản lý lab
+    - Tôi muốn liên hệ người phụ trách lab
+    - Lab có địa chỉ email liên hệ không?
+    - Số điện thoại lab là gì?
+    - Lab có thông tin liên hệ không?
+    - Ai phụ trách lab ngành [Điện tử]?
+    - Tôi cần xin thông tin liên hệ lab
+    - Lab có website chính thức không?
+    - Người quản lý lab là ai?
+    - Ai chịu trách nhiệm phòng lab này?
+    - Liên hệ phòng lab như thế nào?
+    - Lab có liên hệ trực tuyến không?
+    - Email liên hệ phòng lab?
+    - Số điện thoại liên hệ lab?
+    - Lab có fanpage không?
+    - Ai phụ trách lab này?
+    - Tôi muốn liên hệ lab [Tự động hóa]
+    - Lab có quản lý trực tiếp không?
+    - Lab có người hỗ trợ sinh viên không?
+    - Tôi cần liên hệ phòng lab
+    - Lab có địa chỉ cụ thể không?
+    - Ai hướng dẫn sinh viên trong lab?
+    - Lab có thông tin quản lý không?
+    - Liên hệ với phòng lab làm sao?
+    - Thông tin liên hệ phòng lab
+    
 
 - intent: tra_cuu_co_hoi_viec_lam
   examples: |
+    # Kỹ thuật Điều khiển và Tự động hóa
     - Sinh viên ngành [Kỹ thuật Điều khiển và Tự động hóa](ten_nganh) ra trường làm gì?
-    - Ngành [Công nghệ Kỹ thuật Điện, điện tử](ten_nganh) học xong có thể làm ở đâu?
-    - Ngành [Thiết kế vi mạch bán dẫn](ten_nganh) có cơ hội nghề nghiệp thế nào?
-    - Ngành [Điện, điện tử](ten_nganh) ra trường làm những công việc gì?
-    - Tốt nghiệp ngành [Tự động hóa](ten_nganh) thì làm kỹ sư ở đâu?
-- intent: tra_cuu_nhu_cau_tuyen_dung
-  examples: |
-    - Ngành [vi mạch](ten_nganh) có nhu cầu tuyển dụng cao không?
-    - Nhu cầu việc làm ngành [Điều khiển và Tự động hóa](ten_nganh) thế nào?
-    - Công ty có tuyển nhiều sinh viên ngành [Điện tử](ten_nganh) không?
-    - Thị trường lao động có cần nhiều kỹ sư [tự động hóa](ten_nganh) không?
-- intent: tra_cuu_viec_lam_quoc_te
-  examples: |
-    - Học ngành [chip bán dẫn](ten_nganh) có thể đi làm ở nước ngoài không?
-    - Sinh viên ngành [Điện, điện tử](ten_nganh) có cơ hội việc làm ở Nhật không?
-    - Ngành [Kỹ thuật Điều khiển và Tự động hóa](ten_nganh) có dễ xin việc tại nước ngoài không?
-    - Có thể làm việc trong các tập đoàn quốc tế sau khi học ngành [vi mạch](ten_nganh) không?
-- intent: tra_cuu_luong_nganh
-  examples: |
-    - Học ngành [Tự động hóa](ten_nganh) ra trường lương bao nhiêu?
-    - Ngành [vi mạch](ten_nganh) có lương cao không?
-    - Sinh viên ngành [Công nghệ Điện, điện tử](ten_nganh) mới ra trường lương khoảng bao nhiêu?
-    - Ngành [Điện tử](ten_nganh) thu nhập trung bình là bao nhiêu?
-    - Có thể kiếm được mức lương cao khi học ngành [Điều khiển và Tự động hóa](ten_nganh) không?
+    - Học xong ngành [Kỹ thuật Điều khiển và Tự động hóa](ten_nganh) có thể làm nghề gì?
+    - Tư vấn cho mình việc làm của ngành [Kỹ thuật Điều khiển và Tự động hóa](ten_nganh)
+    - Ad cho mình hỏi học xong ngành [Kỹ thuật Điều khiển và Tự động hóa](ten_nganh) có thể làm gì ạ
+    - Cơ hội việc làm của ngành [Kỹ thuật Điều khiển và Tự động hóa](ten_nganh)
+    - Học xong ngành [Tự động hóa](ten_nganh) có thể làm những việc gì?
+    - Cho mình hỏi cơ hội làm việc của ngành [Tự động hóa](ten_nganh)
+    - Tư vấn cho mình việc làm của ngành [Tự động hóa](ten_nganh) với ạ
+    - Ad cho mình hỏi học xong ngành [Điều khiển và Tự động hóa](ten_nganh) có thể làm gì ạ
+    - Cơ hội việc làm của ngành [Điều khiển tự động hóa](ten_nganh)
 
+    - Sinh viên ngành [Công nghệ Kỹ thuật Điện, Điện tử](ten_nganh) ra trường làm gì?
+    - Học xong ngành [Công nghệ Kỹ thuật Điện, Điện tử](ten_nganh) có thể làm nghề gì?
+    - Tư vấn việc làm ngành [Điện, điện tử](ten_nganh)
+    - Ad cho mình hỏi học xong ngành [CNKT điện điện tử](ten_nganh) có thể làm gì?
+    - Cơ hội nghề nghiệp ngành [Electrical Engineering](ten_nganh)
+    - Học xong ngành [EE](ten_nganh) ra trường làm gì?
+    - Sinh viên ngành [EEE](ten_nganh) có thể làm những công việc nào?
+    - Cho mình hỏi cơ hội làm việc ngành [Công nghệ điện](ten_nganh)
+    - Tư vấn việc làm ngành [Điện tử & điện](ten_nganh)
+    - Học xong ngành [KTĐT](ten_nganh) có thể xin việc ở đâu?
 
-- intent: tra_cuu_dieu_kien_tuyen_sinh
-  examples: |
-    - Điều kiện tuyển sinh ngành [Điều khiển và Tự động hóa](ten_nganh) là gì?
-    - Muốn vào ngành [Công nghệ kỹ thuật Điện, điện tử](ten_nganh) cần đáp ứng điều kiện gì?
-    - Ngành [Thiết kế vi mạch bán dẫn](ten_nganh) có yêu cầu gì để được xét tuyển?
-    - Tiêu chí xét tuyển của ngành [Điện, điện tử](ten_nganh) gồm những gì?
-    - Ngành [Điều khiển và Tự động hóa](ten_nganh) có cần điểm tiếng Anh không?
-    - Điều kiện trúng tuyển ngành [Công nghệ kỹ thuật Điện, điện tử](ten_nganh)?
-    - Học sinh muốn đăng ký ngành [Thiết kế vi mạch bán dẫn](ten_nganh) phải có chứng chỉ gì?
-    - Điều kiện tối thiểu để được xét tuyển vào ngành [Điều khiển và Tự động hóa](ten_nganh) là gì?
+    - Sinh viên ngành [Công nghệ Vi mạch bán dẫn](ten_nganh) ra trường làm gì?
+    - Học xong ngành [Vi mạch](ten_nganh) có thể làm nghề gì?
+    - Tư vấn việc làm ngành [Công nghệ bán dẫn](ten_nganh)
+    - Ad cho mình hỏi học xong ngành [Bán dẫn](ten_nganh) có thể làm gì?
+    - Cơ hội việc làm ngành [IC design](ten_nganh)
+    - Học xong ngành [chip design](ten_nganh) ra trường làm gì?
+    - Sinh viên ngành [semiconductor](ten_nganh) có thể làm những công việc nào?
+    - Cho mình hỏi cơ hội làm việc ngành [thiết kế chip](ten_nganh)
+    - Tư vấn việc làm ngành [semiconductor engineering](ten_nganh)
+    - Học xong ngành [Công nghệ vi mạch](ten_nganh) có thể xin việc ở đâu?
 
-- intent: tra_cuu_quy_trinh_nhap_hoc
-  examples: |
-    - Quy trình nhập học ngành [Điều khiển và Tự động hóa](ten_nganh) như thế nào?
-    - Ngành [Công nghệ Kỹ thuật Điện, điện tử](ten_nganh) thủ tục nhập học ra sao?
-    - Hướng dẫn nhập học ngành [Thiết kế vi mạch bán dẫn](ten_nganh)?
-    - Em đã trúng tuyển ngành [Điều khiển và Tự động hóa](ten_nganh), giờ nhập học thế nào?
-    - Quy trình nhập học của ngành [Điện, điện tử](ten_nganh) có mấy bước?
-    - Ngành [Thiết kế vi mạch bán dẫn](ten_nganh) cần chuẩn bị giấy tờ gì để nhập học?
-    - Hồ sơ nhập học ngành [Điều khiển và Tự động hóa](ten_nganh) gồm những gì?
-    - Thủ tục nhập học ngành [Công nghệ Kỹ thuật Điện, điện tử](ten_nganh)?
-
-- intent: tra_cuu_ho_so_nhap_hoc
-  examples: |
-    - Hồ sơ nhập học ngành [Điều khiển và Tự động hóa](ten_nganh) gồm những gì?
-    - Em cần chuẩn bị giấy tờ gì để nhập học ngành [Công nghệ Kỹ thuật Điện, điện tử](ten_nganh)?
-    - Ngành [Thiết kế vi mạch bán dẫn](ten_nganh) cần những giấy tờ gì để nhập học?
-    - Hồ sơ nhập học của ngành [Điều khiển và Tự động hóa](ten_nganh)?
-    - Hồ sơ để nhập học ngành [Công nghệ Kỹ thuật Điện, điện tử](ten_nganh) có gì khác?
-    - Nhập học ngành [Thiết kế vi mạch bán dẫn](ten_nganh) cần giấy tờ gì?
-
-
-- intent: tra_cuu_kien_thuc_co_ban
-  examples: |
-    - Sinh viên ngành [Điện, điện tử](ten_nganh) cần có kiến thức gì?
-    - Chuẩn đầu ra về kiến thức cơ bản của ngành [Điện tử](ten_nganh) là gì?
-    - Sinh viên ngành [Điện, điện tử](ten_nganh) phải học những môn nào?
-- intent: tra_cuu_kien_thuc_chuyen_mon
-  examples: |
-    - Sinh viên ngành [Điện, điện tử](ten_nganh) cần biết những gì về chuyên môn?
-    - Chuẩn đầu ra về kiến thức chuyên môn của ngành [Điện tử](ten_nganh) là gì?
-    - Sinh viên ngành [Điện, điện tử](ten_nganh) cần học những môn chuyên ngành nào?
-- intent: tra_cuu_ky_nang_nghe_nghiep
-  examples: |
-    - Sinh viên ngành [Điện, điện tử](ten_nganh) cần có kỹ năng gì?
-    - Chuẩn đầu ra về kỹ năng nghề nghiệp của ngành [Điện tử](ten_nganh) là gì?
-    - Sinh viên ngành [Điện, điện tử](ten_nganh) cần học những kỹ năng nào?
-- intent: tra_cuu_ky_nang_mem
-  examples: |
-    - Sinh viên ngành [Điện, điện tử](ten_nganh) cần có kỹ năng mềm gì?
-    - Chuẩn đầu ra về kỹ năng mềm của ngành [Điện tử](ten_nganh) là gì?
-    - Sinh viên ngành [Điện, điện tử](ten_nganh) cần học những kỹ năng mềm nào?
-
-
-- intent: tra_cuu_chuong_trinh_hoc_nganh
-  examples: |
-    - Cấu trúc chương trình học của ngành [Điều khiển và Tự động hóa](ten_nganh) là gì?
-    - Ngành [Công nghệ Kỹ thuật Điện, điện tử](ten_nganh) gồm những môn gì?
-    - Ngành [Thiết kế vi mạch bán dẫn](ten_nganh) học bao nhiêu tín chỉ đại cương, chuyên nghiệp?
-    - Cho tôi biết chương trình học ngành [Điều khiển và Tự động hóa](ten_nganh)
-- intent: tra_cuu_chuyen_nganh_trong_nganh
-  examples: |
-    - Ngành [Công nghệ Kỹ thuật Điện, điện tử](ten_nganh) có những chuyên ngành gì?
-    - Cho tôi biết các chuyên ngành của ngành [Điều khiển và Tự động hóa](ten_nganh)
-    - Ngành [Thiết kế vi mạch bán dẫn](ten_nganh) gồm bao nhiêu chuyên ngành?
-- intent: tra_cuu_tin_chi_thuc_tap_do_an
-  examples: |
-    - Ngành [Công nghệ Kỹ thuật Điện, điện tử](ten_nganh) có mấy tín chỉ thực tập?
-    - Sinh viên ngành [Thiết kế vi mạch bán dẫn](ten_nganh) làm đồ án như thế nào?
-    - Thực tập và đồ án tốt nghiệp ngành [Điều khiển và Tự động hóa](ten_nganh) ra sao?
 
 - intent: tra_cuu_ket_noi_doanh_nghiep
   examples: |
@@ -491,119 +841,50 @@ nlu:
     - Sinh viên ra trường có được Học viện giới thiệu việc làm không?
     - Khoa Điện tử hợp tác với những doanh nghiệp nào?
     - Liên kết doanh nghiệp của Học viện để sinh viên thực tập gồm những công ty nào?
+    - Sinh viên có cơ hội internship ở đâu?
+    - Sinh viên có cơ hội thực tập ở đâu?
+    - Các công ty đối tác của Học viện là gì?
+    - Học viện có chương trình internship với doanh nghiệp không?
+    - Sinh viên ngành [Điện tử](ten_nganh) được giới thiệu việc làm ra sao?
+    - Khoa có hợp tác doanh nghiệp để tìm việc cho sinh viên không?
+    - Danh sách công ty hợp tác với khoa Điện tử
+    - Sinh viên có được hỗ trợ internship tại các công ty không?
+    - Các doanh nghiệp đối tác có tuyển sinh viên mới ra trường không?
+    - Học viện có chương trình kết nối doanh nghiệp cho sinh viên không?
+    - Học viện liên kết với những doanh nghiệp nào
+    
 
-- intent: tra_cuu_thong_tin_lien_he
+- intent: hoi_ve_nu_gioi_trong_ky_thuat
   examples: |
-    - Cho mình xin số điện thoại phòng tuyển sinh.
-    - Địa chỉ của khoa ở đâu?
-    - Email của phòng tuyển sinh là gì?
-    - Fanpage tư vấn tuyển sinh là gì?
-    - Muốn liên hệ phòng tuyển sinh thì gọi số nào?
-    - Địa chỉ khoa Điện tử nằm ở đâu?
-    - Email liên hệ với khoa để hỏi về tuyển sinh?
-
-- intent: tra_cuu_phu_hop_nu
-  examples: |
-    - Nữ học ngành [Điện, điện tử](ten_nganh) có phù hợp không?
-    - Con gái học ngành [Tự động hóa](ten_nganh) có khó không?
-    - Ngành [vi mạch bán dẫn](ten_nganh) có thích hợp cho nữ không?
-    - Con gái có nên theo ngành [Điều khiển và Tự động hóa](ten_nganh) không?
-    - Nữ có thể học ngành [Công nghệ Điện tử](ten_nganh) được không?
-- intent: tra_cuu_dac_thu_cong_viec_nu
-  examples: |
-    - Ngành [Điện, điện tử](ten_nganh) có phải làm việc nặng nhọc không?
-    - Con gái học ngành [Tự động hóa](ten_nganh) có phải đi công trình nhiều không?
-    - Công việc ngành [Điện tử](ten_nganh) có vất vả không cho nữ?
-    - Nữ làm ngành [vi mạch](ten_nganh) có gặp khó khăn không?
-- intent: tra_cuu_viec_lam_cho_nu
-  examples: |
-    - Nữ học ngành [Điện, điện tử](ten_nganh) ra trường làm việc gì?
-    - Con gái ngành [Điều khiển và Tự động hóa](ten_nganh) dễ xin việc không?
-    - Cơ hội việc làm cho nữ ngành [Công nghệ Điện tử](ten_nganh) thế nào?
-    - Nữ học [vi mạch](ten_nganh) có dễ được nhận vào công ty lớn không?
-- intent: tra_cuu_co_hoi_thang_tien_nu
-  examples: |
-    - Nữ làm ngành [Điện, điện tử](ten_nganh) có cơ hội thăng tiến không?
-    - Con gái học ngành [Tự động hóa](ten_nganh) có thể làm quản lý không?
-    - Nữ có thể làm giảng viên ngành [Điện tử](ten_nganh) không?
-    - Có nhiều nữ làm nghiên cứu trong ngành [vi mạch](ten_nganh) không?
-
-
-- intent: ptit_gioi_thieu_lich_su
-  examples: |
-    - Trường PTIT được thành lập khi nào?
-    - Lịch sử hình thành PTIT
-    - Tôi muốn biết quá trình phát triển của PTIT
-    - PTIT có từ bao giờ?
-    - Lịch sử và truyền thống của trường PTIT
-- intent: ptit_gioi_thieu_su_menh_tam_nhin
-  examples: |
-    - Sứ mệnh của PTIT là gì?
-    - Tầm nhìn của PTIT ra sao?
-    - Mục tiêu phát triển của trường PTIT
-    - PTIT hướng tới điều gì trong giáo dục?
-    - Trường có giá trị cốt lõi nào?
-- intent: ptit_gioi_thieu_co_cau_to_chuc
-  examples: |
-    - PTIT có những phòng ban, khoa nào?
-    - Tôi muốn biết cơ cấu tổ chức của PTIT
-    - Trường gồm những đơn vị nào?
-    - Các khoa, phòng chức năng trong PTIT
-    - Ban giám hiệu và các phòng ban của PTIT
-- intent: ptit_gioi_thieu_dia_chi
-  examples: |
-    - Trường PTIT ở đâu?
-    - Địa chỉ các cơ sở của PTIT
-    - Tôi muốn đến thăm PTIT, địa chỉ là gì?
-    - PTIT có cơ sở tại Hà Nội và TP.HCM không?
-    - Địa chỉ chính và các cơ sở của PTIT
-- intent: ptit_gioi_thieu_quy_mo_dao_tao
-  examples: |
-    - PTIT đào tạo bao nhiêu sinh viên?
-    - Quy mô đào tạo của trường ra sao?
-    - Số lượng khoa, ngành học của PTIT
-    - PTIT có đào tạo những bậc học nào?
-    - Tôi muốn biết quy mô sinh viên và giảng viên
-- intent: ptit_gioi_thieu_thanh_tuu_noi_bat
-  examples: |
-    - PTIT có những thành tựu gì?
-    - Trường đạt giải thưởng hay thành tích gì nổi bật?
-    - Tôi muốn biết thành tích nghiên cứu và đào tạo
-    - Những dự án, cuộc thi nổi bật của PTIT
-    - PTIT có danh tiếng nào trong nước và quốc tế?
-- intent: ptit_gioi_thieu_lien_he
-  examples: |
-    - Tôi muốn liên hệ với trường PTIT
-    - Email, số điện thoại của PTIT là gì?
-    - Website và fanpage của PTIT
-    - Ai phụ trách thông tin chung của PTIT?
-    - Tôi cần hỗ trợ thông tin về PTIT liên hệ ai?
-
-
-- intent: tra_cuu_giang_vien
-  examples: |
-    - Cho tôi biết giảng viên ngành [Điện tử](ten_nganh) là ai?
-    - Ai dạy ngành [Tự động hóa](ten_nganh)?
-    - Giảng viên khoa [Điều khiển và Tự động hóa](ten_khoa) gồm những ai?
-    - Tôi muốn biết tên giảng viên ngành [vi mạch](ten_nganh)
-- intent: tra_cuu_trinh_do_giang_vien
-  examples: |
-    - Giảng viên [Điện tử](ten_nganh) có học vị gì?
-    - Ai là tiến sĩ trong khoa [Tự động hóa](ten_khoa)?
-    - Trình độ giảng viên ngành [Điều khiển](ten_nganh) thế nào?
-    - Giảng viên [vi mạch](ten_nganh) có bao nhiêu người thạc sĩ, tiến sĩ?
-- intent: tra_cuu_chuyen_mon_giang_vien
-  examples: |
-    - Giảng viên khoa [Điện tử](ten_khoa) chuyên môn gì?
-    - Ai dạy môn [Điều khiển tự động](ten_mon)?
-    - Giảng viên [vi mạch](ten_nganh) nghiên cứu gì?
-    - Bộ môn giảng viên [Tự động hóa](ten_khoa) phụ trách?
-- intent: tra_cuu_lich_day_giang_vien
-  examples: |
-    - Giảng viên [Điện tử](ten_nganh) dạy môn gì trong kỳ này?
-    - Lịch học môn [Tự động hóa](ten_mon) của giảng viên nào?
-    - Ai dạy môn [vi mạch](ten_nganh) học kỳ này?
-    - Giờ office giảng viên [Điều khiển](ten_nganh) là khi nào?
+    - Nữ học ngành [Điện tử](ten_nganh) có phù hợp không?
+    - Con gái học [Tự động hóa](ten_nganh) có khó không?
+    - Ngành [Vi mạch bán dẫn](ten_nganh) thích hợp cho nữ không?
+    - Nữ có nên học [Điều khiển & Tự động hóa](ten_nganh) không?
+    - Nữ có học được ngành [Công nghệ Điện tử](ten_nganh)?
+    - Con gái học kỹ thuật có ổn không?
+    - Phù hợp cho nữ ngành điện tử?
+    - Nữ học [CĐT](ten_nganh) được không?
+    - Ngành [Automation](ten_nganh) có dành cho nữ?
+    - Con gái có theo được ngành [KTĐK-TĐH](ten_nganh)?
+    - Ngành [Điện tử](ten_nganh) có nặng nhọc không?
+    - Con gái học [Tự động hóa](ten_nganh) có phải đi công trình nhiều?
+    - Công việc ngành [Vi mạch](ten_nganh) vất vả không?
+    - Nữ làm [Điện tử](ten_nganh) gặp khó khăn không?
+    - Công việc yêu cầu thể lực không
+    - Điều kiện làm việc cho nữ ra sao?
+    - Có rủi ro với nữ khi làm [Điện, điện tử](ten_nganh)?
+    - Nữ làm ngành [Công nghệ Điện tử](ten_nganh) có mệt không?
+    - Công việc ngành [Tự động hóa](ten_nganh) có nặng không?
+    - Nữ trong ngành kỹ thuật điện tử?
+    - Vấn đề của con gái học điện tử?
+    - Khó khăn khi nữ học kỹ thuật?
+    - Lời khuyên cho nữ học ngành này?
+    - Có nữ sinh viên điện tử không?
+    - Tỷ lệ nữ trong ngành là bao nhiêu?
+    - Trải nghiệm của nữ trong ngành kỹ thuật?
+    - Con gái học ngành này có ổn không?
+    - Nữ có phù hợp ngành [KTĐK-TĐH]?
+    - Nữ ngành [Vi mạch] có thuận lợi gì?
 
 
 - intent: cau_lac_bo_danh_sach
