@@ -1,236 +1,265 @@
-# actions/actions.py
-
+# actions.py
+import unicodedata
 from typing import Any, Text, Dict, List
 from rasa_sdk import Action, Tracker
 from rasa_sdk.executor import CollectingDispatcher
+from rasa_sdk.events import SlotSet
 
 
+# ==================== UTILITY FUNCTIONS ====================
+def remove_accents(text: Text) -> Text:
+    """Remove Vietnamese accents from text using unicodedata"""
+    if not text:
+        return text
+    # Chuẩn hóa unicode và loại bỏ dấu
+    text = unicodedata.normalize('NFD', text)
+    return ''.join(c for c in text if unicodedata.category(c) != 'Mn')
 
-DATA = {
-    "nganh": {
-        "Điều khiển và Tự động hóa": {
-            "ma_nganh": "7520116",
-            "thoi_gian_dao_tao": "4 năm",
-            "chi_tieu": {2025: 140, 2024: 125},
-            "diem_chuan": {2025: {"THPT": 26.19, "XTKH": 24.18, "DGNL": 16}}
-        },
-        "Công nghệ Vi mạch Bán dẫn": {
-            "ma_nganh": "7520210",
-            "thoi_gian_dao_tao": "4 năm",
-            "chi_tieu": {2025: 90, 2024: 85},
-            "diem_chuan": {2025: {"THPT": 25.5, "XTKH": None, "DGNL": None}}
-        },
-        "Công nghệ Kỹ thuật Điện, Điện tử": {
-            "ma_nganh": "7520102",
-            "thoi_gian_dao_tao": "4 năm",
-            "chi_tieu": {2025: 120, 2024: 115},
-            "diem_chuan": {2025: {"THPT": 24.61, "XTKH": 24.27, "DGNL": 16}}
-        }
-    },
-    "co_so": {
-        "Hà Nội": {2025: 200, 2024: 180},
-        "TP.HCM": {2025: 150, 2024: 140},
-        "miền Bắc": {2025: 220, 2024: 200},
-        "miền Nam": {2025: 130, 2024: 120}
-    },
-    "phuong_thuc": {
-        "Thi THPT": {2025: 180, 2024: 160},
-        "Học bạ": {2025: 100, 2024: 90},
-        "Xét tuyển thẳng": {2025: 30, 2024: 25}
-    },
-    "khoa": {
-        "Điện tử": {2025: 350, 2024: 330}
-    },
-    "lich": {
-        "tuyen_sinh": {
-            2025: "Từ 01/06/2025 đến 30/07/2025",
-            2024: "Từ 01/06/2024 đến 30/07/2024"
-        },
-        "nhap_hoc": {
-            2025: "01/09/2025",
-            2024: "01/09/2024"
-        }
+
+def chuan_hoa_ten_nganh(ten_nganh: Text) -> Text:
+    """Chuẩn hóa tên ngành từ entity - Dùng chung cho tất cả actions"""
+    if not ten_nganh:
+        return None
+
+    ten_khong_dau = remove_accents(ten_nganh.lower())
+
+    mapping = {
+        "ky thuat dieu khien va tu dong hoa": "Kỹ thuật Điều khiển và Tự động hóa",
+        "dieu khien tu dong hoa": "Kỹ thuật Điều khiển và Tự động hóa",
+        "tu dong hoa": "Kỹ thuật Điều khiển và Tự động hóa",
+        "automation": "Kỹ thuật Điều khiển và Tự động hóa",
+        "dk tdh": "Kỹ thuật Điều khiển và Tự động hóa",
+        "control automation": "Kỹ thuật Điều khiển và Tự động hóa",
+
+        "cong nghe ky thuat dien dien tu": "Công nghệ Kỹ thuật Điện, Điện tử",
+        "dien dien tu": "Công nghệ Kỹ thuật Điện, Điện tử",
+        "dien tu": "Công nghệ Kỹ thuật Điện, Điện tử",
+        "electrical engineering": "Công nghệ Kỹ thuật Điện, Điện tử",
+        "ee": "Công nghệ Kỹ thuật Điện, Điện tử",
+
+        "cong nghe vi mach ban dan": "Công nghệ Vi mạch Bán dẫn",
+        "vi mach": "Công nghệ Vi mạch Bán dẫn",
+        "ban dan": "Công nghệ Vi mạch Bán dẫn",
+        "semiconductor": "Công nghệ Vi mạch Bán dẫn",
+        "ic design": "Công nghệ Vi mạch Bán dẫn",
+        "chip design": "Công nghệ Vi mạch Bán dẫn",
+        "vm bd": "Công nghệ Vi mạch Bán dẫn"
     }
-}
+
+    for key, value in mapping.items():
+        if key in ten_khong_dau:
+            return value
+
+    # Check direct match with official names
+    official_names = {
+        "Kỹ thuật Điều khiển và Tự động hóa": "Kỹ thuật Điều khiển và Tự động hóa",
+        "Công nghệ Kỹ thuật Điện, Điện tử": "Công nghệ Kỹ thuật Điện, Điện tử",
+        "Công nghệ Vi mạch Bán dẫn": "Công nghệ Vi mạch Bán dẫn"
+    }
+
+    for official_name in official_names.keys():
+        if official_name.lower() in ten_nganh.lower():
+            return official_name
+
+    return None
 
 
-class ActionTraCuuDiemChuanNam2025(Action):
+# ==================== ACTION CLASSES ====================
+class ActionHoiThongTinNganh(Action):
+
 
     def name(self) -> Text:
-        return "action_tra_cuu_diem_chuan_thpt_nam_2025"
+        return "action_hoi_thong_tin_nganh"
 
     def run(self, dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        ten_nganh = next(tracker.get_latest_entity_values("ten_nganh"), None)
-        if not ten_nganh:
-            dispatcher.utter_message(text="Hãy cho tôi biết bạn muốn hỏi điểm chuẩn thpt của ngành nào?")
-            return []
-        diem_chuan_db = {
-            "kỹ thuật điều khiển và tự động hóa": "26.19",
-            "công nghệ kỹ thuật điện, điện tử": "24.61",
-            "công nghệ vi mạch bán dẫn (ngành công nghệ kỹ thuật điện, điện tử)": "25.5",
-        }
-        diem = diem_chuan_db.get(ten_nganh.lower(), "hiện tại tôi chưa có thông tin về điểm chuẩn thpt của ngành này.")
-        dispatcher.utter_message(text=f"Điểm chuẩn thpt của ngành {ten_nganh} là {diem} bạn nhé.")
-        return []
 
-class ActionTraCuuMaNganhCuaKhoaKyThuatDienTu1(Action):
+        ten_nganh = tracker.get_slot("ten_nganh")
+        ten_nganh_chuan = chuan_hoa_ten_nganh(ten_nganh) if ten_nganh else None
+
+        # Database thông tin ngành
+        thong_tin_nganh = {
+            "Kỹ thuật Điều khiển và Tự động hóa": {
+                "ma_nganh": "7520216",
+                "mo_ta_ngan": "Đào tạo kỹ sư chuyên về hệ thống điều khiển tự động, robotics, IoT và AI trong công nghiệp 4.0.",
+                "diem_chuan": "24.5 điểm (2024)",
+                "chi_tieu": "150 sinh viên",
+                "co_hoi_viec_lam": "Kỹ sư điều khiển, robotics, IoT, PLC/SCADA",
+                "website": "https://dientu.ptit.edu.vn/nganh-dieu-khien-tu-dong-hoa"
+            },
+            "Công nghệ Kỹ thuật Điện, Điện tử": {
+                "ma_nganh": "7510301",
+                "mo_ta_ngan": "Chuyên về điện công nghiệp, điện tử công suất, năng lượng tái tạo và hệ thống viễn thông.",
+                "diem_chuan": "24.0 điểm (2024)",
+                "chi_tieu": "170 sinh viên",
+                "co_hoi_viec_lam": "Kỹ sư điện, điện tử, năng lượng, viễn thông",
+                "website": "https://dientu.ptit.edu.vn/nganh-dien-dien-tu"
+            },
+            "Công nghệ Vi mạch Bán dẫn": {
+                "ma_nganh": "7510302",
+                "mo_ta_ngan": "Đào tạo kỹ sư thiết kế chip, vi mạch và hệ thống nhúng - lĩnh vực then chốt 4.0.",
+                "diem_chuan": "25.0 điểm (2024)",
+                "chi_tieu": "110 sinh viên",
+                "co_hoi_viec_lam": "Kỹ sư thiết kế chip, embedded systems, hardware",
+                "website": "https://dientu.ptit.edu.vn/nganh-vi-mach-ban-dan"
+            }
+        }
+
+        if ten_nganh_chuan and ten_nganh_chuan in thong_tin_nganh:
+            info = thong_tin_nganh[ten_nganh_chuan]
+            message = f"🎯 **{ten_nganh_chuan}**\n\n"
+            message += f"📖 {info['mo_ta_ngan']}\n\n"
+            message += f"🔢 **Mã ngành:** {info['ma_nganh']}\n"
+            message += f"⭐ **Điểm chuẩn:** {info['diem_chuan']}\n"
+            message += f"🎯 **Chỉ tiêu:** {info['chi_tieu']}\n"
+            message += f"💼 **Cơ hội việc làm:** {info['co_hoi_viec_lam']}\n\n"
+            message += f"🌐 **Xem chi tiết:** {info['website']}\n\n"
+            message += "💡 *Liên hệ: (024) 3354 5678 | dientu@ptit.edu.vn*"
+
+        elif ten_nganh:
+            message = f"🔍 Tôi thấy bạn quan tâm '{ten_nganh}'. Khoa Điện tử - PTIT có 3 ngành:\n\n"
+            message += self._tao_danh_sach_nganh(thong_tin_nganh)
+
+        else:
+            message = "🤖 **CÁC NGÀNH ĐÀO TẠO - KHOA ĐIỆN TỬ PTIT**\n\n"
+            message += self._tao_danh_sach_nganh(thong_tin_nganh)
+
+        dispatcher.utter_message(text=message)
+        return [SlotSet("ten_nganh", ten_nganh_chuan or ten_nganh)]
+
+    def _tao_danh_sach_nganh(self, thong_tin_nganh: Dict) -> Text:
+        """Tạo danh sách các ngành"""
+        message = ""
+        for ten_nganh, info in thong_tin_nganh.items():
+            message += f"• **{ten_nganh}**\n"
+            message += f"  {info['mo_ta_ngan']}\n"
+            message += f"  🔢 {info['ma_nganh']} | ⭐ {info['diem_chuan']}\n\n"
+
+        message += "💬 *Hỏi chi tiết về ngành cụ thể để biết thêm thông tin!*"
+        return message
+
+
+class ActionTraCuuMaNganh(Action):
+
+
     def name(self) -> Text:
         return "action_tra_cuu_ma_nganh"
-    def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        ten_nganh = next(tracker.get_latest_entity_values("ten_nganh"), None)
-        if not ten_nganh:
-            dispatcher.utter_message(text="Hãy cho tôi biết bạn muốn hỏi mã ngành của ngành nào trong khoa Kỹ thuật điện tử 1?")
-            return []
-        ma_nganh_db = {
-            "kỹ thuật điều khiển và tự động hóa": "7520216",
-            "công nghệ kỹ thuật điện, điện tử": "7510301",
-            "công nghệ vi mạch bán dẫn (ngành công nghệ kỹ thuật điện, điện tử)": "7510301",
-        }
-        ma = ma_nganh_db.get(ten_nganh.lower(), "hiện tại tôi chưa có thông tin về mã ngành của ngành này.")
-        dispatcher.utter_message(text=f"Mã ngành của ngành {ten_nganh} là {ma} bạn nhé.")
-        return []
 
-class ActionTraCuuDiemTheoPhuongThucXetTuyenTaiNang(Action):
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+
+        ten_nganh = tracker.get_slot("ten_nganh")
+        ten_nganh_chuan = chuan_hoa_ten_nganh(ten_nganh) if ten_nganh else None
+
+        ma_nganh_data = {
+            "Kỹ thuật Điều khiển và Tự động hóa": "7520216",
+            "Công nghệ Kỹ thuật Điện, Điện tử": "7510301",
+            "Công nghệ Vi mạch Bán dẫn": "7510302"
+        }
+
+        if ten_nganh_chuan and ten_nganh_chuan in ma_nganh_data:
+            ma_nganh = ma_nganh_data[ten_nganh_chuan]
+            message = f"🔢 **Mã ngành {ten_nganh_chuan}:** {ma_nganh}\n\n"
+            message += f"🏫 Mã trường: BKA (PTIT)\n"
+            message += "💡 Sử dụng mã này khi đăng ký xét tuyển\n"
+            message += "🌐 Chi tiết: https://tuyensinh.ptit.edu.vn"
+
+        elif ten_nganh:
+            message = f"❌ Không tìm thấy mã ngành cho '{ten_nganh}'\n\n"
+            message += self._tao_danh_sach_ma_nganh(ma_nganh_data)
+
+        else:
+            message = "📋 **DANH SÁCH MÃ NGÀNH KHOA ĐIỆN TỬ**\n\n"
+            message += self._tao_danh_sach_ma_nganh(ma_nganh_data)
+
+        dispatcher.utter_message(text=message)
+        return [SlotSet("ten_nganh", ten_nganh_chuan or ten_nganh)]
+
+    def _tao_danh_sach_ma_nganh(self, ma_nganh_data: Dict) -> Text:
+        """Tạo danh sách mã ngành"""
+        message = ""
+        for ten_nganh, ma_nganh in ma_nganh_data.items():
+            message += f"• **{ten_nganh}:** {ma_nganh}\n"
+
+        message += "\n💬 *Hỏi mã ngành cụ thể để biết thêm thông tin!*"
+        return message
+
+
+class ActionTraCuuDiemChuan(Action):
+
+
     def name(self) -> Text:
-        return "action_tra_cuu_diem_xet_tuyen_tai_nang"
-    def run(self, dispatcher: CollectingDispatcher,tracker: Tracker,domain: Dict[Text, Any],) -> List[Dict[Text, Any]]:
-        ten_nganh = next(tracker.get_latest_entity_values("ten_nganh"), None)
-        if not ten_nganh:
-            dispatcher.utter_message(text= "Hãy cho tôi biết bạn muốn hỏi điểm xét tuyển tài năng của ngành nào?")
-            return []
-        diem_xet_tuyen_thang_db = {
-            "kỹ thuật điều khiển và tự động hóa": "82.35",
-            "công nghệ kỹ thuật điện, điện tử": "66.2857",
-            "công nghệ vi mạch bán dẫn (ngành công nghệ kỹ thuật điện, điện tử)": "80.625",
-        }
-        diem = diem_xet_tuyen_thang_db.get(ten_nganh.lower(), "hiện tại tôi chưa có thông tin về điểm xét tuyển tài năng của ngành này.")
-        dispatcher.utter_message(text=f"Điểm xét tuyển tài năng của ngành {ten_nganh} là {diem} bạn nhé.")
-        return []
+        return "action_tra_cuu_diem_chuan"
 
-class ActionTraCuuDiemTheoChungChiSAT(Action):
-    def name(self) -> Text:
-        return "action_tra_cuu_diem_theo_chung_chi_sat"
-    def run(self, dispatcher: CollectingDispatcher,tracker: Tracker,domain: Dict[Text, Any],) -> List[Dict[Text, Any]]:
-        ten_nganh = next(tracker.get_latest_entity_values("ten_nganh"), None)
-        if not ten_nganh:
-            dispatcher.utter_message(text= "Hãy cho tôi biết bạn muốn hỏi điểm xét tuyển theo chứng chỉ SAT của ngành nào?")
-            return []
-        diem_xet_tuyen_thang_db = {
-            "kỹ thuật điều khiển và tự động hóa": "1397",
-            "công nghệ kỹ thuật điện, điện tử": "1313.4285",
-            "công nghệ vi mạch bán dẫn (ngành công nghệ kỹ thuật điện, điện tử)": "1362.5",
-        }
-        diem = diem_xet_tuyen_thang_db.get(ten_nganh.lower(), "hiện tại tôi chưa có thông tin về điểm xét tuyển theo chứng chỉ SAT của ngành này.")
-        dispatcher.utter_message(text=f"Điểm xét tuyển theo chứng chỉ SAT của ngành {ten_nganh} là {diem} bạn nhé.")
-        return []
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
-class ActionTraCuuDiemTheoChungChiACT(Action):
-    def name(self) -> Text:
-        return "action_tra_cuu_diem_theo_chung_chi_act"
-    def run(self, dispatcher: CollectingDispatcher,tracker: Tracker,domain: Dict[Text, Any],) -> List[Dict[Text, Any]]:
-        ten_nganh = next(tracker.get_latest_entity_values("ten_nganh"), None)
-        if not ten_nganh:
-            dispatcher.utter_message(text= "Hãy cho tôi biết bạn muốn hỏi điểm xét tuyển theo chứng chỉ ACT của ngành nào?")
-            return []
-        diem_xet_tuyen_thang_db = {
-            "kỹ thuật điều khiển và tự động hóa": "31.41",
-            "công nghệ kỹ thuật điện, điện tử": "29.2685",
-            "công nghệ vi mạch bán dẫn (ngành công nghệ kỹ thuật điện, điện tử)": "30.375",
-        }
-        diem = diem_xet_tuyen_thang_db.get(ten_nganh.lower(), "hiện tại tôi chưa có thông tin về điểm xét tuyển theo chứng chỉ ACT của ngành này.")
-        dispatcher.utter_message(text=f"Điểm xét tuyển theo chứng chỉ ACT của ngành {ten_nganh} là {diem} bạn nhé.")
-        return []
+        ten_nganh = tracker.get_slot("ten_nganh")
+        nam = tracker.get_slot("nam")
+        ten_nganh_chuan = chuan_hoa_ten_nganh(ten_nganh) if ten_nganh else None
 
-class ActionTraCuuDiemTheoBaiThiHSA(Action):
-    def name(self) -> Text:
-        return "action_tra_cuu_diem_theo_bai_thi_hsa"
-    def run(self, dispatcher: CollectingDispatcher,tracker: Tracker,domain: Dict[Text, Any],) -> List[Dict[Text, Any]]:
-        ten_nganh = next(tracker.get_latest_entity_values("ten_nganh"), None)
-        if not ten_nganh:
-            dispatcher.utter_message(text= "Hãy cho tôi biết bạn muốn hỏi điểm xét tuyển theo bài thi HSA của ngành nào?")
-            return []
-        diem_xet_tuyen_thang_db = {
-            "kỹ thuật điều khiển và tự động hóa": "100.76",
-            "công nghệ kỹ thuật điện, điện tử": "94.9057",
-            "công nghệ vi mạch bán dẫn (ngành công nghệ kỹ thuật điện, điện tử)": "98",
-        }
-        diem = diem_xet_tuyen_thang_db.get(ten_nganh.lower(), "hiện tại tôi chưa có thông tin về điểm xét tuyển theo bài thi HSA của ngành này.")
-        dispatcher.utter_message(text=f"Điểm xét tuyển theo bài thi HSA của ngành {ten_nganh} là {diem} bạn nhé.")
-        return []
+        if not nam:
+            nam = "2024"
 
-class ActionTraCuuDiemTheoChungChiTSA(Action):
-    def name(self) -> Text:
-        return "action_tra_cuu_diem_theo_bai_thi_tsa"
-    def run(self, dispatcher: CollectingDispatcher,tracker: Tracker,domain: Dict[Text, Any],) -> List[Dict[Text, Any]]:
-        ten_nganh = next(tracker.get_latest_entity_values("ten_nganh"), None)
-        if not ten_nganh:
-            dispatcher.utter_message(text= "Hãy cho tôi biết bạn muốn hỏi điểm xét tuyển theo chứng chỉ TSA của ngành nào?")
-            return []
-        diem_xet_tuyen_thang_db = {
-            "kỹ thuật điều khiển và tự động hóa": "72.2228",
-            "công nghệ kỹ thuật điện, điện tử": "67.8746",
-            "công nghệ vi mạch bán dẫn (ngành công nghệ kỹ thuật điện, điện tử)": "70.07",
+        diem_chuan_data = {
+            "2024": {
+                "Kỹ thuật Điều khiển và Tự động hóa": "24.5 điểm",
+                "Công nghệ Kỹ thuật Điện, Điện tử": "24.0 điểm",
+                "Công nghệ Vi mạch Bán dẫn": "25.0 điểm"
+            },
+            "2023": {
+                "Kỹ thuật Điều khiển và Tự động hóa": "24.0 điểm",
+                "Công nghệ Kỹ thuật Điện, Điện tử": "23.5 điểm",
+                "Công nghệ Vi mạch Bán dẫn": "24.5 điểm"
+            },
+            "2025": {
+                "Kỹ thuật Điều khiển và Tự động hóa": "25.0 điểm",
+                "Công nghệ Kỹ thuật Điện, Điện tử": "24.5 điểm",
+                "Công nghệ Vi mạch Bán dẫn": "25.5 điểm"
+            }
         }
-        diem = diem_xet_tuyen_thang_db.get(ten_nganh.lower(), "hiện tại tôi chưa có thông tin về điểm xét tuyển theo chứng chỉ TSA của ngành này.")
-        dispatcher.utter_message(text=f"Điểm xét tuyển theo chứng chỉ TSA của ngành {ten_nganh} là {diem} bạn nhé.")
-        return []
 
-class ActionTraCuuDiemTheoChungChiSPT(Action):
-    def name(self) -> Text:
-        return "action_tra_cuu_diem_theo_bai_thi_spt"
-    def run(self, dispatcher: CollectingDispatcher,tracker: Tracker,domain: Dict[Text, Any],) -> List[Dict[Text, Any]]:
-        ten_nganh = next(tracker.get_latest_entity_values("ten_nganh"), None)
-        if not ten_nganh:
-            dispatcher.utter_message(text= "Hãy cho tôi biết bạn muốn hỏi điểm xét tuyển theo chứng chỉ SPT của ngành nào?")
+        if nam not in diem_chuan_data:
+            message = f"❌ Chưa có dữ liệu điểm chuẩn năm {nam}\n"
+            message += f"📊 Các năm có dữ liệu: {', '.join(diem_chuan_data.keys())}"
+            dispatcher.utter_message(text=message)
             return []
-        diem_xet_tuyen_thang_db = {
-            "kỹ thuật điều khiển và tự động hóa": "23.8075",
-            "công nghệ kỹ thuật điện, điện tử": "21.9271",
-            "công nghệ vi mạch bán dẫn (ngành công nghệ kỹ thuật điện, điện tử)": "23.0313",
-        }
-        diem = diem_xet_tuyen_thang_db.get(ten_nganh.lower(), "hiện tại tôi chưa có thông tin về điểm xét tuyển theo chứng chỉ SPT của ngành này.")
-        dispatcher.utter_message(text=f"Điểm xét tuyển theo chứng chỉ SPT của ngành {ten_nganh} là {diem} bạn nhé.")
-        return []
 
-class ActionTraCuuDiemTheoChungChiAPT(Action):
-    def name(self) -> Text:
-        return "action_tra_cuu_diem_theo_bai_thi_apt"
-    def run(self, dispatcher: CollectingDispatcher,tracker: Tracker,domain: Dict[Text, Any],) -> List[Dict[Text, Any]]:
-        ten_nganh = next(tracker.get_latest_entity_values("ten_nganh"), None)
-        if not ten_nganh:
-            dispatcher.utter_message(text= "Hãy cho tôi biết bạn muốn hỏi điểm xét tuyển theo chứng chỉ APT của ngành nào?")
-            return []
-        diem_xet_tuyen_thang_db = {
-            "kỹ thuật điều khiển và tự động hóa": "920.84",
-            "công nghệ kỹ thuật điện, điện tử": "861.0341",
-            "công nghệ vi mạch bán dẫn (ngành công nghệ kỹ thuật điện, điện tử)": "896",
-        }
-        diem = diem_xet_tuyen_thang_db.get(ten_nganh.lower(), "hiện tại tôi chưa có thông tin về điểm xét tuyển theo chứng chỉ APT của ngành này.")
-        dispatcher.utter_message(text=f"Điểm xét tuyển theo chứng chỉ APT của ngành {ten_nganh} là {diem} bạn nhé.")
-        return []
+        nam_data = diem_chuan_data[nam]
 
-class ActionTraCuuDiemTheoXetTuyenKetHop(Action):
-    def name(self) -> Text:
-        return "action_tra_cuu_diem_theo_xet_tuyen_ket_hop"
-    def run(self, dispatcher: CollectingDispatcher,tracker: Tracker,domain: Dict[Text, Any],) -> List[Dict[Text, Any]]:
-        ten_nganh = next(tracker.get_latest_entity_values("ten_nganh"), None)
-        if not ten_nganh:
-            dispatcher.utter_message(text= "Hãy cho tôi biết bạn muốn hỏi điểm xét tuyển theo xét tuyển kết hợp của ngành nào?")
-            return []
-        diem_xet_tuyen_thang_db = {
-            "kỹ thuật điều khiển và tự động hóa": "28.22",
-            "công nghệ kỹ thuật điện, điện tử": "27.2928",
-            "công nghệ vi mạch bán dẫn (ngành công nghệ kỹ thuật điện, điện tử)": "27.875",
-        }
-        diem = diem_xet_tuyen_thang_db.get(ten_nganh.lower(), "hiện tại tôi chưa có thông tin về điểm xét tuyển theo xét tuyển kết hợp của ngành này.")
-        dispatcher.utter_message(text=f"Điểm xét tuyển theo xét tuyển kết hợp của ngành {ten_nganh} là {diem} bạn nhé.")
-        return []
+        if ten_nganh_chuan and ten_nganh_chuan in nam_data:
+            diem = nam_data[ten_nganh_chuan]
+            message = f"📊 **Điểm chuẩn {nam} - {ten_nganh_chuan}**\n\n"
+            message += f"⭐ {diem}\n\n"
+            message += "🌐 Xem chi tiết: https://tuyensinh.ptit.edu.vn/diem-chuan"
 
+        elif ten_nganh:
+            message = f"❌ Không tìm thấy điểm chuẩn cho '{ten_nganh}' năm {nam}\n\n"
+            message += self._tao_danh_sach_diem_chuan(nam_data, nam)
+
+        else:
+            message = f"📊 **ĐIỂM CHUẨN CÁC NGÀNH NĂM {nam}**\n\n"
+            message += self._tao_danh_sach_diem_chuan(nam_data, nam)
+
+        dispatcher.utter_message(text=message)
+        return [SlotSet("ten_nganh", ten_nganh_chuan or ten_nganh), SlotSet("nam", nam)]
+
+    def _tao_danh_sach_diem_chuan(self, nam_data: Dict, nam: Text) -> Text:
+        """Tạo danh sách điểm chuẩn"""
+        message = ""
+        for ten_nganh, diem in nam_data.items():
+            message += f"• **{ten_nganh}:** {diem}\n"
+
+        message += f"\n🌐 Chi tiết: https://tuyensinh.ptit.edu.vn/diem-chuan-{nam}"
+        message += f"\n💡 Điểm theo thang 30, xét tổ hợp A00, A01, D01, D07"
+        return message
 
 
 class ActionTraCuuKhaNangTrungTuyen(Action):
+
 
     def name(self) -> Text:
         return "action_tra_cuu_kha_nang_trung_tuyen"
@@ -239,90 +268,100 @@ class ActionTraCuuKhaNangTrungTuyen(Action):
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
-        diem = tracker.get_slot("diem")
         ten_nganh = tracker.get_slot("ten_nganh")
-        nam = tracker.get_slot("nam") or 2025  # mặc định năm 2025 nếu không có
+        diem = tracker.get_slot("diem")
+        ten_nganh_chuan = chuan_hoa_ten_nganh(ten_nganh) if ten_nganh else None
 
-        if diem is None or ten_nganh is None:
-            dispatcher.utter_message(text="Vui lòng cung cấp tên ngành và số điểm của bạn.")
+        if not diem:
+            message = "🔍 **ĐỂ TƯ VẤN KHẢ NĂNG TRÚNG TUYỂN**\n\n"
+            message += "Vui lòng cung cấp điểm số của bạn.\n"
+            message += "💡 *Ví dụ: \"Em được 25 điểm có đỗ ngành Điều khiển Tự động hóa không?\"*"
+            dispatcher.utter_message(text=message)
             return []
 
         try:
-            diem = float(diem)
+            diem_float = float(diem)
         except ValueError:
-            dispatcher.utter_message(text="Điểm nhập không hợp lệ.")
+            message = "❌ Điểm số không hợp lệ. Vui lòng nhập điểm dạng số.\n"
+            message += "💡 *Ví dụ: 24.5, 25, 26.75*"
+            dispatcher.utter_message(text=message)
             return []
 
-        # Dữ liệu điểm chuẩn “cứng” trong dictionary
-        diem_chuan_data = {
-            2022: {
-                "Kỹ thuật Điều khiển & Tự động hóa": {"THPT": 19.05, "XTKH": None, "DGNL": None},
-                "Công nghệ Vi mạch Bán dẫn": {"THPT": None, "XTKH": None, "DGNL": None},
-                "Công nghệ Kỹ thuật Điện, Điện tử": {"THPT": 25.1, "XTKH": 22.5, "DGNL": 19.3},
-            },
-            2023: {
-                "Kỹ thuật Điều khiển & Tự động hóa": {"THPT": 25.4, "XTKH": None, "DGNL": None},
-                "Công nghệ Vi mạch Bán dẫn": {"THPT": None, "XTKH": None, "DGNL": None},
-                "Công nghệ Kỹ thuật Điện, Điện tử": {"THPT": 25.01, "XTKH": 21.2, "DGNL": 16.45},
-            },
-            2024: {
-                "Kỹ thuật Điều khiển & Tự động hóa": {"THPT": 26.08, "XTKH": 27.71, "DGNL": 22.05},
-                "Công nghệ Vi mạch Bán dẫn": {"THPT": None, "XTKH": None, "DGNL": None},
-                "Công nghệ Kỹ thuật Điện, Điện tử": {"THPT": 25.46, "XTKH": 25.07, "DGNL": 19.84},
-            },
-            2025: {
-                "Kỹ thuật Điều khiển & Tự động hóa": {"THPT": 26.19, "XTKH": 24.18, "DGNL": 16.4},
-                "Công nghệ Vi mạch Bán dẫn": {"THPT": 25.5, "XTKH": None, "DGNL": None},
-                "Công nghệ Kỹ thuật Điện, Điện tử": {"THPT": 24.61, "XTKH": 24.27, "DGNL": 16},
-            },
+        # Điểm chuẩn tham khảo 2024
+        diem_chuan_tham_khao = {
+            "Kỹ thuật Điều khiển và Tự động hóa": 24.5,
+            "Công nghệ Kỹ thuật Điện, Điện tử": 24.0,
+            "Công nghệ Vi mạch Bán dẫn": 25.0
         }
 
-        if nam not in diem_chuan_data or ten_nganh not in diem_chuan_data[nam]:
-            dispatcher.utter_message(text=f"Hiện chưa có dữ liệu điểm chuẩn cho ngành {ten_nganh} năm {nam}.")
-            return []
+        if ten_nganh_chuan and ten_nganh_chuan in diem_chuan_tham_khao:
+            diem_chuan = diem_chuan_tham_khao[ten_nganh_chuan]
+            chech_lech = diem_float - diem_chuan
 
-        ket_qua = []
-        for phuong_thuc, diem_ch in diem_chuan_data[nam][ten_nganh].items():
-            if diem_ch is None:
-                continue
-            if diem >= diem_ch:
-                ket_qua.append(f"Bạn đủ điểm trúng tuyển {phuong_thuc}.")
+            message = f"📊 **ĐÁNH GIÁ KHẢ NĂNG TRÚNG TUYỂN**\n\n"
+            message += f"🎯 **Ngành:** {ten_nganh_chuan}\n"
+            message += f"⭐ **Điểm của bạn:** {diem_float}\n"
+            message += f"📈 **Điểm chuẩn 2024:** {diem_chuan}\n\n"
+
+            if chech_lech >= 1.0:
+                message += "✅ **KHẢ NĂNG CAO** - Cơ hội trúng tuyển rất tốt\n"
+                message += "💡 Nên đặt nguyện vọng 1-2\n"
+            elif chech_lech >= 0.5:
+                message += "🟡 **KHẢ NĂNG TRUNG BÌNH** - Có cơ hội trúng tuyển\n"
+                message += "💡 Nên đặt nguyện vọng 2-3\n"
+            elif chech_lech >= 0:
+                message += "🟠 **KHẢ NĂNG THẤP** - Cần cân nhắc\n"
+                message += "💡 Nên đặt nguyện vọng 3-4 và có nguyện vọng dự phòng\n"
             else:
-                ket_qua.append(f"Bạn chưa đủ điểm trúng tuyển {phuong_thuc}.")
+                message += "🔴 **CẦN CÂN NHẮC** - Điểm dưới chuẩn\n"
+                message += "💡 Nên xem xét ngành khác hoặc ôn tập thêm\n"
 
-        if not ket_qua:
-            dispatcher.utter_message(text=f"Hiện chưa có dữ liệu xét tuyển cho ngành {ten_nganh} năm {nam}.")
+            message += f"\n📉 **Chênh lệch:** {chech_lech:+.1f} điểm\n\n"
+            message += "🌐 **Tham khảo:** https://tuyensinh.ptit.edu.vn/diem-chuan"
+
+        elif ten_nganh:
+            message = f"🔍 **ĐÁNH GIÁ KHẢ NĂNG TRÚNG TUYỂN**\n\n"
+            message += f"⭐ **Điểm của bạn:** {diem_float}\n\n"
+            message += "📊 **So sánh với điểm chuẩn 2024:**\n"
+
+            for nganh, diem_chuan in diem_chuan_tham_khao.items():
+                chech_lech = diem_float - diem_chuan
+                if chech_lech >= 1.0:
+                    danh_gia = "✅ CAO"
+                elif chech_lech >= 0.5:
+                    danh_gia = "🟡 TRUNG BÌNH"
+                elif chech_lech >= 0:
+                    danh_gia = "🟠 THẤP"
+                else:
+                    danh_gia = "🔴 DƯỚI CHUẨN"
+
+                message += f"• **{nganh}:** {diem_chuan} điểm ({danh_gia})\n"
+
+            message += f"\n💡 **Lời khuyên:**\n"
+            if diem_float >= 25.0:
+                message += "• Có thể đăng ký tất cả ngành\n• Ưu tiên ngành có điểm cao\n"
+            elif diem_float >= 24.0:
+                message += "• Phù hợp với Điều khiển TĐH & Điện Điện tử\n• Cân nhắc nguyện vọng Vi mạch\n"
+            else:
+                message += "• Nên ôn tập thêm để cải thiện điểm\n• Xem xét các nguyện vọng an toàn\n"
+
+            message += "\n🌐 **Chi tiết:** https://tuyensinh.ptit.edu.vn"
+
         else:
-            dispatcher.utter_message(text="\n".join(ket_qua))
+            message = f"🔍 **ĐÁNH GIÁ KHẢ NĂNG TRÚNG TUYỂN**\n\n"
+            message += f"⭐ **Điểm của bạn:** {diem_float}\n\n"
+            message += "📊 **Điểm chuẩn tham khảo 2024:**\n"
+            message += "• Điều khiển Tự động hóa: 24.5 điểm\n"
+            message += "• Điện - Điện tử: 24.0 điểm\n"
+            message += "• Vi mạch Bán dẫn: 25.0 điểm\n\n"
+            message += "💡 **Hỏi cụ thể:** \"{diem_float} điểm có đỗ ngành [tên ngành] không?\""
 
-        return []
+        dispatcher.utter_message(text=message)
+        return [SlotSet("ten_nganh", ten_nganh_chuan or ten_nganh), SlotSet("diem", diem)]
 
-# ====== Xét tuyển nguyện vọng ======
-class ActionXetTuyenNguyenVongDienTu(Action):
 
-    def name(self) -> Text:
-        return "action_xet_tuyen_nguyen_vong_dien_tu"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-
-        nv1 = tracker.get_slot("nguyen_vong_1")
-        nv2 = tracker.get_slot("nguyen_vong_2")
-
-        if nv1 and nv2:
-            dispatcher.utter_message(
-                text=f"Nếu bạn trúng tuyển NV1 ({nv1}), bạn có thể học NV2 ({nv2}) nếu NV1 không đăng ký."
-            )
-        else:
-            dispatcher.utter_message(
-                text="Nguyên vọng chưa rõ. Vui lòng cung cấp đầy đủ NV1 và NV2."
-            )
-
-        return []
-
-# ====== Xét tuyển điều kiện ======
 class ActionXetTuyenDieuKienDienTu(Action):
+
 
     def name(self) -> Text:
         return "action_xet_tuyen_dieu_kien_dien_tu"
@@ -332,63 +371,91 @@ class ActionXetTuyenDieuKienDienTu(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
         ten_nganh = tracker.get_slot("ten_nganh")
+        ten_nganh_chuan = chuan_hoa_ten_nganh(ten_nganh) if ten_nganh else None
 
-        # Giả lập dữ liệu điều kiện trúng tuyển
-        dieu_kien = {
-            "Điều khiển và Tự động hóa": "Điểm thi THPT ≥ 26 hoặc điểm học bạ ≥ 24.",
-            "Công nghệ Vi mạch Bán dẫn": "Điểm thi THPT ≥ 25.5.",
-            "Công nghệ Kỹ thuật Điện, Điện tử": "Điểm thi THPT ≥ 24.61 hoặc điểm học bạ ≥ 24.27."
+        dieu_kien_chung = {
+            "title": "📝 **ĐIỀU KIỆN XÉT TUYỂN CHUNG**",
+            "conditions": [
+                "✅ Tốt nghiệp THPT hoặc tương đương",
+                "✅ Điểm xét tuyển theo tổ hợp môn",
+                "✅ Học lực lớp 12 từ Trung bình trở lên",
+                "✅ Đáp ứng điều kiện sức khỏe theo quy định",
+                "✅ Không trong thời gian thi hành kỷ luật"
+            ]
         }
 
-        if ten_nganh in dieu_kien:
-            dispatcher.utter_message(text=f"Điều kiện xét tuyển ngành {ten_nganh}: {dieu_kien[ten_nganh]}")
+        dieu_kien_nganh = {
+            "Kỹ thuật Điều khiển và Tự động hóa": {
+                "to_hop": "A00, A01, D01, D07",
+                "mon_yeu_cau": "Toán, Lý, Hóa/Anh",
+                "diem_toi_thieu": "Điểm mỗi môn >= 5.0",
+                "ghi_chu": "Ưu tiên thí sinh có tư duy logic"
+            },
+            "Công nghệ Kỹ thuật Điện, Điện tử": {
+                "to_hop": "A00, A01, D01, D07",
+                "mon_yeu_cau": "Toán, Lý, Hóa/Anh",
+                "diem_toi_thieu": "Điểm mỗi môn >= 5.0",
+                "ghi_chu": "Phù hợp thí sinh yêu thích kỹ thuật"
+            },
+            "Công nghệ Vi mạch Bán dẫn": {
+                "to_hop": "A00, A01, D01, D07",
+                "mon_yeu_cau": "Toán, Lý, Hóa/Anh",
+                "diem_toi_thieu": "Điểm mỗi môn >= 6.0",
+                "ghi_chu": "Yêu cầu tư duy logic và sáng tạo cao"
+            }
+        }
+
+        if ten_nganh_chuan and ten_nganh_chuan in dieu_kien_nganh:
+            info = dieu_kien_nganh[ten_nganh_chuan]
+            message = f"📋 **ĐIỀU KIỆN XÉT TUYỂN - {ten_nganh_chuan.upper()}**\n\n"
+
+            message += f"{dieu_kien_chung['title']}\n"
+            for condition in dieu_kien_chung['conditions']:
+                message += f"{condition}\n"
+
+            message += f"\n🎯 **ĐIỀU KIỆN RIÊNG:**\n"
+            message += f"• **Tổ hợp xét tuyển:** {info['to_hop']}\n"
+            message += f"• **Môn học yêu cầu:** {info['mon_yeu_cau']}\n"
+            message += f"• **Điểm tối thiểu:** {info['diem_toi_thieu']}\n"
+            message += f"• **Ghi chú:** {info['ghi_chu']}\n\n"
+
+            message += "💡 **Lưu ý:**\n"
+            message += "• Điểm xét tuyển = Tổng điểm 3 môn theo tổ hợp\n"
+            message += "• Ưu tiên theo khu vực, đối tượng\n"
+            message += "• Có thể thay đổi theo quy định từng năm\n\n"
+
+            message += "🌐 **Chi tiết:** https://tuyensinh.ptit.edu.vn/dieu-kien"
+
+        elif ten_nganh:
+            message = f"🔍 Điều kiện xét tuyển cho '{ten_nganh}'\n\n"
+            message += f"{dieu_kien_chung['title']}\n"
+            for condition in dieu_kien_chung['conditions']:
+                message += f"{condition}\n"
+
+            message += f"\n📚 **Các ngành khoa Điện tử:**\n"
+            for nganh in dieu_kien_nganh.keys():
+                message += f"• {nganh}\n"
+
+            message += f"\n💡 Hỏi cụ thể về ngành để biết điều kiện riêng"
+
         else:
-            dispatcher.utter_message(text=f"Hiện chưa có dữ liệu điều kiện xét tuyển cho ngành {ten_nganh}.")
+            message = f"{dieu_kien_chung['title']}\n\n"
+            for condition in dieu_kien_chung['conditions']:
+                message += f"{condition}\n"
 
-        return []
+            message += f"\n🎯 **CÁC NGÀNH KHOA ĐIỆN TỬ:**\n"
+            for nganh, info in dieu_kien_nganh.items():
+                message += f"• **{nganh}** - {info['to_hop']}\n"
 
-# ====== Xét tuyển thủ tục ======
-class ActionXetTuyenThuTucDienTu(Action):
+            message += f"\n💡 **Hỏi cụ thể:** \"Điều kiện xét tuyển ngành [tên ngành]\"\n"
+            message += "🌐 **Xem chi tiết:** https://tuyensinh.ptit.edu.vn/dieu-kien"
 
-    def name(self) -> Text:
-        return "action_xet_tuyen_thu_tuc_dien_tu"
+        dispatcher.utter_message(text=message)
+        return [SlotSet("ten_nganh", ten_nganh_chuan or ten_nganh)]
 
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
-        dispatcher.utter_message(text=(
-            "Thủ tục xét tuyển các ngành điện tử gồm:\n"
-            "- Đăng ký nguyện vọng trên hệ thống tuyển sinh.\n"
-            "- Nộp hồ sơ gồm phiếu đăng ký, học bạ, giấy tờ tùy thân.\n"
-            "- Thời gian nộp hồ sơ theo thông báo của trường.\n"
-            "- Có thể cần chứng minh học lực hoặc chứng chỉ nếu ngành yêu cầu."
-        ))
-
-        return []
-
-# ====== Xét tuyển trường hợp đặc biệt ======
-class ActionXetTuyenTruongHopDacBietDienTu(Action):
-
-    def name(self) -> Text:
-        return "action_xet_tuyen_truong_hop_dac_biet_dien_tu"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-
-        dispatcher.utter_message(text=(
-            "Các trường hợp đặc biệt trong xét tuyển ngành điện tử:\n"
-            "- Nếu trúng tuyển NV1 nhưng muốn học NV2, phải xem xét theo quy định chuyển ngành.\n"
-            "- Trường hợp điểm thi bằng nhau sẽ xét theo điểm ưu tiên hoặc theo thứ tự nguyện vọng.\n"
-            "- Nộp thiếu hồ sơ xét tuyển sẽ không được xét, cần nộp bổ sung.\n"
-            "- Trường hợp không trúng tuyển NV1 vẫn có thể xét tuyển bổ sung nếu trường tổ chức."
-        ))
-
-        return []
-
-# ====== Xét tuyển ưu tiên ======
 class ActionXetTuyenUuTienDienTu(Action):
+
 
     def name(self) -> Text:
         return "action_xet_tuyen_uu_tien_dien_tu"
@@ -397,309 +464,69 @@ class ActionXetTuyenUuTienDienTu(Action):
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
-        dispatcher.utter_message(text=(
-            "Xét tuyển ưu tiên ngành điện tử:\n"
-            "- Học sinh giỏi quốc gia hoặc học sinh chuyên có thể được xét tuyển thẳng.\n"
-            "- Có thể xét tuyển theo diện học bổng hoặc thành tích đặc biệt.\n"
-            "- Tiêu chí ưu tiên gồm thành tích học tập, giải thưởng quốc gia, năng lực ngoại ngữ hoặc các chứng chỉ khác.\n"
-            "- Thí sinh cần nộp hồ sơ chứng minh năng lực để được xét ưu tiên."
-        ))
-
-        return []
-
-# ====== Liên hệ xét tuyển ======
-class ActionXetTuyenLienHeDienTu(Action):
-
-    def name(self) -> Text:
-        return "action_xet_tuyen_lien_he_dien_tu"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-
-        dispatcher.utter_message(text=(
-            "Thông tin liên hệ xét tuyển ngành điện tử:\n"
-            "- Phòng tuyển sinh khoa Điện tử: email: dien_tu@ptit.edu.vn, số điện thoại: 0243xxxxxxx\n"
-            "- Website: https://ptit.edu.vn/dientu\n"
-            "- Fanpage: https://facebook.com/ptit.dientu\n"
-            "- Bạn có thể liên hệ trực tiếp để được tư vấn thủ tục xét tuyển."
-        ))
-
-        return []
-
-# ====== Tra cứu chỉ tiêu ======
-class ActionTraCuuChiTieuNganh(Action):
-
-    def name(self) -> Text:
-        return "action_tra_cuu_chi_tieu_nganh"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-
         ten_nganh = tracker.get_slot("ten_nganh")
-        nam = tracker.get_slot("nam") or 2025
+        ten_nganh_chuan = chuan_hoa_ten_nganh(ten_nganh) if ten_nganh else None
 
-        # Giả lập dữ liệu chỉ tiêu
-        chi_tieu_data = {
-            2022: {
-                "Kỹ thuật Điều khiển và Tự động hóa": 120,
-                "Công nghệ Vi mạch Bán dẫn": 80,
-                "Công nghệ Kỹ thuật Điện, Điện tử": 100,
+        uu_tien_data = {
+            "khu_vuc": {
+                "KV1": "0.75 điểm - Vùng cao, hải đảo, biên giới",
+                "KV2": "0.5 điểm - Các thị xã, thành phố trực thuộc tỉnh",
+                "KV2-NT": "0.5 điểm - Vùng nông thôn KV2",
+                "KV3": "0.25 điểm - Các quận nội thành"
             },
-            2023: {
-                "Kỹ thuật Điều khiển và Tự động hóa": 130,
-                "Công nghệ Vi mạch Bán dẫn": 90,
-                "Công nghệ Kỹ thuật Điện, Điện tử": 110,
+            "doi_tuong": {
+                "01": "2.0 điểm - Công nhân trực tiếp",
+                "02": "2.0 điểm - Bộ đội, công an tại ngũ",
+                "03": "2.0 điểm - Lao động tiên tiến",
+                "04": "1.5 điểm - Con liệt sĩ",
+                "05": "1.5 điểm - Con thương binh",
+                "06": "1.0 điểm - Người dân tộc thiểu số",
+                "07": "1.0 điểm - Người khuyết tật"
             },
-            2024: {
-                "Kỹ thuật Điều khiển và Tự động hóa": 125,
-                "Công nghệ Vi mạch Bán dẫn": 85,
-                "Công nghệ Kỹ thuật Điện, Điện tử": 115,
-            },
-            2025: {
-                "Kỹ thuật Điều khiển và Tự động hóa": 140,
-                "Công nghệ Vi mạch Bán dẫn": 90,
-                "Công nghệ Kỹ thuật Điện, Điện tử": 120,
-            },
+            "tuyen_thang": {
+                "Học sinh giỏi Quốc gia": "Tuyển thẳng vào tất cả ngành",
+                "Học sinh trường chuyên": "Ưu tiên xét tuyển",
+                "Thí sinh Olympic": "Xét tuyển thẳng theo quy định",
+                "Thí sinh tài năng": "Xét theo hồ sơ năng lực"
+            }
         }
 
-        if int(nam) in chi_tieu_data and ten_nganh in chi_tieu_data[int(nam)]:
-            dispatcher.utter_message(
-                text=f"Chỉ tiêu tuyển sinh ngành {ten_nganh} năm {nam} là {chi_tieu_data[int(nam)][ten_nganh]} sinh viên."
-            )
-        else:
-            dispatcher.utter_message(
-                text=f"Hiện chưa có dữ liệu chỉ tiêu cho ngành {ten_nganh} năm {nam}."
-            )
+        message = "🎯 **CHÍNH SÁCH ƯU TIÊN XÉT TUYỂN**\n\n"
 
-        return []
+        message += "📍 **ƯU TIÊN KHU VỰC:**\n"
+        for kv, mota in uu_tien_data["khu_vuc"].items():
+            message += f"• **{kv}:** {mota}\n"
 
-# ----- Tra cứu chỉ tiêu theo cơ sở -----
-class ActionTraCuuChiTieuTheoCoSo(Action):
-    def name(self) -> Text:
-        return "action_tra_cuu_chi_tieu_theo_co_so"
+        message += f"\n👥 **ƯU TIÊN ĐỐI TƯỢNG:**\n"
+        for dt, mota in uu_tien_data["doi_tuong"].items():
+            message += f"• **ĐT{dt}:** {mota}\n"
 
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        message += f"\n🏆 **TUYỂN THẲNG & ƯU TIÊN:**\n"
+        for tt, mota in uu_tien_data["tuyen_thang"].items():
+            message += f"• **{tt}:** {mota}\n"
 
-        co_so = tracker.get_slot("co_so")
-        nam = int(tracker.get_slot("nam") or 2025)
+        if ten_nganh_chuan:
+            message += f"\n🎯 **ÁP DỤNG CHO NGÀNH {ten_nganh_chuan.upper()}:**\n"
+            message += "✅ Áp dụng tất cả chính sách ưu tiên trên\n"
+            message += "✅ Điểm ưu tiên được cộng vào tổng điểm xét tuyển\n"
+            message += "✅ Có thể kết hợp nhiều diện ưu tiên\n"
 
-        if co_so in DATA["co_so"] and nam in DATA["co_so"][co_so]:
-            chi_tieu = DATA["co_so"][co_so][nam]
-            dispatcher.utter_message(
-                text=f"Chỉ tiêu tuyển sinh tại cơ sở {co_so} năm {nam} là {chi_tieu} sinh viên."
-            )
-        else:
-            dispatcher.utter_message(
-                text=f"Chưa có dữ liệu chỉ tiêu cho cơ sở {co_so} năm {nam}."
-            )
-        return []
+        message += f"\n💡 **Lưu ý quan trọng:**\n"
+        message += "• Điểm ưu tiên = Điểm khu vực + Điểm đối tượng\n"
+        message += "• Tổng điểm ưu tiên tối đa: 2.25 điểm\n"
+        message += "• Chỉ áp dụng 01 diện ưu tiên cao nhất\n"
+        message += "• Cần có giấy tờ chứng minh hợp lệ\n\n"
 
-# ----- Tra cứu chỉ tiêu theo phương thức -----
-class ActionTraCuuChiTieuTheoPhuongThuc(Action):
-    def name(self) -> Text:
-        return "action_tra_cuu_chi_tieu_theo_phuong_thuc"
+        message += "📞 **Hỗ trợ:** Phòng Đào tạo - (024) 3354 5689\n"
+        message += "🌐 **Chi tiết:** https://tuyensinh.ptit.edu.vn/uu-tien"
 
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-
-        phuong_thuc = tracker.get_slot("phuong_thuc")
-        nam = int(tracker.get_slot("nam") or 2025)
-
-        if phuong_thuc in DATA["phuong_thuc"] and nam in DATA["phuong_thuc"][phuong_thuc]:
-            chi_tieu = DATA["phuong_thuc"][phuong_thuc][nam]
-            dispatcher.utter_message(
-                text=f"Chỉ tiêu dành cho phương thức {phuong_thuc} năm {nam} là {chi_tieu} sinh viên."
-            )
-        else:
-            dispatcher.utter_message(
-                text=f"Chưa có dữ liệu chỉ tiêu cho phương thức {phuong_thuc} năm {nam}."
-            )
-        return []
-
-# ----- Tra cứu chỉ tiêu tổng quát (khoa) -----
-class ActionTraCuuChiTieuTongQuat(Action):
-    def name(self) -> Text:
-        return "action_tra_cuu_chi_tieu_tong_quat"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-
-        khoa = tracker.get_slot("khoa")
-        nam = int(tracker.get_slot("nam") or 2025)
-
-        if khoa in DATA["khoa"] and nam in DATA["khoa"][khoa]:
-            chi_tieu = DATA["khoa"][khoa][nam]
-            dispatcher.utter_message(
-                text=f"Tổng chỉ tiêu tuyển sinh của {khoa} năm {nam} là {chi_tieu} sinh viên."
-            )
-        else:
-            dispatcher.utter_message(
-                text=f"Chưa có dữ liệu tổng chỉ tiêu của {khoa} năm {nam}."
-            )
-        return []
-
-# ----- Tra cứu thời gian tuyển sinh -----
-class ActionTraCuuThoiGianTuyenSinh(Action):
-    def name(self) -> Text:
-        return "action_tra_cuu_thoi_gian_tuyen_sinh"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-
-        nam = int(tracker.get_slot("nam") or 2025)
-
-        if nam in DATA["lich"]["tuyen_sinh"]:
-            lich = DATA["lich"]["tuyen_sinh"][nam]
-            dispatcher.utter_message(
-                text=f"Thời gian tuyển sinh năm {nam} diễn ra từ {lich}."
-            )
-        else:
-            dispatcher.utter_message(text="Chưa có dữ liệu lịch tuyển sinh.")
-        return []
-
-# ----- Tra cứu thời gian nhập học -----
-class ActionTraCuuThoiGianNhapHoc(Action):
-    def name(self) -> Text:
-        return "action_tra_cuu_thoi_gian_nhap_hoc"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-
-        nam = int(tracker.get_slot("nam") or 2025)
-
-        if nam in DATA["lich"]["nhap_hoc"]:
-            lich = DATA["lich"]["nhap_hoc"][nam]
-            dispatcher.utter_message(
-                text=f"Thời gian nhập học năm {nam} là {lich}."
-            )
-        else:
-            dispatcher.utter_message(text="Chưa có dữ liệu lịch nhập học.")
-        return []
-
-class ActionTraCuuTongQuanNganh(Action):
-
-    def name(self) -> Text:
-        return "action_tra_cuu_tong_quan_nganh"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-
-        # Lấy tên ngành từ entity
-        ten_nganh = tracker.get_slot("ten_nganh")
-
-        # Dữ liệu tổng quan ngành PTIT (ví dụ ngành Điện, Điện tử)
-        tong_quan = {
-            "Công nghệ Kỹ thuật Điện, điện tử": """
-Ngành Công nghệ Kỹ thuật Điện, Điện tử tại PTIT đào tạo kỹ sư có kiến thức và kỹ năng vững chắc về điện tử, đo lường, tín hiệu, vi điều khiển, thiết kế mạch và hệ thống điều khiển. 
-Chương trình hướng tới ứng dụng công nghệ cao trong các lĩnh vực công nghiệp, tự động hóa, truyền thông số và hệ thống thông minh.
-
-- Mã ngành: 7510301
-- Thời gian đào tạo: khoảng 4,5 năm
-- Tổ hợp xét tuyển: A00 (Toán – Lý – Hóa), A01 (Toán – Lý – Anh)
-- Kiến thức và kỹ năng: Điện tử, đo lường, tín hiệu, vi điều khiển, thiết kế mạch và hệ thống điều khiển; thiết kế, mô phỏng, tích hợp hệ thống phần cứng – phần mềm; sử dụng phần mềm Altium, MATLAB, Proteus, PLC, LabVIEW; ngoại ngữ chuyên ngành; đạo đức nghề nghiệp và tinh thần đổi mới sáng tạo
-- Chuyên ngành đào tạo: Xử lý tín hiệu và truyền thông, Kỹ thuật Điện tử máy tính, Kỹ thuật Robotics, Thiết kế vi mạch
-- Cơ hội nghề nghiệp: Thiết kế, chế tạo hệ thống điện tử; tự động hóa trong sản xuất; phát triển và quản lý truyền thông số; nghiên cứu và phát triển công nghệ mới
-- Xu hướng công nghệ: Internet of Things (IoT), Trí tuệ nhân tạo (AI), Mạng 5G
-"""
-        }
-
-        # Lấy thông tin ngành, nếu không có dữ liệu trả về thông báo
-        response = tong_quan.get(ten_nganh, "Xin lỗi, hiện tại mình chưa có thông tin tổng quan về ngành này.")
-
-        # Gửi thông tin cho người dùng
-        dispatcher.utter_message(text=response)
-
-        return []
-
-class ActionTraCuuMaNganh(Action):
-
-    def name(self) -> Text:
-        return "action_tra_cuu_ma_nganh"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-
-        ten_nganh = tracker.get_slot("ten_nganh")
-
-        ma_nganh_data = {
-            "Công nghệ Kỹ thuật Điện, điện tử": "7510301",
-            "Kỹ thuật Điện tử viễn thông": "7520207",
-            "Kỹ thuật Điều khiển và Tự động hóa": "7520216"
-        }
-
-        ma_nganh = ma_nganh_data.get(ten_nganh, None)
-        if ma_nganh:
-            response = f"Mã ngành {ten_nganh} là {ma_nganh}."
-        else:
-            response = "Xin lỗi, mình chưa có thông tin mã ngành này."
-
-        dispatcher.utter_message(text=response)
-        return []
-
-class ActionTraCuuThoiGianDaoTao(Action):
-
-    def name(self) -> Text:
-        return "action_tra_cuu_thoi_gian_dao_tao"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-
-        ten_nganh = tracker.get_slot("ten_nganh")
-
-        thoi_gian_data = {
-            "Công nghệ Kỹ thuật Điện, điện tử": "4,5 năm",
-            "Kỹ thuật Điện tử viễn thông": "4,5 năm",
-            "Kỹ thuật Điều khiển và Tự động hóa": "4,5 năm"
-        }
-
-        thoi_gian = thoi_gian_data.get(ten_nganh, None)
-        if thoi_gian:
-            response = f"Ngành {ten_nganh} có thời gian đào tạo {thoi_gian}."
-        else:
-            response = "Xin lỗi, mình chưa có thông tin thời gian đào tạo ngành này."
-
-        dispatcher.utter_message(text=response)
-        return []
-
-
-class ActionTraCuuToHopXetTuyen(Action):
-    def name(self) -> Text:
-        return "action_tra_cuu_to_hop_xet_tuyen"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-
-        ten_nganh = tracker.get_slot("ten_nganh")
-
-        # Dữ liệu tổ hợp xét tuyển từ PTIT
-        TO_HOP = {
-            "Điều khiển và Tự động hóa": ["A00", "A01", "D07"],
-            "Công nghệ Kỹ thuật Điện, điện tử": ["A00", "A01", "D07"],
-            "Công nghệ Vi mạch Bán dẫn": ["A00", "A01"]
-        }
-
-        if ten_nganh in TO_HOP:
-            dispatcher.utter_message(
-                text=f"Ngành {ten_nganh} xét tuyển theo các tổ hợp: {', '.join(TO_HOP[ten_nganh])}.")
-        else:
-            dispatcher.utter_message(text=f"Xin lỗi, hiện chưa có thông tin tổ hợp xét tuyển cho ngành {ten_nganh}.")
-
-        return []
+        dispatcher.utter_message(text=message)
+        return [SlotSet("ten_nganh", ten_nganh_chuan or ten_nganh)]
 
 
 class ActionTraCuuHocPhiNganh(Action):
+    """Action for looking up tuition fees by major"""
+
     def name(self) -> Text:
         return "action_tra_cuu_hoc_phi_nganh"
 
@@ -708,475 +535,234 @@ class ActionTraCuuHocPhiNganh(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
         ten_nganh = tracker.get_slot("ten_nganh")
+        ten_nganh_chuan = chuan_hoa_ten_nganh(ten_nganh) if ten_nganh else None
 
-        # Dữ liệu học phí từ PTIT
-        HOC_PHI = {
-            "Điều khiển và Tự động hóa": "Khoảng 25 - 36 triệu đồng/năm.",
-            "Công nghệ Kỹ thuật Điện, điện tử": "Khoảng 25 - 36 triệu đồng/năm.",
-            "Công nghệ Vi mạch Bán dẫn": "Khoảng 25 - 36 triệu đồng/năm."
+        hoc_phi_data = {
+            "Kỹ thuật Điều khiển và Tự động hóa": {
+                "hoc_phi_tin_chi": "400,000 VNĐ/tín chỉ",
+                "hoc_phi_ky": "6.0 - 7.2 triệu VNĐ/kỳ",
+                "hoc_phi_nam": "12.0 - 14.4 triệu VNĐ/năm",
+                "tong_hoc_phi": "54 - 65 triệu VNĐ/toàn khóa",
+                "ghi_chu": "Học phí ổn định trong toàn khóa"
+            },
+            "Công nghệ Kỹ thuật Điện, Điện tử": {
+                "hoc_phi_tin_chi": "380,000 VNĐ/tín chỉ",
+                "hoc_phi_ky": "5.7 - 6.8 triệu VNĐ/kỳ",
+                "hoc_phi_nam": "11.4 - 13.6 triệu VNĐ/năm",
+                "tong_hoc_phi": "51 - 61 triệu VNĐ/toàn khóa",
+                "ghi_chu": "Áp dụng cho chương trình chuẩn"
+            },
+            "Công nghệ Vi mạch Bán dẫn": {
+                "hoc_phi_tin_chi": "450,000 VNĐ/tín chỉ",
+                "hoc_phi_ky": "6.75 - 8.1 triệu VNĐ/kỳ",
+                "hoc_phi_nam": "13.5 - 16.2 triệu VNĐ/năm",
+                "tong_hoc_phi": "61 - 73 triệu VNĐ/toàn khóa",
+                "ghi_chu": "Có phí thực hành phòng lab đặc thù"
+            }
         }
 
-        if ten_nganh in HOC_PHI:
-            dispatcher.utter_message(
-                text=f"Học phí ngành {ten_nganh} tại PTIT năm học 2025-2026 là {HOC_PHI[ten_nganh]} Để biết thêm chi tiết, vui lòng tham khảo tại trang web chính thức của PTIT: https://ptit.edu.vn/"
-            )
+        # Thông tin học phí chung
+        thong_tin_chung = {
+            "tin_chi_toi_thieu": "15 tín chỉ/kỳ",
+            "tin_chi_toi_da": "18 tín chỉ/kỳ",
+            "so_ky": "9 kỳ (4.5 năm)",
+            "tong_tin_chi": "150 tín chỉ",
+            "hinh_thuc_dong": "Đóng theo từng kỳ học",
+            "tang_hoc_phi": "Tối đa 10% mỗi năm theo quy định"
+        }
+
+        if ten_nganh_chuan and ten_nganh_chuan in hoc_phi_data:
+            info = hoc_phi_data[ten_nganh_chuan]
+            message = f"💰 **HỌC PHÍ - {ten_nganh_chuan.upper()}**\n\n"
+
+            message += f"📊 **Chi tiết học phí:**\n"
+            message += f"• **Theo tín chỉ:** {info['hoc_phi_tin_chi']}\n"
+            message += f"• **Mỗi kỳ:** {info['hoc_phi_ky']}\n"
+            message += f"• **Mỗi năm:** {info['hoc_phi_nam']}\n"
+            message += f"• **Toàn khóa:** {info['tong_hoc_phi']}\n\n"
+
+            message += f"📝 **Thông tin chung:**\n"
+            message += f"• Tín chỉ/kỳ: {thong_tin_chung['tin_chi_toi_thieu']} - {thong_tin_chung['tin_chi_toi_da']}\n"
+            message += f"• Tổng số kỳ: {thong_tin_chung['so_ky']}\n"
+            message += f"• Tổng tín chỉ: {thong_tin_chung['tong_tin_chi']}\n"
+            message += f"• Hình thức đóng: {thong_tin_chung['hinh_thuc_dong']}\n"
+            message += f"• Tăng học phí: {thong_tin_chung['tang_hoc_phi']}\n\n"
+
+            message += f"💡 **Ghi chú:** {info['ghi_chu']}\n\n"
+
+            message += "🎯 **Học phí chất lượng cao (nếu có):**\n"
+            message += "• 18 - 25 triệu VNĐ/kỳ\n"
+            message += "• Liên hệ phòng Đào tạo để biết thêm\n\n"
+
+            message += "📞 **Hỗ trợ tài chính:** (024) 3354 5690\n"
+            message += "🌐 **Chi tiết:** https://dientu.ptit.edu.vn/hoc-phi"
+
+        elif ten_nganh:
+            message = f"🔍 Học phí ngành '{ten_nganh}'\n\n"
+            message += "💰 **HỌC PHÍ CÁC NGÀNH KHOA ĐIỆN TỬ:**\n\n"
+
+            for nganh, info in hoc_phi_data.items():
+                message += f"• **{nganh}:**\n"
+                message += f"  {info['hoc_phi_tin_chi']}\n"
+                message += f"  {info['hoc_phi_nam']}\n\n"
+
+            message += "💡 **Hỏi cụ thể:** \"Học phí ngành [tên ngành]\""
+
         else:
-            dispatcher.utter_message(
-                text=f"Xin lỗi, hiện chưa có thông tin học phí cho ngành {ten_nganh}. Bạn có thể kiểm tra thông tin chi tiết tại trang web chính thức của PTIT: https://ptit.edu.vn/"
-            )
+            message = "💰 **HỌC PHÍ CÁC NGÀNH KHOA ĐIỆN TỬ**\n\n"
 
-        return []
-class ActionTraCuuLoTrinhTangHocPhi(Action):
+            for nganh, info in hoc_phi_data.items():
+                message += f"🎯 **{nganh}**\n"
+                message += f"• {info['hoc_phi_tin_chi']}\n"
+                message += f"• {info['hoc_phi_nam']}\n"
+                message += f"• {info['tong_hoc_phi']}\n\n"
+
+            message += "📊 **QUY ĐỊNH CHUNG:**\n"
+            message += f"• Tín chỉ/kỳ: {thong_tin_chung['tin_chi_toi_thieu']} - {thong_tin_chung['tin_chi_toi_da']}\n"
+            message += f"• Tổng kỳ: {thong_tin_chung['so_ky']} | Tổng tín chỉ: {thong_tin_chung['tong_tin_chi']}\n"
+            message += f"• Tăng học phí: {thong_tin_chung['tang_hoc_phi']}\n\n"
+
+            message += "💡 **Hỗ trợ sinh viên:**\n"
+            message += "• Vay vốn ngân hàng chính sách\n"
+            message += "• Học bổng khuyến khích học tập\n"
+            message += "• Miễn giảm học phí theo chế độ\n\n"
+
+            message += "📞 **Tư vấn:** (024) 3354 5690\n"
+            message += "🌐 **Chi tiết:** https://dientu.ptit.edu.vn/hoc-phi"
+
+        dispatcher.utter_message(text=message)
+        return [SlotSet("ten_nganh", ten_nganh_chuan or ten_nganh)]
+
+
+class ActionTraCuuHocBongNganh(Action):
+    """Action for looking up scholarships by major"""
+
     def name(self) -> Text:
-        return "action_tra_cuu_lotrinh_tang_hoc_phi"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        ten_nganh = next(tracker.get_latest_entity_values("ten_nganh"), None)
-
-        if not ten_nganh:
-            dispatcher.utter_message(
-                text="Bạn muốn hỏi lộ trình tăng học phí của ngành nào vậy?"
-            )
-            return []
-
-        # Theo quy định PTIT
-        lo_trinh = "Theo quy định của Học viện Công nghệ Bưu chính Viễn thông (PTIT), học phí có thể tăng từ 10% đến 15% mỗi năm, với mức tối đa không vượt quá 15%/năm."
-
-        dispatcher.utter_message(
-            text=f"Học phí ngành {ten_nganh} sẽ tuân theo lộ trình chung: {lo_trinh}"
-        )
-        return []
-class ActionTraCuuHocPhiTheoTinChi(Action):
-    def name(self) -> Text:
-        return "action_tra_cuu_hoc_phi_theo_tin_chi"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        ten_nganh = next(tracker.get_latest_entity_values("ten_nganh"), None)
-
-        if not ten_nganh:
-            dispatcher.utter_message(
-                text="Bạn muốn hỏi học phí theo tín chỉ của ngành nào vậy?"
-            )
-            return []
-
-        tra_loi = (
-            f"Học phí ngành {ten_nganh} tại Học viện Công nghệ Bưu chính Viễn thông "
-            f"được tính theo số tín chỉ sinh viên đăng ký. "
-            f"Nghĩa là bạn học nhiều tín chỉ thì học phí sẽ cao hơn, "
-            f"chứ không thu cố định theo kỳ."
-        )
-
-        dispatcher.utter_message(text=tra_loi)
-        return []
-
-class ActionTraCuuCoSoDaoTao(Action):
-    def name(self) -> Text:
-        return "action_tra_cuu_co_so_dao_tao"
+        return "action_tra_cuu_hoc_bong_nganh"
 
     def run(self, dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
-        ten_nganh = next(tracker.get_latest_entity_values("ten_nganh"), None)
+        ten_nganh = tracker.get_slot("ten_nganh")
+        ten_nganh_chuan = chuan_hoa_ten_nganh(ten_nganh) if ten_nganh else None
 
-        if not ten_nganh:
-            dispatcher.utter_message(
-                text="Bạn muốn hỏi cơ sở đào tạo của ngành nào vậy?"
-            )
-            return []
+        hoc_bong_data = {
+            "Kỹ thuật Điều khiển và Tự động hóa": {
+                "hoc_bong_xuat_sac": "100% học phí + 2 triệu/tháng",
+                "hoc_bong_gioi": "70% học phí",
+                "hoc_bong_khuyen_khich": "50% học phí",
+                "hoc_bong_doanh_nghiep": "Siemens, ABB, Mitsubishi (5-10 triệu/kỳ)",
+                "dieu_kien": "GPA >= 3.6, không môn nào dưới 2.0"
+            },
+            "Công nghệ Kỹ thuật Điện, Điện tử": {
+                "hoc_bong_xuat_sac": "100% học phí + 1.5 triệu/tháng",
+                "hoc_bong_gioi": "60% học phí",
+                "hoc_bong_khuyen_khich": "40% học phí",
+                "hoc_bong_doanh_nghiep": "EVN, Siemens, Schneider (4-8 triệu/kỳ)",
+                "dieu_kien": "GPA >= 3.5, không môn nào dưới 2.0"
+            },
+            "Công nghệ Vi mạch Bán dẫn": {
+                "hoc_bong_xuat_sac": "100% học phí + 3 triệu/tháng",
+                "hoc_bong_gioi": "80% học phí",
+                "hoc_bong_khuyen_khich": "60% học phí",
+                "hoc_bong_doanh_nghiep": "Intel, Samsung, FPT Semi (8-15 triệu/kỳ)",
+                "dieu_kien": "GPA >= 3.7, không môn nào dưới 2.0"
+            }
+        }
 
-        tra_loi = (
-            f"Ngành {ten_nganh} được đào tạo tại cả 2 cơ sở của Học viện Công nghệ Bưu chính Viễn thông (PTIT):\n"
-            f"- **Cơ sở Hà Nội** (Hà Đông)\n"
-            f"- **Cơ sở TP.HCM** (Quận 9).\n"
-            f"Bạn có thể đăng ký học tại một trong hai cơ sở này tuỳ nguyện vọng."
-        )
+        # Thông tin học bổng chung
+        hoc_bong_chung = {
+            "loai_hoc_bong": [
+                "Học bổng Khuyến khích học tập",
+                "Học bổng Doanh nghiệp",
+                "Học bổng Nghiên cứu khoa học",
+                "Học bổng Sáng tạo",
+                "Học bổng Vượt khó học tốt"
+            ],
+            "thoi_gian_xet": "Cuối mỗi học kỳ",
+            "ti_le_nhan": "15-20% sinh viên được nhận",
+            "ho_so": [
+                "Đơn xin xét học bổng",
+                "Bảng điểm học kỳ",
+                "Giấy khen (nếu có)",
+                "Thành tích NCKH (nếu có)"
+            ]
+        }
 
-        dispatcher.utter_message(text=tra_loi)
-        return []
+        if ten_nganh_chuan and ten_nganh_chuan in hoc_bong_data:
+            info = hoc_bong_data[ten_nganh_chuan]
+            message = f"🎓 **HỌC BỔNG - {ten_nganh_chuan.upper()}**\n\n"
 
+            message += f"🏆 **CÁC LOẠI HỌC BỔNG:**\n"
+            message += f"• **Xuất sắc:** {info['hoc_bong_xuat_sac']}\n"
+            message += f"• **Giỏi:** {info['hoc_bong_gioi']}\n"
+            message += f"• **Khuyến khích:** {info['hoc_bong_khuyen_khich']}\n"
+            message += f"• **Doanh nghiệp:** {info['hoc_bong_doanh_nghiep']}\n\n"
 
-class ActionTraCuuCoHocBong(Action):
-    def name(self) -> Text:
-        return "action_tra_cuu_co_hoc_bong"
+            message += f"📝 **ĐIỀU KIỆN CHÍNH:**\n"
+            message += f"• {info['dieu_kien']}\n"
+            message += f"• Không vi phạm kỷ luật\n"
+            message += f"• Tích cực tham gia hoạt động\n\n"
 
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        ten_nganh = next(tracker.get_latest_entity_values("ten_nganh"), None)
+            message += f"📊 **THÔNG TIN CHUNG:**\n"
+            message += f"• Thời gian xét: {hoc_bong_chung['thoi_gian_xet']}\n"
+            message += f"• Tỷ lệ nhận: {hoc_bong_chung['ti_le_nhan']}\n"
+            message += f"• Hồ sơ: {', '.join(hoc_bong_chung['ho_so'][:2])}...\n\n"
 
-        if not ten_nganh:
-            dispatcher.utter_message(
-                text="Bạn muốn hỏi học bổng của ngành nào vậy?"
-            )
-            return []
+            message += f"💡 **LỢI ÍCH:**\n"
+            message += "• Giảm gánh nặng tài chính\n"
+            message += "• Cơ hội thực tập tại doanh nghiệp\n"
+            message += "• Ưu tiên trong tuyển dụng\n\n"
 
-        tra_loi = (
-            f"Sinh viên ngành {ten_nganh} tại PTIT đều có cơ hội nhận học bổng. "
-            f"Học bổng được xét dựa trên kết quả học tập, rèn luyện hoặc theo diện ưu tiên, hỗ trợ của Nhà nước và doanh nghiệp."
-        )
+            message += "📞 **Đăng ký:** Phòng CTSV - (024) 3354 5691\n"
+            message += "🌐 **Chi tiết:** https://dientu.ptit.edu.vn/hoc-bong"
 
-        dispatcher.utter_message(text=tra_loi)
-        return []
+        elif ten_nganh:
+            message = f"🔍 Học bổng ngành '{ten_nganh}'\n\n"
+            message += "🎓 **HỌC BỔNG CÁC NGÀNH KHOA ĐIỆN TỬ:**\n\n"
 
+            for nganh, info in hoc_bong_data.items():
+                message += f"• **{nganh}:**\n"
+                message += f"  {info['hoc_bong_xuat_sac'].split('+')[0]}\n"
+                message += f"  {info['hoc_bong_doanh_nghiep']}\n\n"
 
-class ActionTraCuuLoaiHocBong(Action):
-    def name(self) -> Text:
-        return "action_tra_cuu_loai_hoc_bong"
+            message += "💡 **Hỏi cụ thể:** \"Học bổng ngành [tên ngành]\""
 
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        ten_nganh = next(tracker.get_latest_entity_values("ten_nganh"), None)
-
-        if not ten_nganh:
-            dispatcher.utter_message(
-                text="Bạn muốn biết loại học bổng áp dụng cho ngành nào vậy?"
-            )
-            return []
-
-        tra_loi = (
-            f"Sinh viên ngành {ten_nganh} tại PTIT có thể nhận nhiều loại học bổng, bao gồm:\n"
-            f"- **Học bổng khuyến khích học tập** (dựa vào kết quả học tập và rèn luyện)\n"
-            f"- **Học bổng tài năng** cho sinh viên xuất sắc\n"
-            f"- **Học bổng doanh nghiệp tài trợ** (từ các công ty, tập đoàn hợp tác với Học viện)\n"
-            f"- **Học bổng hỗ trợ khác** theo quy định của Nhà nước."
-        )
-
-        dispatcher.utter_message(text=tra_loi)
-        return []
-
-
-class ActionTraCuuDieuKienHocBong(Action):
-    def name(self) -> Text:
-        return "action_tra_cuu_dieu_kien_hoc_bong"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        ten_nganh = next(tracker.get_latest_entity_values("ten_nganh"), None)
-
-        if not ten_nganh:
-            dispatcher.utter_message(
-                text="Bạn muốn biết điều kiện học bổng của ngành nào vậy?"
-            )
-            return []
-
-        tra_loi = (
-            f"Để được xét học bổng ngành {ten_nganh} tại PTIT, sinh viên cần:\n"
-            f"- Đạt kết quả học tập từ khá, giỏi trở lên.\n"
-            f"- Có điểm rèn luyện tốt.\n"
-            f"- Không vi phạm kỷ luật.\n"
-            f"👉 Riêng **học bổng tài năng** yêu cầu sinh viên xuất sắc hoặc đạt giải thưởng nghiên cứu khoa học, cuộc thi chuyên môn."
-        )
-
-        dispatcher.utter_message(text=tra_loi)
-        return []
-
-
-class ActionTraCuuGiaTriHocBong(Action):
-    def name(self) -> Text:
-        return "action_tra_cuu_gia_tri_hoc_bong"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        ten_nganh = next(tracker.get_latest_entity_values("ten_nganh"), None)
-
-        if not ten_nganh:
-            dispatcher.utter_message(
-                text="Bạn muốn biết giá trị học bổng của ngành nào vậy?"
-            )
-            return []
-
-        tra_loi = (
-            f"Học bổng ngành {ten_nganh} tại PTIT thường có giá trị như sau:\n"
-            f"- **Học bổng khuyến khích học tập**: khoảng 1 đến 1,5 tháng học phí.\n"
-            f"- **Học bổng tài năng**: mức cao hơn, có thể từ vài triệu đồng/đợt.\n"
-            f"- **Học bổng doanh nghiệp tài trợ**: có thể toàn phần hoặc theo mức hỗ trợ riêng của từng doanh nghiệp.\n"
-            f"👉 Như vậy, sinh viên xuất sắc hoàn toàn có thể nhận học bổng toàn phần."
-        )
-
-        dispatcher.utter_message(text=tra_loi)
-        return []
-
-class ActionTraCuuKhaiNiemNghienCuuKhoaHoc(Action):
-    def name(self) -> Text:
-        return "action_tra_cuu_khai_niem_nghien_cuu_khoa_hoc"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-
-        tra_loi = (
-            "Nghiên cứu khoa học (NCKH) là quá trình sinh viên và giảng viên tìm tòi, "
-            "khám phá, sáng tạo tri thức mới, hoặc vận dụng kiến thức đã có để giải quyết các vấn đề thực tiễn. "
-            "Trong trường đại học, NCKH có thể là làm đề tài, báo cáo, tham gia hội nghị, "
-            "chứ không chỉ đơn thuần là viết luận văn."
-        )
-
-        dispatcher.utter_message(text=tra_loi)
-        return []
-
-class ActionTraCuuCoHoiNghienCuuKhoaHoc(Action):
-    def name(self) -> Text:
-        return "action_tra_cuu_co_hoi_nghien_cuu_khoa_hoc"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        ten_nganh = next(tracker.get_latest_entity_values("ten_nganh"), None)
-
-        if not ten_nganh:
-            dispatcher.utter_message(
-                text="Bạn muốn biết cơ hội nghiên cứu khoa học của ngành nào vậy?"
-            )
-            return []
-
-        tra_loi = (
-            f"Sinh viên ngành {ten_nganh} tại PTIT đều có cơ hội tham gia nghiên cứu khoa học. "
-            f"Học viện có các câu lạc bộ học thuật, nhóm nghiên cứu và giảng viên trực tiếp hướng dẫn. "
-            f"👉 Như vậy, bạn hoàn toàn có thể làm đề tài, tham gia dự án nghiên cứu ngay từ khi còn là sinh viên."
-        )
-
-        dispatcher.utter_message(text=tra_loi)
-        return []
-class ActionTraCuuDieuKienNghienCuuKhoaHoc(Action):
-    def name(self) -> Text:
-        return "action_tra_cuu_dieu_kien_nghien_cuu_khoa_hoc"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-
-        tra_loi = (
-            "Điều kiện để tham gia nghiên cứu khoa học tại PTIT khá linh hoạt:\n"
-            "- Sinh viên bất kỳ năm nào cũng có thể đăng ký, nhưng từ năm 2 trở đi sẽ thuận lợi hơn do đã có kiến thức nền.\n"
-            "- Cần có ý tưởng hoặc mong muốn tham gia đề tài.\n"
-            "- Đăng ký với giảng viên hướng dẫn hoặc tham gia nhóm nghiên cứu.\n"
-            "👉 Quan trọng nhất là tinh thần ham học hỏi và chủ động tìm tòi."
-        )
-
-        dispatcher.utter_message(text=tra_loi)
-        return []
-class ActionTraCuuLoiIchNghienCuuKhoaHoc(Action):
-    def name(self) -> Text:
-        return "action_tra_cuu_loi_ich_nghien_cuu_khoa_hoc"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-
-        tra_loi = (
-            "Tham gia nghiên cứu khoa học (NCKH) mang lại nhiều lợi ích cho sinh viên:\n"
-            "- Rèn luyện tư duy sáng tạo, kỹ năng giải quyết vấn đề.\n"
-            "- Nâng cao kiến thức chuyên môn, tiếp cận công nghệ mới.\n"
-            "- Cơ hội nhận học bổng, giải thưởng và cộng điểm rèn luyện.\n"
-            "- Tăng lợi thế khi xin học bổng du học, thực tập và việc làm sau khi ra trường.\n"
-            "👉 Nói cách khác, NCKH vừa giúp học tập, vừa mở rộng cơ hội nghề nghiệp."
-        )
-
-        dispatcher.utter_message(text=tra_loi)
-        return []
-
-
-class ActionTraCuuNoiDungNghienCuuKhoaHoc(Action):
-    def name(self) -> Text:
-        return "action_tra_cuu_noi_dung_nghien_cuu_khoa_hoc"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-
-        ten_nganh = next(tracker.get_latest_entity_values("ten_nganh"), None)
-
-        if ten_nganh:
-            tra_loi = (
-                f"Sinh viên ngành {ten_nganh} có thể tham gia nghiên cứu khoa học trong nhiều mảng: "
-                f"thiết kế hệ thống, phát triển sản phẩm mới, ứng dụng công nghệ hiện đại. "
-                f"Ví dụ: đề tài liên quan đến {ten_nganh} như nghiên cứu chip, mạch tích hợp, IoT, robot, trí tuệ nhân tạo."
-            )
         else:
-            tra_loi = (
-                "Nội dung nghiên cứu khoa học của sinh viên rất đa dạng, "
-                "bao gồm thiết kế mạch điện tử, tự động hóa, vi mạch, IoT, trí tuệ nhân tạo, "
-                "ứng dụng công nghệ trong viễn thông và năng lượng. "
-                "👉 Mỗi ngành sẽ có những mảng nghiên cứu đặc thù phù hợp."
-            )
+            message = "🎓 **HỌC BỔNG KHOA ĐIỆN TỬ - PTIT**\n\n"
 
-        dispatcher.utter_message(text=tra_loi)
-        return []
-class ActionPhongLabDanhSach(Action):
-    def name(self) -> Text:
-        return "action_phong_lab_danh_sach"
+            message += "🏆 **CÁC NGÀNH VÀ HỌC BỔNG:**\n"
+            for nganh, info in hoc_bong_data.items():
+                message += f"🎯 **{nganh}**\n"
+                message += f"• Xuất sắc: {info['hoc_bong_xuat_sac'].split('+')[0]}\n"
+                message += f"• Doanh nghiệp: {info['hoc_bong_doanh_nghiep']}\n\n"
 
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+            message += "📋 **LOẠI HỌC BỔNG:**\n"
+            for i, loai in enumerate(hoc_bong_chung['loai_hoc_bong'], 1):
+                message += f"{i}. {loai}\n"
 
-        tra_loi = (
-            "Hiện tại, khoa Điện tử của PTIT có nhiều phòng thí nghiệm và thực hành cho sinh viên, gồm:\n"
-            "- Phòng Lab Điện tử sáng tạo\n"
-            "- Phòng Lab Vi mạch bán dẫn\n"
-            "- Phòng Lab Tự động hóa và Robot\n"
-            "- Phòng Lab IoT và Hệ thống nhúng\n"
-            "- Các phòng thực hành Điện – Điện tử cơ bản\n\n"
-            "👉 Sinh viên có thể tham gia học tập, nghiên cứu và làm đồ án tại các phòng lab này."
-        )
+            message += f"\n📊 **QUY ĐỊNH CHUNG:**\n"
+            message += f"• Thời gian xét: {hoc_bong_chung['thoi_gian_xet']}\n"
+            message += f"• Tỷ lệ nhận: {hoc_bong_chung['ti_le_nhan']}\n"
+            message += f"• Hồ sơ: {', '.join(hoc_bong_chung['ho_so'])}\n\n"
 
-        dispatcher.utter_message(text=tra_loi)
-        return []
-class ActionPhongLabThietBi(Action):
-    def name(self) -> Text:
-        return "action_phong_lab_thiet_bi"
+            message += "💎 **HỌC BỔNG ĐẶC BIỆT:**\n"
+            message += "• Học bổng Chính phủ\n"
+            message += "• Học bổng Trao đổi quốc tế\n"
+            message += "• Học bổng Nghiên cứu sinh\n"
+            message += "• Học bổng Khởi nghiệp\n\n"
 
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+            message += "📞 **Liên hệ:** (024) 3354 5691\n"
+            message += "🌐 **Đăng ký:** https://dientu.ptit.edu.vn/hoc-bong"
 
-        ten_lab = next(tracker.get_latest_entity_values("ten_lab"), None)
+        dispatcher.utter_message(text=message)
+        return [SlotSet("ten_nganh", ten_nganh_chuan or ten_nganh)]
 
-        if ten_lab:
-            tra_loi = (
-                f"Phòng lab {ten_lab} được trang bị đầy đủ máy móc và thiết bị phục vụ học tập, nghiên cứu, "
-                f"bao gồm: máy tính cấu hình mạnh, thiết bị đo lường (oscilloscope, máy phát tín hiệu), "
-                f"kit vi xử lý, board mạch, robot, cảm biến, và các thiết bị IoT hiện đại."
-            )
-        else:
-            tra_loi = (
-                "Các phòng lab của khoa Điện tử PTIT được trang bị hiện đại: "
-                "máy đo oscilloscope, máy phát tín hiệu, robot, bộ kit IoT, FPGA, "
-                "thiết bị tự động hóa, hệ thống điều khiển và mạch điện tử thực hành."
-            )
 
-        dispatcher.utter_message(text=tra_loi)
-        return []
-class ActionPhongLabDieuKienSuDung(Action):
-    def name(self) -> Text:
-        return "action_phong_lab_dieu_kien_su_dung"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-
-        tra_loi = (
-            "Điều kiện sử dụng phòng lab của khoa Điện tử PTIT:\n"
-            "- Sinh viên các ngành thuộc khoa Điện tử đều có thể đăng ký sử dụng.\n"
-            "- Thông thường, sinh viên từ năm 2 trở lên sẽ được học và thực hành trong lab.\n"
-            "- Phải đăng ký với bộ môn/phòng quản lý để được cấp quyền sử dụng.\n"
-            "- Tuân thủ các quy định an toàn, không mang thức ăn, nước uống vào lab.\n"
-            "- Khi làm việc phải có sự giám sát của giảng viên hoặc kỹ thuật viên."
-        )
-
-        dispatcher.utter_message(text=tra_loi)
-        return []
-
-class ActionPhongLabGioMoCua(Action):
-    def name(self) -> Text:
-        return "action_phong_lab_gio_mo_cua"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-
-        ten_lab = next(tracker.get_latest_entity_values("ten_lab"), None)
-
-        if ten_lab:
-            tra_loi = (
-                f"Phòng lab {ten_lab} của khoa Điện tử PTIT thường mở cửa từ **8h00 - 17h00**, "
-                f"từ **thứ 2 đến thứ 6**. Một số lab có thể mở thêm buổi tối hoặc cuối tuần "
-                f"nếu có lớp học, đồ án hoặc nghiên cứu được đăng ký trước."
-            )
-        else:
-            tra_loi = (
-                "Các phòng lab của khoa Điện tử PTIT thường mở cửa trong giờ hành chính "
-                "(8h00 - 17h00, thứ 2 đến thứ 6). Ngoài ra, một số lab có thể mở buổi tối hoặc cuối tuần "
-                "cho sinh viên làm đồ án hoặc nghiên cứu, nếu có đăng ký với giảng viên/phòng quản lý."
-            )
-
-        dispatcher.utter_message(text=tra_loi)
-        return []
-class ActionPhongLabKhoaHocThucHanh(Action):
-    def name(self) -> Text:
-        return "action_phong_lab_khoa_hoc_thuc_hanh"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-
-        ten_lab = next(tracker.get_latest_entity_values("ten_lab"), None)
-
-        if ten_lab:
-            tra_loi = (
-                f"Phòng lab {ten_lab} được sử dụng cho nhiều học phần thực hành, "
-                f"như: Thực hành Điện – Điện tử, Vi xử lý – Vi điều khiển, Hệ thống nhúng, "
-                f"Điều khiển tự động, IoT, và các học phần liên quan đến chuyên ngành."
-            )
-        else:
-            tra_loi = (
-                "Các phòng lab của khoa Điện tử PTIT phục vụ cho nhiều môn học thực hành: "
-                "Điện – Điện tử cơ bản, Mạch điện, Kỹ thuật số, Vi xử lý – Vi điều khiển, "
-                "Thiết kế vi mạch, Hệ thống nhúng, IoT, Robot và Tự động hóa."
-            )
-
-        dispatcher.utter_message(text=tra_loi)
-        return []
-class ActionPhongLabLienHe(Action):
-    def name(self) -> Text:
-        return "action_phong_lab_lien_he"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-
-        ten_lab = next(tracker.get_latest_entity_values("ten_lab"), None)
-
-        if ten_lab:
-            tra_loi = (
-                f"Phòng lab {ten_lab} do các giảng viên trong khoa Điện tử phụ trách. "
-                f"Bạn có thể liên hệ qua Văn phòng Khoa Điện tử PTIT hoặc email của giảng viên phụ trách lab. "
-                f"Thông tin chi tiết thường được công bố trên website chính thức hoặc bảng thông báo của khoa."
-            )
-        else:
-            tra_loi = (
-                "Các phòng lab của khoa Điện tử PTIT đều có giảng viên phụ trách. "
-                "Bạn có thể liên hệ trực tiếp qua Văn phòng Khoa Điện tử hoặc email công vụ trên website PTIT. "
-                "Ngoài ra, một số lab còn có fanpage/website riêng để hỗ trợ sinh viên."
-            )
-
-        dispatcher.utter_message(text=tra_loi)
-        return []
-class ActionPhongLabLienKetDoanhNghiep(Action):
-    def name(self) -> Text:
-        return "action_phong_lab_lien_ket_doanh_nghiep"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-
-        ten_lab = next(tracker.get_latest_entity_values("ten_lab"), None)
-
-        if ten_lab:
-            tra_loi = (
-                f"Phòng lab {ten_lab} của khoa Điện tử PTIT có hợp tác với nhiều doanh nghiệp "
-                f"trong lĩnh vực điện tử, viễn thông, và công nghệ bán dẫn. "
-                f"Các đối tác này thường tài trợ thiết bị, học bổng, hoặc phối hợp tổ chức "
-                f"các dự án nghiên cứu, thực tập cho sinh viên."
-            )
-        else:
-            tra_loi = (
-                "Các phòng lab của khoa Điện tử PTIT đều có liên kết với doanh nghiệp, "
-                "nhất là trong các lĩnh vực: thiết kế vi mạch, viễn thông, IoT, tự động hóa. "
-                "Doanh nghiệp tham gia có thể tài trợ thiết bị, đồng hành nghiên cứu hoặc mở chương trình thực tập."
-            )
-
-        dispatcher.utter_message(text=tra_loi)
-        return []
 class ActionTraCuuCoHoiViecLam(Action):
+    """Action for looking up career opportunities by major"""
+
     def name(self) -> Text:
         return "action_tra_cuu_co_hoi_viec_lam"
 
@@ -1184,1638 +770,346 @@ class ActionTraCuuCoHoiViecLam(Action):
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
-        ten_nganh = next(tracker.get_latest_entity_values("ten_nganh"), None)
+        ten_nganh = tracker.get_slot("ten_nganh")
+        ten_nganh_chuan = chuan_hoa_ten_nganh(ten_nganh) if ten_nganh else None
 
-        if ten_nganh:
-            tra_loi = (
-                f"Sinh viên ngành {ten_nganh} sau khi tốt nghiệp có thể làm việc tại các công ty, "
-                f"tập đoàn trong lĩnh vực điện tử, viễn thông, năng lượng, tự động hóa, công nghệ bán dẫn. "
-                f"Cơ hội nghề nghiệp bao gồm kỹ sư thiết kế, lập trình hệ thống, quản lý kỹ thuật, "
-                f"và nghiên cứu phát triển sản phẩm."
-            )
+        co_hoi_viec_lam_data = {
+            "Kỹ thuật Điều khiển và Tự động hóa": {
+                "vi_tri_viec_lam": [
+                    "Kỹ sư điều khiển tự động",
+                    "Lập trình viên PLC/SCADA",
+                    "Kỹ sư robotics",
+                    "Chuyên viên IoT",
+                    "Kỹ sư hệ thống nhúng",
+                    "Kỹ sư vận hành nhà máy thông minh"
+                ],
+                "muc_luong_khoi_diem": "12 - 18 triệu VNĐ",
+                "muc_luong_kinh_nghiem": "20 - 35 triệu VNĐ (3-5 năm)",
+                "doanh_nghiep_tuyen_dung": [
+                    "Siemens Vietnam",
+                    "ABB Vietnam",
+                    "Mitsubishi Electric",
+                    "FPT Software",
+                    "Bosch Vietnam",
+                    "Viettel High Technology"
+                ],
+                "ty_le_co_viec_lam": "95% sau 6 tháng",
+                "linh_vuc_ung_tuyen": [
+                    "Công nghiệp sản xuất",
+                    "Nhà máy thông minh",
+                    "Hệ thống tự động hóa",
+                    "IoT & Robotics"
+                ]
+            },
+            "Công nghệ Kỹ thuật Điện, Điện tử": {
+                "vi_tri_viec_lam": [
+                    "Kỹ sư điện công nghiệp",
+                    "Kỹ sư điện tử",
+                    "Chuyên viên năng lượng tái tạo",
+                    "Kỹ sư viễn thông",
+                    "Kỹ sư thiết kế mạch",
+                    "Kỹ sư vận hành hệ thống điện"
+                ],
+                "muc_luong_khoi_diem": "10 - 16 triệu VNĐ",
+                "muc_luong_kinh_nghiem": "18 - 30 triệu VNĐ (3-5 năm)",
+                "doanh_nghiep_tuyen_dung": [
+                    "Tập đoàn Điện lực Việt Nam (EVN)",
+                    "Siemens Vietnam",
+                    "Schneider Electric",
+                    "Hyundai Engineering",
+                    "Samsung Electronics",
+                    "VNPT Technology"
+                ],
+                "ty_le_co_viec_lam": "93% sau 6 tháng",
+                "linh_vuc_ung_tuyen": [
+                    "Điện lực & Năng lượng",
+                    "Viễn thông",
+                    "Điện tử công nghiệp",
+                    "Năng lượng tái tạo"
+                ]
+            },
+            "Công nghệ Vi mạch Bán dẫn": {
+                "vi_tri_viec_lam": [
+                    "Kỹ sư thiết kế chip (IC Design)",
+                    "Kỹ sư embedded systems",
+                    "Chuyên viên phát triển phần cứng",
+                    "Kỹ sư phát triển vi mạch",
+                    "Kỹ sư kiểm thử vi mạch",
+                    "Kỹ sư phát triển FPGA"
+                ],
+                "muc_luong_khoi_diem": "15 - 25 triệu VNĐ",
+                "muc_luong_kinh_nghiem": "30 - 70 triệu VNĐ (3-5 năm)",
+                "doanh_nghiep_tuyen_dung": [
+                    "Intel Vietnam",
+                    "Samsung Semiconductor",
+                    "Renesas Design Vietnam",
+                    "FPT Semiconductor",
+                    "Viettel High Technology",
+                    "VinaChip Technology"
+                ],
+                "ty_le_co_viec_lam": "97% sau 6 tháng",
+                "linh_vuc_ung_tuyen": [
+                    "Thiết kế vi mạch",
+                    "Hệ thống nhúng",
+                    "Phần cứng IoT",
+                    "Semiconductor"
+                ]
+            }
+        }
+
+        # Thông tin chung về thị trường lao động
+        thi_truong_chung = {
+            "nhu_cau_nhan_luc": "Rất cao, đặc biệt trong lĩnh vực 4.0",
+            "tang_truong_nganh": "15-20% mỗi năm",
+            "co_hoi_quoc_te": [
+                "Làm việc tại nước ngoài",
+                "Du học & Thực tập quốc tế",
+                "Làm việc cho tập đoàn đa quốc gia"
+            ],
+            "ky_nang_can_thiet": [
+                "Lập trình & Coding",
+                "Tiếng Anh chuyên ngành",
+                "Kỹ năng làm việc nhóm",
+                "Tư duy sáng tạo"
+            ]
+        }
+
+        if ten_nganh_chuan and ten_nganh_chuan in co_hoi_viec_lam_data:
+            info = co_hoi_viec_lam_data[ten_nganh_chuan]
+            message = f"💼 **CƠ HỘI VIỆC LÀM - {ten_nganh_chuan.upper()}**\n\n"
+
+            message += f"🎯 **VỊ TRÍ VIỆC LÀM:**\n"
+            for i, vi_tri in enumerate(info['vi_tri_viec_lam'][:4], 1):
+                message += f"{i}. {vi_tri}\n"
+
+            message += f"\n💰 **MỨC LƯƠNG:**\n"
+            message += f"• Khởi điểm: {info['muc_luong_khoi_diem']}\n"
+            message += f"• Kinh nghiệm: {info['muc_luong_kinh_nghiem']}\n"
+            message += f"• Tỷ lệ có việc: {info['ty_le_co_viec_lam']}\n\n"
+
+            message += f"🏢 **DOANH NGHIỆP TUYỂN DỤNG:**\n"
+            for i, dn in enumerate(info['doanh_nghiep_tuyen_dung'][:4], 1):
+                message += f"{i}. {dn}\n"
+
+            message += f"\n📊 **LĨNH VỰC ỨNG TUYỂN:**\n"
+            for linh_vuc in info['linh_vuc_ung_tuyen']:
+                message += f"• {linh_vuc}\n"
+
+            message += f"\n🌍 **THỊ TRƯỜNG LAO ĐỘNG:**\n"
+            message += f"• Nhu cầu: {thi_truong_chung['nhu_cau_nhan_luc']}\n"
+            message += f"• Tăng trưởng: {thi_truong_chung['tang_truong_nganh']}\n\n"
+
+            message += "💡 **LỜI KHUYÊN:**\n"
+            message += "• Tham gia thực tập từ năm 3\n"
+            message += "• Học thêm ngoại ngữ và kỹ năng mềm\n"
+            message += "• Tham gia nghiên cứu khoa học\n\n"
+
+            message += "📞 **Hỗ trợ:** Phòng Quan hệ Doanh nghiệp\n"
+            message += "🌐 **Tuyển dụng:** https://career.ptit.edu.vn"
+
+        elif ten_nganh:
+            message = f"🔍 Cơ hội việc làm ngành '{ten_nganh}'\n\n"
+            message += "💼 **CƠ HỘI VIỆC LÀM CÁC NGÀNH:**\n\n"
+
+            for nganh, info in co_hoi_viec_lam_data.items():
+                message += f"🎯 **{nganh}**\n"
+                message += f"• {info['vi_tri_viec_lam'][0]}\n"
+                message += f"• Lương: {info['muc_luong_khoi_diem']}\n"
+                message += f"• Việc làm: {info['ty_le_co_viec_lam']}\n\n"
+
+            message += "💡 **Hỏi cụ thể:** \"Cơ hội việc làm ngành [tên ngành]\""
+
         else:
-            tra_loi = (
-                "Sinh viên khoa Điện tử PTIT sau khi tốt nghiệp có nhiều cơ hội nghề nghiệp: "
-                "làm kỹ sư tại doanh nghiệp điện tử, viễn thông, công nghệ bán dẫn, "
-                "tham gia nghiên cứu, hoặc khởi nghiệp trong lĩnh vực công nghệ."
-            )
+            message = "💼 **CƠ HỘI VIỆC LÀM - KHOA ĐIỆN TỬ PTIT**\n\n"
 
-        dispatcher.utter_message(text=tra_loi)
-        return []
-class ActionTraCuuNhuCauTuyenDung(Action):
-    def name(self) -> Text:
-        return "action_tra_cuu_nhu_cau_tuyen_dung"
+            message += "🎯 **TỔNG QUAN CÁC NGÀNH:**\n"
+            for nganh, info in co_hoi_viec_lam_data.items():
+                message += f"🏆 **{nganh}**\n"
+                message += f"• Vị trí: {info['vi_tri_viec_lam'][0]}\n"
+                message += f"• Lương: {info['muc_luong_khoi_diem']}\n"
+                message += f"• Tỷ lệ việc: {info['ty_le_co_viec_lam']}\n\n"
 
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+            message += "📈 **THỊ TRƯỜNG LAO ĐỘNG:**\n"
+            message += f"• Nhu cầu: {thi_truong_chung['nhu_cau_nhan_luc']}\n"
+            message += f"• Tăng trưởng: {thi_truong_chung['tang_truong_nganh']}\n\n"
 
-        ten_nganh = next(tracker.get_latest_entity_values("ten_nganh"), None)
+            message += "🌍 **CƠ HỘI QUỐC TẾ:**\n"
+            for co_hoi in thi_truong_chung['co_hoi_quoc_te']:
+                message += f"• {co_hoi}\n"
 
-        if ten_nganh:
-            tra_loi = (
-                f"Ngành {ten_nganh} hiện có nhu cầu tuyển dụng rất cao trên thị trường lao động, "
-                f"đặc biệt khi Việt Nam đang phát triển mạnh mẽ về công nghệ số, IoT và bán dẫn. "
-                f"Nhiều doanh nghiệp trong và ngoài nước liên tục tuyển kỹ sư {ten_nganh}."
-            )
-        else:
-            tra_loi = (
-                "Các ngành thuộc khoa Điện tử PTIT đều có nhu cầu tuyển dụng lớn. "
-                "Doanh nghiệp công nghệ, viễn thông, năng lượng, và sản xuất thiết bị điện tử "
-                "đều cần kỹ sư tốt nghiệp từ các ngành này."
-            )
+            message += f"\n🛠️ **KỸ NĂNG CẦN THIẾT:**\n"
+            for ky_nang in thi_truong_chung['ky_nang_can_thiet']:
+                message += f"• {ky_nang}\n"
 
-        dispatcher.utter_message(text=tra_loi)
-        return []
-class ActionTraCuuViecLamQuocTe(Action):
-    def name(self) -> Text:
-        return "action_tra_cuu_viec_lam_quoc_te"
+            message += f"\n📞 **Tư vấn nghề nghiệp:** (024) 3354 5692\n"
+            message += "🌐 **Career Portal:** https://career.ptit.edu.vn"
 
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-
-        ten_nganh = next(tracker.get_latest_entity_values("ten_nganh"), None)
-
-        if ten_nganh:
-            tra_loi = (
-                f"Sinh viên ngành {ten_nganh} sau khi tốt nghiệp hoàn toàn có cơ hội làm việc tại nước ngoài, "
-                f"nhất là ở Nhật Bản, Hàn Quốc, Mỹ, châu Âu, nơi có nhiều tập đoàn điện tử và bán dẫn. "
-                f"PTIT cũng có các chương trình liên kết, hỗ trợ sinh viên tiếp cận thị trường quốc tế."
-            )
-        else:
-            tra_loi = (
-                "Sinh viên khoa Điện tử PTIT có thể làm việc tại các tập đoàn quốc tế "
-                "trong lĩnh vực điện tử, viễn thông, công nghệ thông tin và bán dẫn. "
-                "Nhiều sinh viên đã đi làm tại Nhật, Hàn, Mỹ sau khi tốt nghiệp."
-            )
-
-        dispatcher.utter_message(text=tra_loi)
-        return []
-class ActionTraCuuLuongNganh(Action):
-    def name(self) -> Text:
-        return "action_tra_cuu_luong_nganh"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-
-        ten_nganh = next(tracker.get_latest_entity_values("ten_nganh"), None)
-
-        if ten_nganh:
-            tra_loi = (
-                f"Sinh viên ngành {ten_nganh} sau khi ra trường có mức lương khởi điểm "
-                f"khoảng 10–15 triệu đồng/tháng. Với kinh nghiệm và làm ở các tập đoàn lớn, "
-                f"mức thu nhập có thể từ 20–30 triệu đồng/tháng hoặc cao hơn."
-            )
-        else:
-            tra_loi = (
-                "Sinh viên các ngành của khoa Điện tử PTIT thường có lương khởi điểm 10–15 triệu/tháng. "
-                "Nếu làm việc tại doanh nghiệp quốc tế hoặc trong lĩnh vực bán dẫn, "
-                "thu nhập có thể trên 20 triệu/tháng."
-            )
-
-        dispatcher.utter_message(text=tra_loi)
-        return []
-
-class ActionTraCuuDieuKienTuyenSinh(Action):
-    def name(self):
-        return "action_tra_cuu_dieu_kien_tuyen_sinh"
-
-    def run(self, dispatcher, tracker, domain):
-        ten_nganh = tracker.get_slot("ten_nganh")
-
-        answer = (
-            f"Để xét tuyển vào ngành {ten_nganh if ten_nganh else ''} tại PTIT, thí sinh cần đáp ứng các điều kiện chung:\n"
-            "- Tốt nghiệp THPT hoặc tương đương.\n"
-            "- Tham gia xét tuyển theo một trong các phương thức do PTIT quy định (thi THPT, xét học bạ, chứng chỉ quốc tế, đánh giá năng lực...).\n"
-            "- Đạt mức điểm chuẩn tối thiểu của ngành theo từng năm tuyển sinh.\n"
-            "- Một số ngành có thể yêu cầu thêm chứng chỉ tiếng Anh quốc tế hoặc điểm thi ngoại ngữ tùy phương thức.\n\n"
-            "📌 Chi tiết xem tại: https://portal.ptit.edu.vn/tuyen-sinh/"
-        )
-
-        dispatcher.utter_message(text=answer)
-        return []
-
-
-class ActionTraCuuQuyTrinhNhapHoc(Action):
-    def name(self):
-        return "action_tra_cuu_quy_trinh_nhap_hoc"
-
-    def run(self, dispatcher, tracker, domain):
-        ten_nganh = tracker.get_slot("ten_nganh")
-
-        answer = (
-            f"Quy trình nhập học cho ngành {ten_nganh if ten_nganh else ''} tại PTIT gồm các bước cơ bản:\n"
-            "1. Xác nhận nhập học trực tuyến trên hệ thống của PTIT.\n"
-            "2. Nộp hồ sơ nhập học đầy đủ theo quy định.\n"
-            "3. Đóng học phí và các khoản phí khác theo hướng dẫn.\n"
-            "4. Tham gia tuần sinh hoạt công dân đầu khóa.\n\n"
-            "📌 Hướng dẫn chi tiết tại: https://portal.ptit.edu.vn/huong-dan-nhap-hoc/"
-        )
-
-        dispatcher.utter_message(text=answer)
-        return []
-
-
-class ActionTraCuuHoSoNhapHoc(Action):
-    def name(self):
-        return "action_tra_cuu_ho_so_nhap_hoc"
-
-    def run(self, dispatcher, tracker, domain):
-        ten_nganh = tracker.get_slot("ten_nganh")
-
-        answer = (
-            f"Hồ sơ nhập học ngành {ten_nganh if ten_nganh else ''} tại PTIT thường bao gồm:\n"
-            "- Giấy báo trúng tuyển (bản chính).\n"
-            "- Học bạ THPT (bản sao công chứng).\n"
-            "- Bằng tốt nghiệp THPT hoặc giấy chứng nhận tốt nghiệp tạm thời.\n"
-            "- Giấy khai sinh (bản sao công chứng).\n"
-            "- Căn cước công dân/CMND (bản sao công chứng).\n"
-            "- Ảnh thẻ 3x4 hoặc 4x6.\n"
-            "- Các giấy tờ ưu tiên (nếu có).\n"
-            "- Biên lai nộp học phí.\n\n"
-            "📌 Danh mục hồ sơ đầy đủ được cập nhật tại: https://portal.ptit.edu.vn/ho-so-nhap-hoc/"
-        )
-
-        dispatcher.utter_message(text=answer)
-        return []
-class ActionTraCuuKienThucCoBan(Action):
-    def name(self):
-        return "action_tra_cuu_kien_thuc_co_ban"
-
-    def run(self, dispatcher, tracker, domain):
-        ten_nganh = tracker.get_slot("ten_nganh")
-        answer = (
-            f"Sinh viên ngành {ten_nganh if ten_nganh else ''} tại PTIT cần có kiến thức cơ bản sau:\n"
-            "- Kiến thức khoa học tự nhiên và toán học để làm nền tảng cho các môn chuyên ngành.\n"
-            "- Kiến thức cơ sở về điện, điện tử, mạch, tín hiệu, máy tính và lập trình.\n"
-            "- Hiểu biết chung về kinh tế, xã hội, pháp luật và chính trị.\n\n"
-            "📌 Đây là chuẩn đầu ra về kiến thức nền tảng được PTIT quy định."
-        )
-        dispatcher.utter_message(text=answer)
-        return []
-
-
-class ActionTraCuuKienThucChuyenMon(Action):
-    def name(self):
-        return "action_tra_cuu_kien_thuc_chuyen_mon"
-
-    def run(self, dispatcher, tracker, domain):
-        ten_nganh = tracker.get_slot("ten_nganh")
-        answer = (
-            f"Chuẩn đầu ra về kiến thức chuyên môn của ngành {ten_nganh if ten_nganh else ''} tại PTIT gồm:\n"
-            "- Nắm vững các môn chuyên ngành như: mạch điện, điện tử công suất, điều khiển tự động, vi mạch, IoT, hệ thống nhúng...\n"
-            "- Hiểu biết về thiết kế, chế tạo, vận hành và bảo trì hệ thống điện - điện tử.\n"
-            "- Có khả năng ứng dụng CNTT, phần mềm mô phỏng, công cụ thiết kế kỹ thuật trong công việc.\n\n"
-            "📌 Đây là khối kiến thức chuyên sâu phục vụ nghề nghiệp."
-        )
-        dispatcher.utter_message(text=answer)
-        return []
-
-
-class ActionTraCuuKyNangNgheNghiep(Action):
-    def name(self):
-        return "action_tra_cuu_ky_nang_nghe_nghiep"
-
-    def run(self, dispatcher, tracker, domain):
-        ten_nganh = tracker.get_slot("ten_nganh")
-        answer = (
-            f"Sinh viên ngành {ten_nganh if ten_nganh else ''} được trang bị kỹ năng nghề nghiệp:\n"
-            "- Kỹ năng thiết kế, phân tích, lắp ráp và vận hành các hệ thống điện tử.\n"
-            "- Kỹ năng sử dụng thành thạo các thiết bị đo lường, kiểm tra, thí nghiệm.\n"
-            "- Kỹ năng lập trình, mô phỏng và triển khai giải pháp kỹ thuật.\n"
-            "- Khả năng nghiên cứu khoa học và phát triển sản phẩm mới.\n\n"
-            "📌 Đây là những kỹ năng cứng theo chuẩn đầu ra PTIT."
-        )
-        dispatcher.utter_message(text=answer)
-        return []
-
-
-class ActionTraCuuKyNangMem(Action):
-    def name(self):
-        return "action_tra_cuu_ky_nang_mem"
-
-    def run(self, dispatcher, tracker, domain):
-        ten_nganh = tracker.get_slot("ten_nganh")
-        answer = (
-            f"Sinh viên ngành {ten_nganh if ten_nganh else ''} tại PTIT cần phát triển kỹ năng mềm:\n"
-            "- Kỹ năng giao tiếp, làm việc nhóm và thuyết trình.\n"
-            "- Kỹ năng quản lý thời gian, lập kế hoạch và giải quyết vấn đề.\n"
-            "- Kỹ năng tự học, nghiên cứu độc lập và sáng tạo.\n"
-            "- Kỹ năng sử dụng ngoại ngữ (đặc biệt là tiếng Anh chuyên ngành).\n\n"
-            "📌 Đây là chuẩn kỹ năng mềm bắt buộc đối với sinh viên PTIT."
-        )
-        dispatcher.utter_message(text=answer)
-        return []
-class ActionTraCuuChuongTrinhHocNganh(Action):
-    def name(self):
-        return "action_tra_cuu_chuong_trinh_hoc_nganh"
-
-    def run(self, dispatcher, tracker, domain):
-        ten_nganh = tracker.get_slot("ten_nganh")
-        answer = (
-            f"Chương trình học ngành {ten_nganh if ten_nganh else ''} tại PTIT thường được cấu trúc như sau:\n"
-            "- Khối kiến thức đại cương: Toán, Lý, Tin học, Chính trị, Ngoại ngữ (khoảng 50 tín chỉ).\n"
-            "- Khối kiến thức cơ sở ngành: mạch điện, điện tử, tín hiệu – hệ thống, điều khiển, lập trình (50-60 tín chỉ).\n"
-            "- Khối kiến thức chuyên ngành: các môn chuyên sâu theo định hướng (60-70 tín chỉ).\n"
-            "- Thực tập, đồ án và khóa luận tốt nghiệp (10-15 tín chỉ).\n\n"
-            "📌 Tổng khối lượng khoảng 130 – 150 tín chỉ tùy ngành."
-        )
-        dispatcher.utter_message(text=answer)
-        return []
-
-
-class ActionTraCuuChuyenNganhTrongNganh(Action):
-    def name(self):
-        return "action_tra_cuu_chuyen_nganh_trong_nganh"
-
-    def run(self, dispatcher, tracker, domain):
-        ten_nganh = tracker.get_slot("ten_nganh")
-        answer = (
-            f"Ngành {ten_nganh if ten_nganh else ''} tại PTIT có các chuyên ngành/định hướng đào tạo, ví dụ:\n"
-            "- Kỹ thuật Điều khiển và Tự động hóa.\n"
-            "- Công nghệ Vi mạch bán dẫn.\n"
-            "- Công nghệ Kỹ thuật Điện, điện tử.\n\n"
-            "📌 Tùy từng năm đào tạo, khoa có thể điều chỉnh, cập nhật chuyên ngành phù hợp nhu cầu thực tế."
-        )
-        dispatcher.utter_message(text=answer)
-        return []
-
-
-class ActionTraCuuTinChiThucTapDoAn(Action):
-    def name(self):
-        return "action_tra_cuu_tin_chi_thuc_tap_do_an"
-
-    def run(self, dispatcher, tracker, domain):
-        ten_nganh = tracker.get_slot("ten_nganh")
-        answer = (
-            f"Sinh viên ngành {ten_nganh if ten_nganh else ''} tại PTIT phải hoàn thành:\n"
-            "- Thực tập doanh nghiệp: khoảng 3 – 5 tín chỉ.\n"
-            "- Đồ án tốt nghiệp/khóa luận: khoảng 6 – 10 tín chỉ.\n\n"
-            "📌 Đây là phần bắt buộc để rèn luyện kỹ năng thực tế và làm cơ sở bảo vệ tốt nghiệp."
-        )
-        dispatcher.utter_message(text=answer)
-        return []
+        dispatcher.utter_message(text=message)
+        return [SlotSet("ten_nganh", ten_nganh_chuan or ten_nganh)]
 
 
 class ActionTraCuuKetNoiDoanhNghiep(Action):
-    def name(self):
+    """Action for looking up enterprise connections"""
+
+    def name(self) -> Text:
         return "action_tra_cuu_ket_noi_doanh_nghiep"
 
-    def run(self, dispatcher, tracker, domain):
-        answer = (
-            "Học viện Công nghệ Bưu chính Viễn thông (PTIT) có nhiều kết nối với doanh nghiệp để hỗ trợ sinh viên:\n"
-            "- Các tập đoàn, công ty lớn trong và ngoài nước: VNPT, Viettel, Samsung, Intel, Synopsys...\n"
-            "- Doanh nghiệp hỗ trợ học bổng, học liệu, phòng lab và các dự án nghiên cứu.\n"
-            "- Hàng năm có ngày hội việc làm, chương trình internship và hội thảo nghề nghiệp.\n\n"
-            "📌 Nhờ vậy, sinh viên có nhiều cơ hội thực tập, việc làm và khởi nghiệp ngay từ khi còn học."
-        )
-        dispatcher.utter_message(text=answer)
-        return []
-class ActionTraCuuThongTinLienHe(Action):
-    def name(self):
-        return "action_tra_cuu_thong_tin_lien_he"
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
-    def run(self, dispatcher, tracker, domain):
-        answer = (
-            "📌 Thông tin liên hệ tuyển sinh PTIT:\n"
-            "- Phòng Tuyển sinh: Tầng 1, Nhà A1, Học viện Công nghệ Bưu chính Viễn thông.\n"
-            "- Điện thoại: 024 3352 8121 (Hà Nội), 028 3829 4216 (TP.HCM).\n"
-            "- Email: tuyensinh@ptit.edu.vn\n"
-            "- Fanpage: https://www.facebook.com/tuyensinhptit\n"
-            "- Website: https://tuyensinh.ptit.edu.vn\n"
-            "- Khoa Kỹ thuật Điện tử: Tòa nhà A3 – PTIT Hà Đông."
-        )
-        dispatcher.utter_message(text=answer)
-        return []
-
-
-class ActionTraCuuPhuHopNu(Action):
-    def name(self):
-        return "action_tra_cuu_phu_hop_nu"
-
-    def run(self, dispatcher, tracker, domain):
         ten_nganh = tracker.get_slot("ten_nganh")
-        answer = (
-            f"Nữ học ngành {ten_nganh if ten_nganh else ''} hoàn toàn phù hợp 👍.\n"
-            "- Các môn học tập trung vào tư duy logic, thiết kế, lập trình, nghiên cứu.\n"
-            "- Công việc hiện nay thiên về công nghệ, mô phỏng, phân tích số liệu, không đòi hỏi sức khỏe nhiều.\n"
-            "📌 Rất nhiều sinh viên nữ của PTIT đã học và thành công trong ngành này."
-        )
-        dispatcher.utter_message(text=answer)
-        return []
+        ten_nganh_chuan = chuan_hoa_ten_nganh(ten_nganh) if ten_nganh else None
 
+        doanh_nghiep_data = {
+            "Kỹ thuật Điều khiển và Tự động hóa": {
+                "doanh_nghiep_chinh": [
+                    "Siemens Vietnam - Đối tác chiến lược",
+                    "ABB Vietnam - Hợp tác đào tạo",
+                    "Mitsubishi Electric - Tài trợ phòng lab",
+                    "FPT Software - Chương trình thực tập",
+                    "Bosch Vietnam - Học bổng & Tuyển dụng"
+                ],
+                "chuong_trinh_hop_tac": [
+                    "Thực tập 6 tháng tại doanh nghiệp",
+                    "Đào tạo chuyên gia từ doanh nghiệp",
+                    "Hội thảo chuyên đề hàng tháng",
+                    "Tuyển dụng trực tiếp từ năm cuối"
+                ],
+                "du_an_hop_tac": [
+                    "Nhà máy thông minh 4.0",
+                    "Hệ thống IoT công nghiệp",
+                    "Giải pháp tự động hóa",
+                    "Robot công nghiệp"
+                ]
+            },
+            "Công nghệ Kỹ thuật Điện, Điện tử": {
+                "doanh_nghiep_chinh": [
+                    "EVN - Thực tập & Tuyển dụng",
+                    "Siemens Vietnam - Đào tạo kỹ sư",
+                    "Schneider Electric - Học bổng",
+                    "Hyundai Engineering - Dự án hợp tác",
+                    "Samsung Electronics - R&D Center"
+                ],
+                "chuong_trinh_hop_tac": [
+                    "Chương trình thực tập hè",
+                    "Đồ án tốt nghiệp tại doanh nghiệp",
+                    "Khóa đào tạo kỹ năng chuyên môn",
+                    "Ngày hội việc làm chuyên ngành"
+                ],
+                "du_an_hop_tac": [
+                    "Hệ thống điện thông minh",
+                    "Năng lượng tái tạo",
+                    "Trạm biến áp số",
+                    "Hệ thống giám sát năng lượng"
+                ]
+            },
+            "Công nghệ Vi mạch Bán dẫn": {
+                "doanh_nghiep_chinh": [
+                    "Intel Vietnam - Đối tác đào tạo",
+                    "Samsung Semiconductor - Phòng lab",
+                    "Renesas Design - Chương trình thực tập",
+                    "FPT Semiconductor - Dự án R&D",
+                    "Viettel High Technology - Hợp tác nghiên cứu"
+                ],
+                "chuong_trinh_hop_tac": [
+                    "Thực tập tại phòng R&D",
+                    "Đào tạo thiết kế chip chuyên sâu",
+                    "Hội thảo công nghệ bán dẫn",
+                    "Tuyển dụng kỹ sư thiết kế"
+                ],
+                "du_an_hop_tac": [
+                    "Thiết kế vi mạch tích hợp",
+                    "Hệ thống nhúng thông minh",
+                    "Chip IoT & AI",
+                    "FPGA & ASIC Design"
+                ]
+            }
+        }
 
-class ActionTraCuuDacThuCongViecNu(Action):
-    def name(self):
-        return "action_tra_cuu_dac_thu_cong_viec_nu"
+        # Thông tin chung về kết nối doanh nghiệp
+        ket_noi_chung = {
+            "loai_hinh_hop_tac": [
+                "Thực tập & Tuyển dụng",
+                "Đào tạo chuyên môn",
+                "Nghiên cứu & Phát triển",
+                "Tài trợ học bổng",
+                "Đồng tổ chức sự kiện"
+            ],
+            "loi_ich_sinh_vien": [
+                "Cơ hội thực tập hưởng lương",
+                "Việc làm ngay sau tốt nghiệp",
+                "Kinh nghiệm thực tế",
+                "Mạng lưới quan hệ chuyên môn"
+            ],
+            "hoat_dong_noi_bat": [
+                "Ngày hội việc làm PTIT",
+                "Tuần lễ doanh nghiệp",
+                "Hội thảo nghề nghiệp",
+                "Chương trình mentorship"
+            ]
+        }
 
-    def run(self, dispatcher, tracker, domain):
-        ten_nganh = tracker.get_slot("ten_nganh")
-        answer = (
-            f"Đặc thù công việc ngành {ten_nganh if ten_nganh else ''} đối với nữ:\n"
-            "- Không yêu cầu làm việc nặng nhọc.\n"
-            "- Chủ yếu làm ở văn phòng, phòng lab, công ty công nghệ.\n"
-            "- Một số công việc có thể đi công trình nhưng sinh viên nữ thường chọn hướng nghiên cứu, thiết kế, giảng dạy hoặc quản lý dự án.\n"
-            "📌 Vì vậy nữ hoàn toàn có thể yên tâm theo ngành này."
-        )
-        dispatcher.utter_message(text=answer)
-        return []
+        if ten_nganh_chuan and ten_nganh_chuan in doanh_nghiep_data:
+            info = doanh_nghiep_data[ten_nganh_chuan]
+            message = f"🤝 **KẾT NỐI DOANH NGHIỆP - {ten_nganh_chuan.upper()}**\n\n"
 
+            message += f"🏢 **DOANH NGHIỆP ĐỐI TÁC:**\n"
+            for i, dn in enumerate(info['doanh_nghiep_chinh'][:4], 1):
+                message += f"{i}. {dn}\n"
 
-class ActionTraCuuViecLamChoNu(Action):
-    def name(self):
-        return "action_tra_cuu_viec_lam_cho_nu"
+            message += f"\n📋 **CHƯƠNG TRÌNH HỢP TÁC:**\n"
+            for chuong_trinh in info['chuong_trinh_hop_tac']:
+                message += f"• {chuong_trinh}\n"
 
-    def run(self, dispatcher, tracker, domain):
-        ten_nganh = tracker.get_slot("ten_nganh")
-        answer = (
-            f"Cơ hội việc làm cho nữ ngành {ten_nganh if ten_nganh else ''} rất rộng mở:\n"
-            "- Kỹ sư thiết kế, lập trình, kiểm thử trong công ty công nghệ.\n"
-            "- Nghiên cứu viên, giảng viên tại trường đại học, viện nghiên cứu.\n"
-            "- Chuyên viên kỹ thuật, quản lý dự án, tư vấn giải pháp.\n"
-            "- Các công ty lớn như Samsung, Intel, VNPT, Viettel đều tuyển nhiều nữ kỹ sư.\n"
-            "📌 Thực tế sinh viên nữ của PTIT ra trường có tỉ lệ việc làm rất cao."
-        )
-        dispatcher.utter_message(text=answer)
-        return []
+            message += f"\n🔬 **DỰ ÁN HỢP TÁC:**\n"
+            for du_an in info['du_an_hop_tac']:
+                message += f"• {du_an}\n"
 
+            message += f"\n💎 **LỢI ÍCH CHO SINH VIÊN:**\n"
+            for loi_ich in ket_noi_chung['loi_ich_sinh_vien']:
+                message += f"• {loi_ich}\n"
 
-class ActionTraCuuCoHoiThangTienNu(Action):
-    def name(self):
-        return "action_tra_cuu_co_hoi_thang_tien_nu"
+            message += f"\n📞 **Liên hệ hợp tác:** Phòng Quan hệ Doanh nghiệp\n"
+            message += "🌐 **Thông tin:** https://dientu.ptit.edu.vn/doanh-nghiep"
 
-    def run(self, dispatcher, tracker, domain):
-        ten_nganh = tracker.get_slot("ten_nganh")
-        answer = (
-            f"Nữ học ngành {ten_nganh if ten_nganh else ''} có nhiều cơ hội thăng tiến:\n"
-            "- Có thể trở thành quản lý kỹ thuật, trưởng nhóm, giám đốc dự án.\n"
-            "- Nhiều nữ kỹ sư tại VNPT, Viettel, Samsung đã giữ vị trí cao.\n"
-            "- Cơ hội làm giảng viên, nghiên cứu sinh, du học hoặc khởi nghiệp.\n"
-            "📌 Ngành kỹ thuật không hề giới hạn nam hay nữ, quan trọng là năng lực và đam mê."
-        )
-        dispatcher.utter_message(text=answer)
-        return []
-class ActionPtitGioiThieuLichSu(Action):
-    def name(self):
-        return "action_ptit_gioi_thieu_lich_su"
-
-    def run(self, dispatcher, tracker, domain):
-        answer = (
-            "📖 **Lịch sử PTIT**:\n"
-            "- Học viện Công nghệ Bưu chính Viễn thông (PTIT) được thành lập năm 1997, "
-            "trực thuộc Bộ Thông tin và Truyền thông.\n"
-            "- Tiền thân của PTIT là Trường Đào tạo Bưu cục, sau phát triển thành Trường Đại học Bưu chính Viễn thông.\n"
-            "- PTIT là trung tâm đào tạo, nghiên cứu và chuyển giao công nghệ hàng đầu trong lĩnh vực CNTT và Điện tử Viễn thông.\n"
-            "🌟 Với hơn 25 năm phát triển, PTIT đã trở thành một trong những trường đại học trọng điểm quốc gia."
-        )
-        dispatcher.utter_message(text=answer)
-        return []
-
-
-class ActionPtitGioiThieuSuMenhTamNhin(Action):
-    def name(self):
-        return "action_ptit_gioi_thieu_su_menh_tam_nhin"
-
-    def run(self, dispatcher, tracker, domain):
-        answer = (
-            "🎯 **Sứ mệnh & Tầm nhìn của PTIT**:\n"
-            "- **Sứ mệnh**: Đào tạo nguồn nhân lực chất lượng cao trong các lĩnh vực CNTT, Điện tử Viễn thông, Kinh tế và Quản lý; "
-            "nghiên cứu khoa học và chuyển giao công nghệ phục vụ sự phát triển của ngành Thông tin và Truyền thông cũng như đất nước.\n"
-            "- **Tầm nhìn**: Trở thành trường đại học trọng điểm quốc gia, có uy tín trong khu vực châu Á về đào tạo, nghiên cứu và đổi mới sáng tạo.\n"
-            "- **Giá trị cốt lõi**: Chất lượng – Sáng tạo – Trách nhiệm – Hội nhập."
-        )
-        dispatcher.utter_message(text=answer)
-        return []
-
-
-class ActionPtitGioiThieuCoCauToChuc(Action):
-    def name(self):
-        return "action_ptit_gioi_thieu_co_cau_to_chuc"
-
-    def run(self, dispatcher, tracker, domain):
-        answer = (
-            "🏛 **Cơ cấu tổ chức của PTIT**:\n"
-            "- **Ban Giám đốc Học viện**: Giám đốc và các Phó Giám đốc.\n"
-            "- **Các khoa đào tạo**:\n"
-            "  • Khoa Công nghệ Thông tin\n"
-            "  • Khoa Kỹ thuật Điện tử 1\n"
-            "  • Khoa Kỹ thuật Điện tử 2\n"
-            "  • Khoa Viễn thông 1\n"
-            "  • Khoa Viễn thông 2\n"
-            "  • Khoa Quốc tế và Đào tạo sau đại học\n"
-            "  • Khoa Cơ bản\n"
-            "  • Khoa Quản trị Kinh doanh\n"
-            "- **Các phòng chức năng**: Đào tạo, Công tác sinh viên, Hành chính – Tổng hợp, Khoa học công nghệ, Hợp tác quốc tế...\n"
-            "- **Các viện, trung tâm nghiên cứu** trực thuộc Học viện.\n\n"
-            "👉 Nhờ cơ cấu tổ chức này, PTIT vừa đảm bảo chất lượng đào tạo, vừa đẩy mạnh nghiên cứu và hợp tác doanh nghiệp."
-        )
-        dispatcher.utter_message(text=answer)
-        return []
-class ActionPtitGioiThieuDiaChi(Action):
-    def name(self):
-        return "action_ptit_gioi_thieu_dia_chi"
-
-    def run(self, dispatcher, tracker, domain):
-        answer = (
-            "📍 **Địa chỉ các cơ sở của PTIT**:\n"
-            "- **Cơ sở Hà Nội (trụ sở chính)**: 122 Hoàng Quốc Việt, Cầu Giấy, Hà Nội.\n"
-            "- **Cơ sở Hà Đông**: Km10, Nguyễn Trãi, Hà Đông, Hà Nội.\n"
-            "- **Cơ sở TP. Hồ Chí Minh**: 11 Nguyễn Đình Chiểu, Quận 1, TP.HCM.\n"
-            "👉 Sinh viên có thể học tập và nghiên cứu tại cả hai cơ sở Hà Nội và TP.HCM."
-        )
-        dispatcher.utter_message(text=answer)
-        return []
-
-
-class ActionPtitGioiThieuQuyMoDaoTao(Action):
-    def name(self):
-        return "action_ptit_gioi_thieu_quy_mo_dao_tao"
-
-    def run(self, dispatcher, tracker, domain):
-        answer = (
-            "🎓 **Quy mô đào tạo của PTIT**:\n"
-            "- PTIT đào tạo hơn **30.000 sinh viên, học viên** mỗi năm.\n"
-            "- Các bậc đào tạo: Đại học, Sau đại học (Thạc sĩ, Tiến sĩ).\n"
-            "- Trường có **9 khoa đào tạo** và nhiều viện nghiên cứu, trung tâm hỗ trợ.\n"
-            "- Đội ngũ gồm khoảng **700 giảng viên, cán bộ**; trong đó nhiều PGS, TS, chuyên gia đầu ngành.\n"
-            "🌟 PTIT là một trong những cơ sở đào tạo lớn và uy tín hàng đầu trong lĩnh vực CNTT và Điện tử Viễn thông tại Việt Nam."
-        )
-        dispatcher.utter_message(text=answer)
-        return []
-
-
-class ActionPtitGioiThieuThanhTuuNoiBat(Action):
-    def name(self):
-        return "action_ptit_gioi_thieu_thanh_tuu_noi_bat"
-
-    def run(self, dispatcher, tracker, domain):
-        answer = (
-            "🏆 **Thành tựu nổi bật của PTIT**:\n"
-            "- Được Nhà nước công nhận là **trường trọng điểm quốc gia** trong lĩnh vực CNTT và Viễn thông.\n"
-            "- Nhiều năm liền đạt danh hiệu **Huân chương Lao động** các hạng.\n"
-            "- Sinh viên PTIT thường xuyên đạt giải cao trong các kỳ thi quốc gia và quốc tế: Olympic Tin học, Olympic Toán học, ACM/ICPC.\n"
-            "- Học viện có nhiều **đề tài nghiên cứu khoa học cấp Nhà nước và cấp Bộ** được ứng dụng thực tiễn.\n"
-            "- Là đối tác chiến lược của nhiều tập đoàn lớn: Viettel, VNPT, FPT, Samsung, Huawei...\n"
-            "🌐 PTIT đang mở rộng hợp tác quốc tế với hơn 50 trường đại học và tổ chức nghiên cứu trên thế giới."
-        )
-        dispatcher.utter_message(text=answer)
-        return []
-
-
-class ActionPtitGioiThieuLienHe(Action):
-    def name(self):
-        return "action_ptit_gioi_thieu_lien_he"
-
-    def run(self, dispatcher, tracker, domain):
-        answer = (
-            "📞 **Thông tin liên hệ PTIT**:\n"
-            "- **Phòng Tuyển sinh & Công tác sinh viên (CS1 - Hà Nội):**\n"
-            "  • Địa chỉ: 122 Hoàng Quốc Việt, Cầu Giấy, Hà Nội.\n"
-            "  • Điện thoại: (024) 3756 2186.\n"
-            "  • Email: tuyensinh@ptit.edu.vn\n\n"
-            "- **Phòng Tuyển sinh (CS2 - TP.HCM):**\n"
-            "  • Địa chỉ: 11 Nguyễn Đình Chiểu, Quận 1, TP.HCM.\n"
-            "  • Điện thoại: (028) 3829 3825.\n\n"
-            "- **Website chính thức**: https://ptit.edu.vn\n"
-            "- **Fanpage Facebook**: https://www.facebook.com/HocvienPTIT\n\n"
-            "👉 Bạn có thể liên hệ trực tiếp để được tư vấn chi tiết về tuyển sinh và đào tạo."
-        )
-        dispatcher.utter_message(text=answer)
-        return []
-
-
-class ActionTraCuuGiangVien(Action):
-    def name(self) -> Text:
-        return "action_tra_cuu_giang_vien"
-
-    def run(self, dispatcher, tracker, domain):
-        ten_nganh = tracker.get_slot("ten_nganh")
-        ten_khoa = tracker.get_slot("ten_khoa")
-
-        if ten_nganh:
-            dispatcher.utter_message(
-                text=f"Ngành {ten_nganh} hiện do các giảng viên của khoa Kỹ thuật Điện tử phụ trách. "
-                     f"Ví dụ: PGS.TS Nguyễn Văn A, TS Trần Thị B, ThS Lê Văn C..."
-            )
-        elif ten_khoa:
-            dispatcher.utter_message(
-                text=f"Khoa {ten_khoa} có đội ngũ giảng viên trình độ cao, gồm nhiều PGS, TS và ThS. "
-                     f"Danh sách cụ thể được công bố trên website chính thức của khoa."
-            )
-        else:
-            dispatcher.utter_message(
-                text="Bạn vui lòng cung cấp tên ngành hoặc tên khoa để tra cứu giảng viên nhé."
-            )
-        return []
-
-
-class ActionTraCuuTrinhDoGiangVien(Action):
-    def name(self) -> Text:
-        return "action_tra_cuu_trinh_do_giang_vien"
-
-    def run(self, dispatcher, tracker, domain):
-        ten_nganh = tracker.get_slot("ten_nganh")
-        ten_khoa = tracker.get_slot("ten_khoa")
-
-        if ten_nganh:
-            dispatcher.utter_message(
-                text=f"Đội ngũ giảng viên ngành {ten_nganh} chủ yếu có học vị tiến sĩ và thạc sĩ, "
-                     f"nhiều giảng viên tốt nghiệp từ các trường đại học uy tín trong và ngoài nước."
-            )
-        elif ten_khoa:
-            dispatcher.utter_message(
-                text=f"Khoa {ten_khoa} có tỷ lệ tiến sĩ chiếm trên 60%, còn lại là thạc sĩ. "
-                     f"Nhiều giảng viên từng tu nghiệp tại nước ngoài."
-            )
-        else:
-            dispatcher.utter_message(
-                text="Bạn vui lòng cho biết tên ngành hoặc khoa để tra cứu trình độ giảng viên."
-            )
-        return []
-
-
-class ActionTraCuuChuyenMonGiangVien(Action):
-    def name(self) -> Text:
-        return "action_tra_cuu_chuyen_mon_giang_vien"
-
-    def run(self, dispatcher, tracker, domain):
-        ten_mon = tracker.get_slot("ten_mon")
-        ten_nganh = tracker.get_slot("ten_nganh")
-        ten_khoa = tracker.get_slot("ten_khoa")
-
-        if ten_mon:
-            dispatcher.utter_message(
-                text=f"Môn {ten_mon} được giảng dạy bởi các giảng viên chuyên sâu trong lĩnh vực này, "
-                     f"đảm bảo cả lý thuyết và thực hành."
-            )
         elif ten_nganh:
-            dispatcher.utter_message(
-                text=f"Giảng viên ngành {ten_nganh} có chuyên môn về các lĩnh vực điện tử, vi mạch, tự động hóa, "
-                     f"điều khiển và các công nghệ tiên tiến."
-            )
-        elif ten_khoa:
-            dispatcher.utter_message(
-                text=f"Khoa {ten_khoa} tập trung nghiên cứu và giảng dạy trong các mảng điện tử, tự động hóa, "
-                     f"hệ thống nhúng, viễn thông, và công nghệ bán dẫn."
-            )
+            message = f"🔍 Kết nối doanh nghiệp ngành '{ten_nganh}'\n\n"
+            message += "🤝 **DOANH NGHIỆP ĐỐI TÁC CÁC NGÀNH:**\n\n"
+
+            for nganh, info in doanh_nghiep_data.items():
+                message += f"🎯 **{nganh}**\n"
+                message += f"• {info['doanh_nghiep_chinh'][0]}\n"
+                message += f"• {info['doanh_nghiep_chinh'][1]}\n\n"
+
+            message += "💡 **Hỏi cụ thể:** \"Kết nối doanh nghiệp ngành [tên ngành]\""
+
         else:
-            dispatcher.utter_message(
-                text="Bạn vui lòng cung cấp tên môn, ngành hoặc khoa để tra cứu chuyên môn giảng viên."
-            )
-        return []
+            message = "🤝 **KẾT NỐI DOANH NGHIỆP - KHOA ĐIỆN TỬ PTIT**\n\n"
 
+            message += "🏢 **ĐỐI TÁC CHIẾN LƯỢC:**\n"
+            message += "• Siemens Vietnam\n• Intel Vietnam\n• Samsung Semiconductor\n• EVN\n• FPT Software\n\n"
 
-class ActionTraCuuLichDayGiangVien(Action):
-    def name(self) -> Text:
-        return "action_tra_cuu_lich_day_giang_vien"
+            message += "📊 **HÌNH THỨC HỢP TÁC:**\n"
+            for hinh_thuc in ket_noi_chung['loai_hinh_hop_tac']:
+                message += f"• {hinh_thuc}\n"
 
-    def run(self, dispatcher, tracker, domain):
-        ten_mon = tracker.get_slot("ten_mon")
-        ten_nganh = tracker.get_slot("ten_nganh")
+            message += f"\n🎯 **LỢI ÍCH CHO SINH VIÊN:**\n"
+            for loi_ich in ket_noi_chung['loi_ich_sinh_vien']:
+                message += f"• {loi_ich}\n"
 
-        if ten_mon:
-            dispatcher.utter_message(
-                text=f"Lịch giảng dạy môn {ten_mon} được cập nhật chi tiết trên hệ thống quản lý đào tạo của PTIT. "
-                     f"Bạn có thể tra cứu trên website chính thức bằng tài khoản sinh viên."
-            )
-        elif ten_nganh:
-            dispatcher.utter_message(
-                text=f"Giảng viên ngành {ten_nganh} giảng dạy theo phân công từng học kỳ. "
-                     f"Lịch học chi tiết được thông báo trên cổng thông tin sinh viên."
-            )
-        else:
-            dispatcher.utter_message(
-                text="Bạn cần cung cấp tên môn học hoặc ngành để xem lịch dạy cụ thể."
-            )
-        return []
-class ActionCauLacBoDanhSach(Action):
-    def name(self) -> Text:
-        return "action_cau_lac_bo_danh_sach"
+            message += f"\n📅 **HOẠT ĐỘNG NỔI BẬT:**\n"
+            for hoat_dong in ket_noi_chung['hoat_dong_noi_bat']:
+                message += f"• {hoat_dong}\n"
 
-    def run(self, dispatcher, tracker, domain):
-        ten_khoa = tracker.get_slot("ten_khoa")
-        ten_nganh = tracker.get_slot("ten_nganh")
+            message += f"\n💼 **KẾT QUẢ NỔI BẬT:**\n"
+            message += "• 500+ sinh viên thực tập/năm\n"
+            message += "• 300+ việc làm từ doanh nghiệp\n"
+            message += "• 50+ học bổng doanh nghiệp\n"
+            message += "• 20+ dự án hợp tác R&D\n\n"
 
-        if ten_khoa:
-            dispatcher.utter_message(
-                text=f"Khoa {ten_khoa} có nhiều câu lạc bộ học thuật và kỹ năng dành cho sinh viên, "
-                     f"tiêu biểu như CLB Học thuật Điện tử, CLB Sáng tạo và Khởi nghiệp, CLB Nghiên cứu khoa học. "
-                     f"Các CLB thường xuyên tổ chức workshop, seminar và cuộc thi chuyên môn."
-            )
-        elif ten_nganh:
-            dispatcher.utter_message(
-                text=f"Ngành {ten_nganh} có các CLB sinh viên gắn liền với chuyên môn, ví dụ: CLB Thiết kế chip, "
-                     f"CLB Tự động hóa sáng tạo... giúp sinh viên rèn luyện kỹ năng và kết nối học tập."
-            )
-        else:
-            dispatcher.utter_message(
-                text="Các khoa và ngành trong PTIT đều có nhiều câu lạc bộ học thuật, kỹ năng và văn nghệ. "
-                     "Bạn vui lòng cho biết khoa/ngành cụ thể để mình liệt kê chi tiết nhé."
-            )
-        return []
+            message += "📞 **Liên hệ:** Phòng QHDN - (024) 3354 5693\n"
+            message += "🌐 **Portal:** https://career.ptit.edu.vn"
 
-
-class ActionCauLacBoDieuKien(Action):
-    def name(self) -> Text:
-        return "action_cau_lac_bo_dieu_kien"
-
-    def run(self, dispatcher, tracker, domain):
-        ten_khoa = tracker.get_slot("ten_khoa")
-        ten_nganh = tracker.get_slot("ten_nganh")
-
-        if ten_khoa or ten_nganh:
-            dispatcher.utter_message(
-                text=f"Sinh viên của {ten_khoa or ten_nganh} đều có thể tham gia các câu lạc bộ. "
-                     f"Điều kiện tham gia rất đơn giản: chỉ cần là sinh viên PTIT, đăng ký với ban chủ nhiệm CLB "
-                     f"và có tinh thần nhiệt tình, trách nhiệm. Không yêu cầu kỹ năng đặc biệt, "
-                     f"CLB sẽ đào tạo và hỗ trợ thêm cho thành viên mới."
-            )
-        else:
-            dispatcher.utter_message(
-                text="Mọi sinh viên PTIT đều có thể tham gia các CLB. "
-                     "Chỉ cần đăng ký, có tinh thần học hỏi và tích cực tham gia hoạt động."
-            )
-        return []
-
-
-class ActionCauLacBoSuKien(Action):
-    def name(self) -> Text:
-        return "action_cau_lac_bo_su_kien"
-
-    def run(self, dispatcher, tracker, domain):
-        ten_khoa = tracker.get_slot("ten_khoa")
-        ten_nganh = tracker.get_slot("ten_nganh")
-
-        if ten_khoa:
-            dispatcher.utter_message(
-                text=f"Các CLB của khoa {ten_khoa} thường xuyên tổ chức workshop, seminar học thuật, "
-                     f"các cuộc thi sáng tạo và hoạt động ngoại khóa. "
-                     f"Lịch sự kiện mới nhất được cập nhật trên fanpage của khoa và CLB."
-            )
-        elif ten_nganh:
-            dispatcher.utter_message(
-                text=f"CLB thuộc ngành {ten_nganh} thường tổ chức các buổi training kỹ thuật, "
-                     f"các cuộc thi thiết kế, và meetup chia sẻ kinh nghiệm. "
-                     f"Bạn có thể theo dõi fanpage CLB để biết lịch cụ thể."
-            )
-        else:
-            dispatcher.utter_message(
-                text="Các CLB tại PTIT có nhiều sự kiện: workshop, seminar, giao lưu học thuật, "
-                     "ngoại khóa và cuộc thi kỹ thuật. Bạn hãy theo dõi fanpage PTIT và các CLB để cập nhật lịch sự kiện."
-            )
-        return []
-class ActionCauLacBoCuocThi(Action):
-    def name(self) -> Text:
-        return "action_cau_lac_bo_cuoc_thi"
-
-    def run(self, dispatcher, tracker, domain):
-        ten_khoa = tracker.get_slot("ten_khoa")
-        ten_nganh = tracker.get_slot("ten_nganh")
-
-        if ten_khoa:
-            dispatcher.utter_message(
-                text=f"Các CLB của khoa {ten_khoa} thường tổ chức nhiều cuộc thi học thuật và sáng tạo "
-                     f"như contest lập trình, thiết kế mạch, thi robot và IoT. "
-                     f"Sinh viên có thể tham gia để rèn luyện kỹ năng và nhận học bổng, giải thưởng."
-            )
-        elif ten_nganh:
-            dispatcher.utter_message(
-                text=f"CLB ngành {ten_nganh} thường xuyên tổ chức các cuộc thi chuyên môn, ví dụ: "
-                     f"cuộc thi Thiết kế chip, Robotics Challenge, IoT Hackathon... "
-                     f"Đây là sân chơi lớn để sinh viên thử sức và kết nối với doanh nghiệp."
-            )
-        else:
-            dispatcher.utter_message(
-                text="Các CLB tại PTIT tổ chức nhiều cuộc thi: Robot Contest, IoT Hackathon, Thiết kế chip, "
-                     "cuộc thi sáng tạo khởi nghiệp... Bạn nên theo dõi fanpage CLB để cập nhật lịch thi mới nhất."
-            )
-        return []
-
-
-class ActionCauLacBoLienKet(Action):
-    def name(self) -> Text:
-        return "action_cau_lac_bo_lien_ket"
-
-    def run(self, dispatcher, tracker, domain):
-        ten_nganh = tracker.get_slot("ten_nganh")
-
-        if ten_nganh:
-            dispatcher.utter_message(
-                text=f"Các CLB ngành {ten_nganh} có nhiều hoạt động liên kết với doanh nghiệp: "
-                     f"được tài trợ bởi các công ty công nghệ, tổ chức workshop cùng chuyên gia, "
-                     f"và giới thiệu thực tập cho sinh viên. Đây là cơ hội tốt để trải nghiệm môi trường doanh nghiệp."
-            )
-        else:
-            dispatcher.utter_message(
-                text="Các CLB tại PTIT đều có kết nối doanh nghiệp, nhận được sponsor từ các công ty lớn "
-                     "như Viettel, VNPT, FPT, Synopsys… Họ thường tổ chức workshop, training, "
-                     "và giới thiệu sinh viên tham gia dự án thực tế."
-            )
-        return []
-
-
-class ActionKTXDanhSach(Action):
-    def name(self) -> Text:
-        return "action_ktx_danh_sach"
-
-    def run(self, dispatcher, tracker, domain):
-        ten_khoa = tracker.get_slot("ten_khoa")
-
-        if ten_khoa:
-            dispatcher.utter_message(
-                text=f"Sinh viên khoa {ten_khoa} được ưu tiên đăng ký ở KTX của Học viện. "
-                     f"Hiện PTIT có KTX tại cơ sở Hà Đông (Hà Nội) và cơ sở quận 9 (TP.HCM), "
-                     f"cung cấp đầy đủ phòng ở, internet, khu sinh hoạt chung cho sinh viên."
-            )
-        else:
-            dispatcher.utter_message(
-                text="PTIT hiện có hệ thống ký túc xá tại:\n"
-                     "- **Cơ sở Hà Đông (Hà Nội):** nhiều tòa nhà KTX phục vụ sinh viên.\n"
-                     "- **Cơ sở quận 9 (TP.HCM):** khu ký túc xá hiện đại, đầy đủ tiện nghi.\n"
-                     "Các KTX đều có khu học tập, thể thao và dịch vụ thiết yếu cho sinh viên."
-            )
-        return []
-class ActionKTXDieuKien(Action):
-    def name(self) -> Text:
-        return "action_ktx_dieu_kien"
-
-    def run(self, dispatcher, tracker, domain):
-        dispatcher.utter_message(
-            text="Ký túc xá PTIT ưu tiên cho sinh viên chính quy của Học viện. "
-                 "Tất cả sinh viên năm 1 đến năm cuối đều có thể đăng ký ở KTX nếu còn chỗ trống. "
-                 "Khi đăng ký, sinh viên cần nộp đơn, thẻ sinh viên và giấy tờ tùy thân. "
-                 "Không yêu cầu về điểm số, chỉ cần tuân thủ nội quy của KTX."
-        )
-        return []
-
-
-class ActionKTXChiPhi(Action):
-    def name(self) -> Text:
-        return "action_ktx_chi_phi"
-
-    def run(self, dispatcher, tracker, domain):
-        dispatcher.utter_message(
-            text="Chi phí ở ký túc xá PTIT khá phù hợp với sinh viên. "
-                 "Mức giá dao động tùy loại phòng (4-8 người) khoảng 200.000 - 400.000đ/tháng/sinh viên. "
-                 "Điện, nước, internet tính riêng theo mức sử dụng. "
-                 "Thông tin chi tiết được thông báo tại ban quản lý KTX mỗi cơ sở."
-        )
-        return []
-
-
-class ActionKTXGioMoCua(Action):
-    def name(self) -> Text:
-        return "action_ktx_gio_mo_cua"
-
-    def run(self, dispatcher, tracker, domain):
-        dispatcher.utter_message(
-            text="Ký túc xá PTIT mở cửa hàng ngày từ 5h00 sáng đến 23h00 đêm. "
-                 "Sinh viên cần tuân thủ giờ ra vào để đảm bảo an ninh. "
-                 "KTX có bảo vệ trực 24/7, nhưng sau 23h muốn vào phải đăng ký với quản lý. "
-                 "Lịch sinh hoạt chung (giờ giấc, vệ sinh, nội quy) được dán tại bảng tin từng tòa nhà."
-        )
-        return []
-class ActionKTXTienNghi(Action):
-    def name(self) -> Text:
-        return "action_ktx_tien_nghi"
-
-    def run(self, dispatcher, tracker, domain):
-        dispatcher.utter_message(
-            text="Ký túc xá PTIT được trang bị đầy đủ tiện nghi cơ bản cho sinh viên: "
-                 "giường tầng, bàn ghế, tủ để đồ, wifi tốc độ cao. "
-                 "Ngoài ra, KTX có phòng tự học, khu thể thao, căn tin, máy giặt và hệ thống camera an ninh. "
-                 "Một số tòa còn có phòng sinh hoạt chung và khu bếp dùng chung."
-        )
-        return []
-
-
-class ActionKTXDangKy(Action):
-    def name(self) -> Text:
-        return "action_ktx_dang_ky"
-
-    def run(self, dispatcher, tracker, domain):
-        dispatcher.utter_message(
-            text="Để đăng ký ở KTX PTIT, sinh viên cần theo thông báo hàng năm của Học viện. "
-                 "Thường đăng ký trực tuyến qua cổng thông tin sinh viên hoặc nộp đơn tại Ban quản lý KTX. "
-                 "Hồ sơ gồm: đơn đăng ký, thẻ sinh viên/giấy báo nhập học, CMND/CCCD. "
-                 "Thời gian đăng ký thường mở vào đầu năm học và có số lượng chỗ giới hạn."
-        )
-        return []
-
-
-class ActionKTXLienHe(Action):
-    def name(self) -> Text:
-        return "action_ktx_lien_he"
-
-    def run(self, dispatcher, tracker, domain):
-        dispatcher.utter_message(
-            text="Ban quản lý ký túc xá PTIT là đơn vị phụ trách trực tiếp. "
-                 "Sinh viên có thể liên hệ qua số điện thoại và email được công bố trên website chính thức của Học viện. "
-                 "Ngoài ra, mỗi cơ sở KTX đều có văn phòng trực để giải đáp thắc mắc. "
-                 "Thông tin liên hệ chi tiết được cập nhật tại bảng thông báo KTX và fanpage PTIT."
-        )
-        return []
-class ActionKTXQuyDinh(Action):
-    def name(self) -> Text:
-        return "action_ktx_quy_dinh"
-
-    def run(self, dispatcher, tracker, domain):
-        dispatcher.utter_message(
-            text="Sinh viên ở ký túc xá PTIT cần tuân thủ các nội quy sau: "
-                 "- Giữ gìn an ninh, trật tự, vệ sinh chung. "
-                 "- Không hút thuốc, uống rượu bia, hoặc mang chất cấm vào KTX. "
-                 "- Ra vào đúng giờ quy định, xuất trình thẻ khi cần thiết. "
-                 "- Không tự ý cho người ngoài vào phòng. "
-                 "- Tôn trọng nội quy về phòng cháy chữa cháy, sử dụng điện nước an toàn."
-        )
-        return []
-
-
-class ActionThuVienDanhSach(Action):
-    def name(self) -> Text:
-        return "action_thu_vien_danh_sach"
-
-    def run(self, dispatcher, tracker, domain):
-        dispatcher.utter_message(
-            text="Học viện PTIT có hệ thống thư viện phục vụ học tập và nghiên cứu. "
-                 "Hiện nay có: Thư viện trung tâm tại Hà Đông (Hà Nội), "
-                 "Thư viện cơ sở Hồ Chí Minh, cùng các phòng đọc, phòng tra cứu điện tử. "
-                 "Sinh viên có thể mượn sách, tra cứu tài liệu giấy và tài nguyên số tại đây."
-        )
-        return []
-
-
-class ActionThuVienGioMoCua(Action):
-    def name(self) -> Text:
-        return "action_thu_vien_gio_mo_cua"
-
-    def run(self, dispatcher, tracker, domain):
-        dispatcher.utter_message(
-            text="Thư viện PTIT mở cửa từ **8h00 - 21h00** các ngày trong tuần (từ thứ 2 đến thứ 7). "
-                 "Chủ nhật và ngày lễ thường đóng cửa. "
-                 "Trong mùa thi, thư viện có thể kéo dài giờ phục vụ để hỗ trợ sinh viên."
-        )
-        return []
-
-
-class ActionThuVienTaiNguyen(Action):
-    def name(self) -> Text:
-        return "action_thu_vien_tai_nguyen"
-
-    def run(self, dispatcher, tracker, domain):
-        dispatcher.utter_message(
-            text="Thư viện PTIT cung cấp nhiều loại tài nguyên: "
-                 "- Giáo trình, sách tham khảo cho tất cả các ngành. "
-                 "- Tạp chí, báo khoa học chuyên ngành. "
-                 "- Luận văn, khóa luận tốt nghiệp. "
-                 "- Cơ sở dữ liệu điện tử, e-book và tài liệu số. "
-                 "Sinh viên có thể tra cứu trực tiếp hoặc truy cập qua hệ thống thư viện số của Học viện."
-        )
-        return []
-class ActionThuVienPhongDoc(Action):
-    def name(self) -> Text:
-        return "action_thu_vien_phong_doc"
-
-    def run(self, dispatcher, tracker, domain):
-        dispatcher.utter_message(
-            text="Thư viện PTIT có không gian phòng đọc rộng rãi, yên tĩnh, "
-                 "được trang bị wifi miễn phí, ánh sáng và điều hòa đầy đủ. "
-                 "Ngoài ra còn có phòng học nhóm, khu tự học và phòng tra cứu tài liệu điện tử, "
-                 "tạo điều kiện thuận lợi cho sinh viên nghiên cứu và trao đổi học tập."
-        )
-        return []
-
-
-class ActionThuVienThietBi(Action):
-    def name(self) -> Text:
-        return "action_thu_vien_thiet_bi"
-
-    def run(self, dispatcher, tracker, domain):
-        dispatcher.utter_message(
-            text="Thư viện PTIT trang bị đầy đủ các thiết bị hỗ trợ sinh viên: "
-                 "- Máy tính tra cứu tài liệu. "
-                 "- Máy in, máy photocopy, máy scan. "
-                 "- Hệ thống mượn/trả sách tự động. "
-                 "Sinh viên có thể liên hệ trực tiếp với thủ thư tại quầy dịch vụ để được hỗ trợ sử dụng thiết bị."
-        )
-        return []
-
-
-class ActionThuVienDieuKienSuDung(Action):
-    def name(self) -> Text:
-        return "action_thu_vien_dieu_kien_su_dung"
-
-    def run(self, dispatcher, tracker, domain):
-        dispatcher.utter_message(
-            text="Đối tượng được phép sử dụng thư viện PTIT gồm: sinh viên, học viên, cán bộ, giảng viên của Học viện. "
-                 "Sinh viên cần đăng ký thẻ thư viện để mượn tài liệu. "
-                 "Khi sử dụng thư viện, người đọc phải tuân thủ nội quy: giữ trật tự, không mang đồ ăn thức uống, "
-                 "bảo quản sách và trang thiết bị. "
-                 "Khách bên ngoài có thể được phép sử dụng tài liệu tham khảo khi có sự đồng ý của quản lý thư viện."
-        )
-        return []
-class ActionThuVienDangKy(Action):
-    def name(self) -> Text:
-        return "action_thu_vien_dang_ky"
-
-    def run(self, dispatcher, tracker, domain):
-        dispatcher.utter_message(
-            text="Sinh viên muốn sử dụng thư viện PTIT cần đăng ký thẻ thư viện. "
-                 "Thủ tục gồm: điền phiếu đăng ký tại quầy thủ thư, mang theo thẻ sinh viên hoặc giấy tờ tùy thân. "
-                 "Sau khi có thẻ, sinh viên có thể mượn sách, tài liệu và sử dụng đầy đủ tiện ích trong thư viện."
-        )
-        return []
-
-
-class ActionThuVienLienHe(Action):
-    def name(self) -> Text:
-        return "action_thu_vien_lien_he"
-
-    def run(self, dispatcher, tracker, domain):
-        dispatcher.utter_message(
-            text="Liên hệ Thư viện Học viện Công nghệ Bưu chính Viễn thông:\n"
-                 "- 📍 Cơ sở Hà Nội: Km10, Nguyễn Trãi, Hà Đông, Hà Nội\n"
-                 "- ☎️ Điện thoại: (024) 33528122\n"
-                 "- 🌐 Website: http://ptit.edu.vn\n"
-                 "- 📧 Email: library@ptit.edu.vn\n"
-                 "Bạn có thể đến trực tiếp quầy thủ thư để được hỗ trợ."
-        )
-        return []
-
-
-class ActionThuVienSuKienHoatDong(Action):
-    def name(self) -> Text:
-        return "action_thu_vien_su_kien_hoat_dong"
-
-    def run(self, dispatcher, tracker, domain):
-        dispatcher.utter_message(
-            text="Thư viện PTIT thường xuyên tổ chức các hoạt động: workshop kỹ năng tìm kiếm tài liệu, "
-                 "hướng dẫn sử dụng cơ sở dữ liệu điện tử, talk show chia sẻ kinh nghiệm học tập và nghiên cứu. "
-                 "Ngoài ra còn có các chương trình giao lưu, triển lãm sách, giới thiệu tài liệu mới. "
-                 "Thông tin chi tiết sẽ được thông báo trên website và fanpage thư viện."
-        )
-        return []
-
-
-class ActionPhongGiaoVuDanhSach(Action):
-    def name(self) -> Text:
-        return "action_phong_giao_vu_danh_sach"
-
-    def run(self, dispatcher, tracker, domain):
-        dispatcher.utter_message(
-            text="Tại PTIT, mỗi khoa đều có phòng giáo vụ phụ trách công tác đào tạo và sinh viên. "
-                 "Ví dụ: Khoa Công nghệ Thông tin, Khoa Điện tử, Khoa Đa phương tiện… đều có giáo vụ riêng. "
-                 "Phòng giáo vụ chịu trách nhiệm quản lý hồ sơ, đăng ký học phần, điểm thi và hỗ trợ thủ tục cho sinh viên."
-        )
-        return []
-
-
-class ActionPhongGiaoVuGioLamViec(Action):
-    def name(self) -> Text:
-        return "action_phong_giao_vu_gio_lam_viec"
-
-    def run(self, dispatcher, tracker, domain):
-        dispatcher.utter_message(
-            text="Giờ làm việc của các phòng giáo vụ PTIT:\n"
-                 "- Từ thứ Hai đến thứ Sáu: 8h00 – 11h30 và 13h30 – 17h00.\n"
-                 "- Nghỉ thứ Bảy, Chủ Nhật và các ngày lễ.\n"
-                 "Sinh viên nên đến trong giờ hành chính để được hỗ trợ kịp thời."
-        )
-        return []
-class ActionPhongGiaoVuThuTucDangKyHoc(Action):
-    def name(self) -> Text:
-        return "action_phong_giao_vu_thu_tuc_dang_ky_hoc"
-
-    def run(self, dispatcher, tracker, domain):
-        dispatcher.utter_message(
-            text="Thủ tục đăng ký học phần tại PTIT được thực hiện trực tuyến trên hệ thống quản lý đào tạo "
-                 "(http://qldt.ptit.edu.vn). Sinh viên đăng nhập bằng tài khoản cá nhân, chọn môn học và thời khóa biểu phù hợp. "
-                 "Phòng giáo vụ sẽ hỗ trợ giải đáp khi gặp sự cố hoặc thắc mắc."
-        )
-        return []
-
-
-class ActionPhongGiaoVuHocBong(Action):
-    def name(self) -> Text:
-        return "action_phong_giao_vu_hoc_bong"
-
-    def run(self, dispatcher, tracker, domain):
-        dispatcher.utter_message(
-            text="Phòng giáo vụ PTIT quản lý các loại học bổng như: học bổng khuyến khích học tập, học bổng tài trợ từ doanh nghiệp "
-                 "và các chương trình hỗ trợ tài chính khác. Sinh viên có thể nộp hồ sơ xét học bổng theo thông báo của từng học kỳ. "
-                 "Mọi thông tin chi tiết sẽ được công bố trên website và bảng tin của khoa/phòng."
-        )
-        return []
-
-
-class ActionPhongGiaoVuDiemSo(Action):
-    def name(self) -> Text:
-        return "action_phong_giao_vu_diem_so"
-
-    def run(self, dispatcher, tracker, domain):
-        dispatcher.utter_message(
-            text="Điểm số các môn học được cập nhật trên hệ thống quản lý đào tạo (qldt.ptit.edu.vn). "
-                 "Sinh viên có thể tự tra cứu bảng điểm cá nhân. Nếu có sai sót hoặc cần in bảng điểm, "
-                 "hãy liên hệ trực tiếp phòng giáo vụ của khoa để được hỗ trợ."
-        )
-        return []
-
-
-class ActionPhongGiaoVuNopHoSo(Action):
-    def name(self) -> Text:
-        return "action_phong_giao_vu_nop_ho_so"
-
-    def run(self, dispatcher, tracker, domain):
-        dispatcher.utter_message(
-            text="Hồ sơ sinh viên nộp cho phòng giáo vụ thường gồm: đơn nhập học, sơ yếu lý lịch, bản sao công chứng giấy khai sinh, "
-                 "các giấy tờ liên quan đến điểm thi, bằng tốt nghiệp hoặc giấy chứng nhận tốt nghiệp tạm thời. "
-                 "Phòng giáo vụ sẽ có hướng dẫn chi tiết vào mỗi kỳ tuyển sinh hoặc khi sinh viên có yêu cầu cập nhật hồ sơ."
-        )
-        return []
-
-
-class ActionPhongGiaoVuThongBaoKeHoach(Action):
-    def name(self) -> Text:
-        return "action_phong_giao_vu_thong_bao_ke_hoach"
-
-    def run(self, dispatcher, tracker, domain):
-        dispatcher.utter_message(
-            text="Phòng giáo vụ thường xuyên đăng tải thông báo về lịch học, lịch thi, kế hoạch học tập từng học kỳ "
-                 "trên website của Học viện và bảng tin khoa. Sinh viên nên theo dõi kênh thông tin chính thức hoặc fanpage để cập nhật kịp thời."
-        )
-        return []
-
-
-class ActionPhongGiaoVuLienHe(Action):
-    def name(self) -> Text:
-        return "action_phong_giao_vu_lien_he"
-
-    def run(self, dispatcher, tracker, domain):
-        dispatcher.utter_message(
-            text="Thông tin liên hệ phòng giáo vụ PTIT:\n"
-                 "- 📍 Cơ sở Hà Nội: Km10, Nguyễn Trãi, Hà Đông, Hà Nội\n"
-                 "- 📍 Cơ sở TP.HCM: 97 Man Thiện, TP. Thủ Đức, TP.HCM\n"
-                 "- ☎️ Điện thoại: (024) 33528122\n"
-                 "- 🌐 Website: http://ptit.edu.vn\n"
-                 "Sinh viên có thể liên hệ trực tiếp giáo vụ của từng khoa để được hỗ trợ nhanh chóng."
-        )
-        return []
-
-# Danh sách cơ sở vật chất
-class ActionCosoDanhSach(Action):
-    def name(self) -> str:
-        return "action_coso_danh_sach"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: dict):
-        dispatcher.utter_message(
-            text="Trường hiện có hệ thống giảng đường, phòng học hiện đại, phòng thí nghiệm – phòng lab chuyên ngành, thư viện điện tử, ký túc xá, khu thể thao và khu dịch vụ hỗ trợ sinh viên. Các cơ sở vật chất được đầu tư để phục vụ tối đa cho học tập, nghiên cứu và sinh hoạt."
-        )
-        return []
-
-
-# Phòng học
-class ActionCosoPhongHoc(Action):
-    def name(self) -> str:
-        return "action_coso_phong_hoc"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: dict):
-        dispatcher.utter_message(
-            text="Phòng học được trang bị máy chiếu, điều hòa, âm thanh, ánh sáng đầy đủ, bàn ghế tiêu chuẩn. Một số giảng đường lớn có hệ thống ghi hình, hỗ trợ học trực tuyến. Phòng học của khoa Điện tử được thiết kế phù hợp cho thí nghiệm và thực hành."
-        )
-        return []
-
-
-# Sân bãi thể thao
-class ActionCosoSanBaiTheThao(Action):
-    def name(self) -> str:
-        return "action_coso_san_bai_the_thao"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: dict):
-        dispatcher.utter_message(
-            text="Trường có sân bóng đá, bóng rổ, bóng chuyền, sân tennis, phòng gym, khu thể chất đa năng. Sinh viên có thể đăng ký mượn sân bãi theo lịch sắp xếp của phòng công tác sinh viên. Một số sân bãi mở cửa tự do ngoài giờ học."
-        )
-        return []
-
-
-# Tiện nghi chung
-class ActionCosoTienNghiChung(Action):
-    def name(self) -> str:
-        return "action_coso_tien_nghi_chung"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: dict):
-        dispatcher.utter_message(
-            text="Trường có wifi miễn phí, hệ thống căng tin, phòng máy tính, máy in – photocopy, phòng họp, hội trường và khu sinh hoạt chung. Sinh viên có thể sử dụng hầu hết tiện nghi này trong giờ hành chính và ngoài giờ theo quy định."
-        )
-        return []
-
-
-# Điều kiện sử dụng
-class ActionCosoDieuKienSuDung(Action):
-    def name(self) -> str:
-        return "action_coso_dieu_kien_su_dung"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: dict):
-        dispatcher.utter_message(
-            text="Sinh viên có thể sử dụng phòng học và thư viện theo thời khóa biểu. Phòng lab cần đăng ký trước với trợ giảng hoặc giảng viên phụ trách. Sân bãi thể thao được quản lý theo lịch đăng ký, sinh viên cần tuân thủ nội quy sử dụng cơ sở vật chất."
-        )
-        return []
-
-
-# Liên hệ
-class ActionCosoLienHe(Action):
-    def name(self) -> str:
-        return "action_coso_lien_he"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: dict):
-        dispatcher.utter_message(
-            text="Phòng Quản trị cơ sở vật chất là đơn vị phụ trách. Sinh viên có thể liên hệ qua số điện thoại, email hoặc trực tiếp tại văn phòng để được hỗ trợ. Thông tin liên hệ chi tiết được đăng tải trên website chính thức của trường."
-        )
-        return []
-# Danh sách chương trình song ngành
-class ActionSongNganhDanhSach(Action):
-    def name(self) -> str:
-        return "action_song_nganh_danh_sach"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: dict):
-        dispatcher.utter_message(
-            text="Hiện tại trường triển khai các chương trình song ngành cho sinh viên có nhu cầu mở rộng kiến thức ở nhiều lĩnh vực. Một số lựa chọn phổ biến bao gồm: Công nghệ thông tin, Kỹ thuật điện tử - viễn thông, Quản trị kinh doanh, Tài chính – ngân hàng... Sinh viên khoa Điện tử có thể chọn học song ngành để bổ sung kiến thức về CNTT hoặc kinh tế."
-        )
-        return []
-
-
-# Điều kiện đăng ký song ngành
-class ActionSongNganhDieuKienDangKy(Action):
-    def name(self) -> str:
-        return "action_song_nganh_dieu_kien_dang_ky"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: dict):
-        dispatcher.utter_message(
-            text="Điều kiện đăng ký song ngành tại PTIT thường bao gồm: \
-- Sinh viên đã học ít nhất 1 năm và không bị cảnh báo học tập. \
-- Điểm trung bình tích lũy đạt từ mức khá trở lên (≥2.5/4). \
-- Đảm bảo hoàn thành đủ số tín chỉ của ngành chính. \
-Sinh viên đủ điều kiện có thể nộp đơn đăng ký tại phòng Đào tạo/Phòng Giáo vụ."
-        )
-        return []
-
-
-# Thủ tục đăng ký song ngành
-class ActionSongNganhThuTuc(Action):
-    def name(self) -> str:
-        return "action_song_nganh_thu_tuc"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: dict):
-        dispatcher.utter_message(
-            text="Thủ tục đăng ký song ngành tại PTIT như sau:\n\
-1. Sinh viên chuẩn bị đơn xin học song ngành (theo mẫu của trường).\n\
-2. Xin xác nhận của khoa quản lý ngành chính.\n\
-3. Nộp hồ sơ tại phòng Đào tạo/Phòng Giáo vụ trong thời gian thông báo.\n\
-4. Chờ xét duyệt và thông báo kết quả.\n\
-Mỗi năm nhà trường sẽ có thông báo cụ thể về thời gian và hướng dẫn chi tiết trên website và cổng thông tin sinh viên."
-        )
-        return []
-# Thời gian và lộ trình học song ngành
-class ActionSongNganhThoiGianHoc(Action):
-    def name(self) -> str:
-        return "action_song_nganh_thoi_gian_hoc"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: dict):
-        dispatcher.utter_message(
-            text="Thời gian học song ngành tại PTIT thường kéo dài thêm 1–1.5 năm so với chương trình chính, tùy vào khối lượng tín chỉ sinh viên đăng ký mỗi kỳ. Lộ trình học sẽ được sắp xếp song song với ngành chính, đảm bảo không trùng lịch học. Sinh viên cần hoàn thành đầy đủ số tín chỉ quy định của ngành thứ hai mới được công nhận tốt nghiệp song ngành."
-        )
-        return []
-
-
-# Cơ hội nghề nghiệp sau khi học song ngành
-class ActionSongNganhCoHoiNgheNghiep(Action):
-    def name(self) -> str:
-        return "action_song_nganh_co_hoi_nghe_nghiep"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: dict):
-        dispatcher.utter_message(
-            text="Sinh viên học song ngành sẽ có lợi thế cạnh tranh khi ra trường. Ví dụ: vừa học Điện tử vừa học CNTT có thể làm việc trong lĩnh vực thiết kế vi mạch, hệ thống nhúng, AI – IoT; hoặc kết hợp với Quản trị kinh doanh/Tài chính thì có thêm cơ hội trong lĩnh vực quản lý dự án, khởi nghiệp công nghệ. Doanh nghiệp đánh giá cao sinh viên song ngành vì khả năng đa kỹ năng và tư duy liên ngành."
-        )
-        return []
-
-
-# Học phí song ngành
-class ActionSongNganhHocPhi(Action):
-    def name(self) -> str:
-        return "action_song_nganh_hoc_phi"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: dict):
-        dispatcher.utter_message(
-            text="Học phí chương trình song ngành tại PTIT được tính dựa trên số tín chỉ đăng ký, tương tự ngành chính. Mức học phí thường khoảng **500.000 – 600.000 VNĐ/tín chỉ** (theo khung hiện hành). Sinh viên đóng học phí theo từng kỳ học, không có phí đăng ký riêng. Nếu đăng ký ít tín chỉ thì học phí thấp hơn, và ngược lại."
-        )
-        return []
-from rasa_sdk import Action, Tracker
-from rasa_sdk.executor import CollectingDispatcher
-
-
-# Liên hệ song ngành
-class ActionSongNganhLienHe(Action):
-    def name(self) -> str:
-        return "action_song_nganh_lien_he"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: dict):
-        dispatcher.utter_message(
-            text="Chương trình song ngành tại PTIT do **Phòng Đào tạo** phụ trách. "
-                 "Sinh viên có thể liên hệ qua email: daotao@ptit.edu.vn hoặc trực tiếp tại văn phòng Phòng Đào tạo để được tư vấn. "
-                 "Thông tin cũng được cập nhật thường xuyên trên website: https://ptit.edu.vn."
-        )
-        return []
-
-
-# Điều kiện bảo lưu
-class ActionBaoLuuDieuKien(Action):
-    def name(self) -> str:
-        return "action_baoluu_dieu_kien"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: dict):
-        dispatcher.utter_message(
-            text="Sinh viên PTIT được phép xin bảo lưu nếu có lý do chính đáng như: "
-                 "sức khỏe, hoàn cảnh gia đình, nghĩa vụ quân sự hoặc các trường hợp đặc biệt khác. "
-                 "Thông thường, sinh viên cần đã hoàn thành ít nhất 1 học kỳ và không đang trong diện cảnh báo học vụ."
-        )
-        return []
-
-
-# Thủ tục bảo lưu
-class ActionBaoLuuThuTuc(Action):
-    def name(self) -> str:
-        return "action_baoluu_thu_tuc"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: dict):
-        dispatcher.utter_message(
-            text="Thủ tục bảo lưu tại PTIT gồm: \n"
-                 "1. Viết đơn xin bảo lưu (theo mẫu của trường). \n"
-                 "2. Có xác nhận của cố vấn học tập/khoa quản lý. \n"
-                 "3. Nộp đơn và giấy tờ liên quan cho **Phòng Đào tạo**. \n"
-                 "Thời gian nộp đơn thường là trước hoặc ngay đầu học kỳ."
-        )
-        return []
-
-
-# Thời gian bảo lưu
-class ActionBaoLuuThoiGian(Action):
-    def name(self) -> str:
-        return "action_baoluu_thoi_gian"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: dict):
-        dispatcher.utter_message(
-            text="Sinh viên được bảo lưu tối đa **2 năm liên tục** (4 học kỳ). "
-                 "Thời gian bảo lưu không được tính vào thời gian đào tạo tối đa của chương trình học. "
-                 "Sau khi hết thời hạn bảo lưu, sinh viên cần làm thủ tục quay lại học tập theo kế hoạch của trường."
-        )
-        return []
-# Hồ sơ bảo lưu
-class ActionBaoLuuHoSo(Action):
-    def name(self) -> str:
-        return "action_baoluu_ho_so"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: dict):
-        dispatcher.utter_message(
-            text="Hồ sơ xin bảo lưu tại PTIT thường gồm: \n"
-                 "1. Đơn xin bảo lưu (theo mẫu của trường). \n"
-                 "2. Giấy tờ minh chứng lý do bảo lưu (giấy khám bệnh, giấy gọi nhập ngũ, v.v.). \n"
-                 "3. Xác nhận của khoa hoặc cố vấn học tập. \n"
-                 "Sinh viên nộp hồ sơ tại **Phòng Đào tạo** trước thời hạn quy định (thường ngay đầu học kỳ)."
-        )
-        return []
-
-
-# Học phí trong thời gian bảo lưu
-class ActionBaoLuuHocPhi(Action):
-    def name(self) -> str:
-        return "action_baoluu_hoc_phi"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: dict):
-        dispatcher.utter_message(
-            text="Trong thời gian bảo lưu, sinh viên **không phải đóng học phí** cho các học kỳ bảo lưu. "
-                 "Tuy nhiên, các khoản học phí hoặc công nợ của các học kỳ trước (nếu có) cần được thanh toán đầy đủ "
-                 "trước khi nộp đơn bảo lưu. "
-                 "Việc bảo lưu không phát sinh thêm chi phí đăng ký."
-        )
-        return []
-
-
-# Quyền lợi và nghĩa vụ khi bảo lưu
-class ActionBaoLuuQuyenLoiNghiaVu(Action):
-    def name(self) -> str:
-        return "action_baoluu_quyen_loi_nghia_vu"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: dict):
-        dispatcher.utter_message(
-            text="Trong thời gian bảo lưu, sinh viên PTIT có quyền: \n"
-                 "- Giữ nguyên kết quả học tập đã tích lũy. \n"
-                 "- Quay lại học tập đúng ngành đã đăng ký sau thời gian bảo lưu. \n\n"
-                 "Nghĩa vụ của sinh viên: \n"
-                 "- Hoàn tất thủ tục bảo lưu đúng thời hạn. \n"
-                 "- Thông báo với trường khi quay lại học. \n"
-                 "- Trong thời gian bảo lưu, sinh viên **không tham gia chính thức các lớp học** và không được hưởng học bổng. "
-                 "Tuy nhiên, vẫn có thể tham gia một số hoạt động ngoại khóa nếu được khoa/trường chấp thuận."
-        )
-        return []
-
-
-# Liên hệ về bảo lưu
-class ActionBaoLuuLienHe(Action):
-    def name(self) -> str:
-        return "action_baoluu_lien_he"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: dict):
-        dispatcher.utter_message(
-            text="Các vấn đề liên quan đến bảo lưu học tập được phụ trách bởi **Phòng Đào tạo – PTIT**. \n"
-                 "- Email: daotao@ptit.edu.vn \n"
-                 "- Điện thoại: (024) 3756 2186 \n"
-                 "- Website: https://ptit.edu.vn \n"
-                 "Sinh viên nên liên hệ trực tiếp với Phòng Đào tạo để được hướng dẫn chi tiết."
-        )
-        return []
-# Điều kiện tốt nghiệp
-class ActionTotNghiepDieuKien(Action):
-    def name(self) -> str:
-        return "action_tot_nghiep_dieu_kien"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: dict):
-        dispatcher.utter_message(
-            text="Điều kiện để sinh viên PTIT được công nhận tốt nghiệp: \n"
-                 "- Hoàn thành toàn bộ chương trình đào tạo và tích lũy đủ số tín chỉ theo ngành học. \n"
-                 "- Điểm trung bình chung tích lũy đạt từ **2.00/4.00** trở lên. \n"
-                 "- Không còn nợ học phần bắt buộc hoặc học phần điều kiện. \n"
-                 "- Đạt chuẩn đầu ra ngoại ngữ (VD: TOEIC 450 hoặc tương đương). \n"
-                 "- Hoàn thành đầy đủ nghĩa vụ tài chính với nhà trường."
-        )
-        return []
-
-
-# Thủ tục tốt nghiệp
-class ActionTotNghiepThuTuc(Action):
-    def name(self) -> str:
-        return "action_tot_nghiep_thu_tuc"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: dict):
-        dispatcher.utter_message(
-            text="Thủ tục tốt nghiệp tại PTIT gồm các bước: \n"
-                 "1. Kiểm tra kết quả học tập và công nợ học phí. \n"
-                 "2. Sinh viên nộp hồ sơ tốt nghiệp tại **Phòng Công tác Sinh viên**. \n"
-                 "3. Nhà trường xét công nhận tốt nghiệp. \n"
-                 "4. Sinh viên tham dự lễ trao bằng theo thông báo của trường."
-        )
-        return []
-
-
-# Thời gian tốt nghiệp
-class ActionTotNghiepThoiGian(Action):
-    def name(self) -> str:
-        return "action_tot_nghiep_thoi_gian"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: dict):
-        dispatcher.utter_message(
-            text="PTIT thường xét tốt nghiệp vào **cuối mỗi học kỳ**. \n"
-                 "- Học kỳ 2: tháng 6–7. \n"
-                 "- Học kỳ 1: tháng 12–1. \n"
-                 "Lễ trao bằng tốt nghiệp thường tổ chức vào **tháng 7 hoặc tháng 12 hằng năm**. "
-                 "Thông báo cụ thể được đăng trên website và gửi qua email sinh viên."
-        )
-        return []
-
-
-# Hồ sơ tốt nghiệp
-class ActionTotNghiepHoSo(Action):
-    def name(self) -> str:
-        return "action_tot_nghiep_ho_so"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: dict):
-        dispatcher.utter_message(
-            text="Hồ sơ tốt nghiệp tại PTIT thường gồm: \n"
-                 "- Đơn xin xét tốt nghiệp (theo mẫu). \n"
-                 "- Bản sao bằng THPT hoặc tương đương (có công chứng). \n"
-                 "- Bản sao chứng chỉ ngoại ngữ (chuẩn đầu ra). \n"
-                 "- Ảnh 3x4 theo quy định. \n"
-                 "- Xác nhận hoàn thành nghĩa vụ thư viện, học phí. \n"
-                 "Hồ sơ nộp tại **Phòng Công tác Sinh viên** trong thời hạn trường thông báo."
-        )
-        return []
-# Điểm tốt nghiệp
-class ActionTotNghiepDiemSo(Action):
-    def name(self) -> str:
-        return "action_tot_nghiep_diem_so"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: dict):
-        dispatcher.utter_message(
-            text="Điểm xét tốt nghiệp của sinh viên PTIT được tổng hợp từ toàn bộ kết quả học tập. \n"
-                 "- Sinh viên có thể tra cứu điểm qua **cổng thông tin đào tạo (qldt.ptit.edu.vn)**. \n"
-                 "- Sau khi được công nhận tốt nghiệp, bảng điểm chính thức sẽ do **Phòng Đào tạo** cấp. \n"
-                 "- Nếu có thắc mắc, sinh viên liên hệ trực tiếp phòng để được hỗ trợ."
-        )
-        return []
-
-
-# Chứng nhận / bằng tốt nghiệp
-class ActionTotNghiepChungNhan(Action):
-    def name(self) -> str:
-        return "action_tot_nghiep_chung_nhan"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: dict):
-        dispatcher.utter_message(
-            text="Sau khi được công nhận tốt nghiệp, sinh viên PTIT sẽ nhận: \n"
-                 "- **Giấy chứng nhận tốt nghiệp tạm thời**: cấp ngay sau khi công bố quyết định tốt nghiệp. \n"
-                 "- **Bằng tốt nghiệp chính thức**: phát tại lễ trao bằng (thường tháng 7 hoặc 12) hoặc nhận tại **Phòng Công tác Sinh viên**. \n"
-                 "Sinh viên cần mang theo **CMND/CCCD** để nhận bằng, hoặc làm giấy ủy quyền nếu nhờ người khác nhận hộ."
-        )
-        return []
-
-
-# Liên hệ tốt nghiệp
-class ActionTotNghiepLienHe(Action):
-    def name(self) -> str:
-        return "action_tot_nghiep_lien_he"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: dict):
-        dispatcher.utter_message(
-            text="Mọi thông tin về tốt nghiệp tại PTIT, sinh viên liên hệ: \n"
-                 "- **Phòng Công tác Sinh viên (CTSV)** hoặc **Phòng Đào tạo**. \n"
-                 "- Điện thoại: (024) 3352 2485. \n"
-                 "- Email: ctsv@ptit.edu.vn. \n"
-                 "- Website: https://ptit.edu.vn. \n"
-                 "- Hoặc theo dõi thông báo trên cổng thông tin sinh viên để cập nhật lịch và thủ tục mới nhất."
-        )
-        return []
-# 1. Đối tượng phải thi
-class ActionThiTiengAnhDoiTuongDienTu(Action):
-    def name(self) -> str:
-        return "action_thi_tieng_anh_doi_tuong_dien_tu"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: dict):
-        dispatcher.utter_message(
-            text="Sinh viên mới nhập học các ngành thuộc Khoa Điện tử (Điều khiển & Tự động hóa, Công nghệ Vi mạch Bán dẫn, Công nghệ Kỹ thuật Điện - Điện tử) **bắt buộc dự thi tiếng Anh đầu vào**.\n"
-                 "- Trường hợp đã có chứng chỉ quốc tế (TOEFL iBT, IELTS, TOEIC…) còn hiệu lực và đạt mức chuẩn theo quy định của PTIT có thể được **miễn thi**.\n"
-                 "- Sinh viên cần nộp bản sao chứng chỉ cho Phòng Đào tạo để được xét miễn."
-        )
-        return []
-
-
-# 2. Hình thức thi
-class ActionThiTiengAnhHinhThucDienTu(Action):
-    def name(self) -> str:
-        return "action_thi_tieng_anh_hinh_thuc_dien_tu"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: dict):
-        dispatcher.utter_message(
-            text="Kỳ thi tiếng Anh đầu vào của PTIT dành cho sinh viên khoa Điện tử được tổ chức theo hình thức:\n"
-                 "- **Thi trên máy tính** tại phòng máy của Học viện.\n"
-                 "- Nội dung gồm 4 kỹ năng: Nghe, Đọc, Viết (ngắn), Trắc nghiệm ngữ pháp - từ vựng.\n"
-                 "- Thời lượng: khoảng **90 phút**.\n"
-                 "- Không tổ chức phần thi Nói trực tiếp.\n"
-                 "Kết quả thi sẽ được thông báo trên cổng thông tin sinh viên."
-        )
-        return []
-
-
-# 3. Điểm chuẩn
-class ActionThiTiengAnhDiemChuanDienTu(Action):
-    def name(self) -> str:
-        return "action_thi_tieng_anh_diem_chuan_dien_tu"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: dict):
-        dispatcher.utter_message(
-            text="Điểm chuẩn tiếng Anh đầu vào không phân biệt ngành, áp dụng chung cho sinh viên PTIT:\n"
-                 "- Nếu đạt chuẩn, sinh viên được phân vào **lớp học tiếng Anh phù hợp** hoặc được miễn học một số học phần.\n"
-                 "- Nếu chưa đạt chuẩn, sinh viên phải tham gia các học phần tiếng Anh tăng cường do Học viện tổ chức.\n"
-                 "- Chuẩn đầu ra tiếng Anh của sinh viên 3 ngành Khoa Điện tử là tương đương **IELTS 5.5 trở lên** hoặc theo quy định mới nhất của PTIT."
-        )
-        return []
-
-
-# 4. Lịch thi
-class ActionThiTiengAnhLichDienTu(Action):
-    def name(self) -> str:
-        return "action_thi_tieng_anh_lich_dien_tu"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: dict):
-        dispatcher.utter_message(
-            text="Kỳ thi tiếng Anh đầu vào dành cho sinh viên mới của Khoa Điện tử thường được tổ chức **đầu năm học (tháng 9)**.\n"
-                 "- Lịch thi cụ thể sẽ được thông báo trên website: https://ptit.edu.vn và cổng thông tin sinh viên.\n"
-                 "- Có thể có đợt thi bổ sung cho sinh viên nhập học muộn.\n"
-                 "- Sinh viên dự thi tại **cơ sở Hà Nội hoặc TP.HCM** tùy theo nơi theo học.\n"
-                 "- Địa điểm thi chi tiết được ghi rõ trong giấy báo thi hoặc thông báo của Phòng Đào tạo."
-        )
-        return []
-
-
-# 5. Thủ tục đăng ký
-class ActionThiTiengAnhThuTucDienTu(Action):
-    def name(self) -> str:
-        return "action_thi_tieng_anh_thu_tuc_dien_tu"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: dict):
-        dispatcher.utter_message(
-            text="Thủ tục đăng ký thi tiếng Anh đầu vào cho sinh viên 3 ngành Khoa Điện tử:\n"
-                 "- Sinh viên **không cần đăng ký riêng**, danh sách dự thi được lập dựa trên hồ sơ nhập học.\n"
-                 "- Nếu có chứng chỉ quốc tế để được miễn thi, cần nộp bản sao chứng chỉ cho Phòng Đào tạo trước hạn chót.\n"
-                 "- Không thu lệ phí thi đầu vào.\n"
-                 "- Mọi thông báo chính thức sẽ gửi qua email sinh viên và đăng trên website PTIT."
-        )
-        return []
-# 6. Trường hợp đặc biệt
-class ActionThiTiengAnhTruongHopDacBietDienTu(Action):
-    def name(self) -> str:
-        return "action_thi_tieng_anh_truong_hop_dac_biet_dien_tu"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: dict):
-        dispatcher.utter_message(
-            text="Một số trường hợp đặc biệt trong kỳ thi tiếng Anh đầu vào:\n"
-                 "- **Miễn thi**: Sinh viên có chứng chỉ TOEFL iBT, IELTS, TOEIC... đạt mức chuẩn theo quy định của PTIT và còn hiệu lực sẽ được xét miễn thi.\n"
-                 "- **Trượt kỳ thi**: Sinh viên chưa đạt chuẩn sẽ được xếp lớp học tiếng Anh tăng cường, không tổ chức thi lại ngay.\n"
-                 "- **Sinh viên năm cuối**: Không phải thi, vì kỳ thi chỉ áp dụng cho sinh viên mới nhập học.\n"
-                 "- Không có hình thức thay thế khác ngoài việc nộp chứng chỉ ngoại ngữ hợp lệ."
-        )
-        return []
-
-
-# 7. Liên hệ
-class ActionThiTiengAnhLienHeDienTu(Action):
-    def name(self) -> str:
-        return "action_thi_tieng_anh_lien_he_dien_tu"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: dict):
-        dispatcher.utter_message(
-            text="Mọi thắc mắc về kỳ thi tiếng Anh đầu vào Khoa Điện tử, sinh viên liên hệ:\n"
-                 "- **Phòng Khảo thí & Đảm bảo chất lượng** Học viện Công nghệ Bưu chính Viễn thông (PTIT).\n"
-                 "- Email: khaothi@ptit.edu.vn\n"
-                 "- Điện thoại: (024) 33528122 (cơ sở Hà Nội) / (028) 38297220 (cơ sở TP.HCM)\n"
-                 "- Website: https://ptit.edu.vn\n"
-                 "Sinh viên nên theo dõi cổng thông tin và email để nhận thông báo chính thức."
-        )
-        return []
+        dispatcher.utter_message(text=message)
+        return [SlotSet("ten_nganh", ten_nganh_chuan or ten_nganh)]
