@@ -1,342 +1,354 @@
 version: "3.1"
 
 stories:
-- story: kịch bản chào hỏi vui vẻ
+
+# Story chào hỏi cơ bản
+- story: Chào hỏi
   steps:
   - intent: chao_hoi
   - action: utter_chao_hoi
 
-- story: kịch bản người dùng cảm ơn
-  steps:
-  - intent: cam_on
-  - action: utter_cam_on
-
-- story: kịch bản người dùng hỏi bot là ai
-  steps:
-  - intent: gioi_thieu_bot
-  - action: utter_gioi_thieu_bot
-
-- story: kịch bản chào tạm biệt
+# Story kết thúc hội thoại
+- story: Tạm biệt
   steps:
   - intent: tam_biet
   - action: utter_tam_biet
 
-- story: kịch bản tra cứu điểm chuẩn THPT 2025
+# Story cảm ơn
+- story: Cảm ơn
   steps:
-  - intent: tra_cuu_diem_chuan_thpt_nam_2025
-  - action: action_tra_cuu_diem_chuan_thpt_nam_2025
+  - intent: cam_on
+  - action: utter_cam_on
 
-- story: Kịch bản tra cứu mã ngành
+# Story giới thiệu và chức năng bot
+- story: Hỏi về bot
   steps:
-    - intent: tra_cuu_ma_nganh
-    - action: action_tra_cuu_ma_nganh
+  - intent: gioi_thieu_bot
+  - action: utter_gioi_thieu_bot
 
-- story: Kịch bản tra cứu điểm xét tuyển tài năng
+- story: Hỏi chức năng bot
   steps:
-    - intent: tra_cuu_diem_xet_tuyen_tai_nang
-    - action: action_tra_cuu_diem_xet_tuyen_tai_nang
-- story: Kịch bản tra cứu điểm theo chứng chỉ SAT
-  steps:
-    - intent: tra_cuu_diem_theo_chung_chi_sat
-    - action: action_tra_cuu_diem_theo_chung_chi_sat
-- story: Kịch bản tra cứu điểm theo chứng chỉ ACT
-  steps:
-    - intent: tra_cuu_diem_theo_chung_chi_act
-    - action: action_tra_cuu_diem_theo_chung_chi_act
-- story: Kịch bản tra cứu điểm theo bài thi HSA
-  steps:
-    - intent: tra_cuu_diem_theo_bai_thi_hsa
-    - action: action_tra_cuu_diem_theo_bai_thi_hsa
-- story: Kịch bản tra cứu điểm theo bài thi TSA
-  steps:
-    - intent: tra_cuu_diem_theo_bai_thi_tsa
-    - action: action_tra_cuu_diem_theo_bai_thi_tsa
-- story: Kịch bản tra cứu điểm theo bài thi spt
-  steps:
-    - intent: tra_cuu_diem_theo_bai_thi_spt
-    - action: action_tra_cuu_diem_theo_bai_thi_spt
-- story: Kịch bản tra cứu điểm theo bài thi APT
-  steps:
-    - intent: tra_cuu_diem_theo_bai_thi_apt
-    - action: action_tra_cuu_diem_theo_bai_thi_apt
-- story: Kịch bản tra cứu điểm theo xét tuyển kết hợp
-  steps:
-    - intent: tra_cuu_diem_theo_xet_tuyen_ket_hop
-    - action: action_tra_cuu_diem_theo_xet_tuyen_ket_hop
+  - intent: hoi_chuc_nang_bot
+  - action: utter_hoi_chuc_nang_bot
 
-
-- story: Kịch bản đa bước - nhóm xet_tuyen
+# Story liên hệ khoa phòng
+- story: Liên hệ khoa phòng giáo vụ
   steps:
-  - intent: tra_cuu_diem_xet_tuyen_tai_nang
-  - action: action_tra_cuu_diem_xet_tuyen_tai_nang
-  - intent: tra_cuu_diem_theo_xet_tuyen_ket_hop
-  - action: action_tra_cuu_diem_theo_xet_tuyen_ket_hop
-  - intent: xet_tuyen_nguyen_vong_dien_tu
-  - action: action_xet_tuyen_nguyen_vong_dien_tu
+  - intent: lien_he_khoa_phong_giao_vu
+  - action: utter_lien_he_khoa_phong_giao_vu
+
+# Story thông tin ngành học (có entity)
+- story: Hỏi thông tin ngành cụ thể
+  steps:
+  - intent: hoi_thong_tin_nganh
+    entities:
+    - ten_nganh
+  - action: action_hoi_thong_tin_nganh
+
+- story: Hỏi thông tin ngành không có entity - hỏi lại
+  steps:
+  - intent: hoi_thong_tin_nganh
+  - action: utter_hoi_ten_nganh
+
+# Story tra cứu mã ngành
+- story: Tra cứu mã ngành có entity
+  steps:
+  - intent: tra_cuu_ma_nganh
+    entities:
+    - ten_nganh
+  - action: action_tra_cuu_ma_nganh
+
+- story: Tra cứu mã ngành không có entity - hỏi lại
+  steps:
+  - intent: tra_cuu_ma_nganh
+  - action: utter_hoi_ten_nganh
+
+# Story tra cứu điểm chuẩn
+- story: Tra cứu điểm chuẩn có entity
+  steps:
+  - intent: tra_cuu_diem_chuan
+    entities:
+    - ten_nganh
+  - action: action_tra_cuu_diem_chuan
+
+- story: Tra cứu điểm chuẩn có cả ngành và loại xét tuyển
+  steps:
+  - intent: tra_cuu_diem_chuan
+    entities:
+    - ten_nganh
+    - loai_xet_tuyen
+  - action: action_tra_cuu_diem_chuan
+
+- story: Tra cứu điểm chuẩn không có ngành - hỏi lại
+  steps:
+  - intent: tra_cuu_diem_chuan
+  - action: utter_hoi_ten_nganh
+
+# Story tra cứu khả năng trúng tuyển
+- story: Tra cứu khả năng trúng tuyển có điểm và ngành
+  steps:
+  - intent: tra_cuu_kha_nang_trung_tuyen
+    entities:
+    - diem
+    - ten_nganh
+  - action: action_tra_cuu_kha_nang_trung_tuyen
+
+- story: Tra cứu khả năng trúng tuyển chỉ có điểm
+  steps:
+  - intent: tra_cuu_kha_nang_trung_tuyen
+    entities:
+    - diem
+  - action: utter_hoi_ten_nganh
+
+- story: Tra cứu khả năng trúng tuyển không có điểm - hỏi lại
+  steps:
+  - intent: tra_cuu_kha_nang_trung_tuyen
+  - action: utter_hoi_diem
+
+- story: Tra cứu khả năng trúng tuyển không có gì - hỏi lại
+  steps:
+  - intent: tra_cuu_kha_nang_trung_tuyen
+  - action: utter_hoi_diem_va_nganh
+
+# Story xét tuyển
+- story: Điều kiện xét tuyển
+  steps:
   - intent: xet_tuyen_dieu_kien_dien_tu
   - action: action_xet_tuyen_dieu_kien_dien_tu
-  - intent: xet_tuyen_thu_tuc_dien_tu
-  - action: action_xet_tuyen_thu_tuc_dien_tu
 
-- story: Kịch bản đa bước - nhóm chi_tieu
+- story: Ưu tiên xét tuyển
   steps:
-  - intent: tra_cuu_chi_tieu_nganh
-  - action: action_tra_cuu_chi_tieu_nganh
-  - intent: tra_cuu_chi_tieu_theo_co_so
-  - action: action_tra_cuu_chi_tieu_theo_co_so
-  - intent: tra_cuu_chi_tieu_theo_phuong_thuc
-  - action: action_tra_cuu_chi_tieu_theo_phuong_thuc
-  - intent: tra_cuu_chi_tieu_tong_quat
-  - action: action_tra_cuu_chi_tieu_tong_quat
+  - intent: xet_tuyen_uu_tien_dien_tu
+  - action: action_xet_tuyen_uu_tien_dien_tu
 
-- story: Kịch bản đa bước - nhóm thoi_gian
+- story: Hồ sơ xét tuyển
   steps:
-  - intent: tra_cuu_thoi_gian_tuyen_sinh
-  - action: action_tra_cuu_thoi_gian_tuyen_sinh
-  - intent: tra_cuu_thoi_gian_nhap_hoc
-  - action: action_tra_cuu_thoi_gian_nhap_hoc
-  - intent: tra_cuu_thoi_gian_dao_tao
-  - action: action_tra_cuu_thoi_gian_dao_tao
+  - intent: xet_tuyen_ho_so
+  - action: action_xet_tuyen_ho_so
 
-- story: Kịch bản đa bước - nhóm hoc_phi
+# Story chỉ tiêu và tổ hợp xét tuyển
+- story: Tra cứu chỉ tiêu
+  steps:
+  - intent: tra_cuu_chi_tieu
+  - action: action_tra_cuu_chi_tieu
+
+- story: Tra cứu tổ hợp xét tuyển
+  steps:
+  - intent: tra_cuu_to_hop_xet_tuyen
+  - action: action_tra_cuu_to_hop_xet_tuyen
+
+# Story học phí
+- story: Tra cứu học phí ngành cụ thể
   steps:
   - intent: tra_cuu_hoc_phi_nganh
+    entities:
+    - ten_nganh
   - action: action_tra_cuu_hoc_phi_nganh
-  - intent: tra_cuu_lotrinh_tang_hoc_phi
-  - action: action_tra_cuu_lotrinh_tang_hoc_phi
-  - intent: tra_cuu_hoc_phi_theo_tin_chi
-  - action: action_tra_cuu_hoc_phi_theo_tin_chi
 
-- story: Kịch bản đa bước - nhóm hoc_bong
+- story: Hỏi học phí chung
   steps:
-  - intent: tra_cuu_co_hoc_bong
-  - action: action_tra_cuu_co_hoc_bong
-  - intent: tra_cuu_loai_hoc_bong
-  - action: action_tra_cuu_loai_hoc_bong
-  - intent: tra_cuu_dieu_kien_hoc_bong
-  - action: action_tra_cuu_dieu_kien_hoc_bong
-  - intent: tra_cuu_gia_tri_hoc_bong
-  - action: action_tra_cuu_gia_tri_hoc_bong
+  - intent: hoi_hoc_phi_chung
+  - action: utter_hoi_hoc_phi_chung
 
-- story: Kịch bản đa bước - nhóm nghien_cuu
+- story: Tra cứu học phí không có ngành - hỏi lại
+  steps:
+  - intent: tra_cuu_hoc_phi_nganh
+  - action: utter_hoi_ten_nganh
+
+# Story học bổng
+- story: Tra cứu học bổng ngành cụ thể
+  steps:
+  - intent: tra_cuu_hoc_bong_nganh
+    entities:
+    - ten_nganh
+  - action: action_tra_cuu_hoc_bong_nganh
+
+- story: Hỏi học bổng chung
+  steps:
+  - intent: hoi_hoc_bong_chung
+  - action: utter_hoi_hoc_bong_chung
+
+- story: Tra cứu học bổng không có ngành - hỏi lại
+  steps:
+  - intent: tra_cuu_hoc_bong_nganh
+  - action: utter_hoi_ten_nganh
+
+# Story hệ đào tạo và thời gian
+- story: Hỏi hệ đào tạo
+  steps:
+  - intent: hoi_he_dao_tao
+  - action: utter_hoi_he_dao_tao
+
+- story: Hỏi thời gian đào tạo
+  steps:
+  - intent: hoi_thoi_gian_dao_tao
+  - action: utter_hoi_thoi_gian_dao_tao
+
+# Story nghiên cứu khoa học
+- story: Khái niệm nghiên cứu khoa học
   steps:
   - intent: tra_cuu_khai_niem_nghien_cuu_khoa_hoc
-  - action: action_tra_cuu_khai_niem_nghien_cuu_khoa_hoc
-  - intent: tra_cuu_co_hoi_nghien_cuu_khoa_hoc
-  - action: action_tra_cuu_co_hoi_nghien_cuu_khoa_hoc
-  - intent: tra_cuu_dieu_kien_nghien_cuu_khoa_hoc
-  - action: action_tra_cuu_dieu_kien_nghien_cuu_khoa_hoc
-  - intent: tra_cuu_loi_ich_nghien_cuu_khoa_hoc
-  - action: action_tra_cuu_loi_ich_nghien_cuu_khoa_hoc
-  - intent: tra_cuu_noi_dung_nghien_cuu_khoa_hoc
-  - action: action_tra_cuu_noi_dung_nghien_cuu_khoa_hoc
+  - action: utter_tra_cuu_khai_niem_nghien_cuu_khoa_hoc
 
-- story: Kịch bản đa bước - nhóm phong_lab
+- story: Điều kiện nghiên cứu khoa học
+  steps:
+  - intent: tra_cuu_dieu_kien_nghien_cuu_khoa_hoc
+  - action: utter_tra_cuu_dieu_kien_nghien_cuu_khoa_hoc
+
+- story: Lợi ích nghiên cứu khoa học
+  steps:
+  - intent: tra_cuu_loi_ich_nghien_cuu_khoa_hoc
+  - action: utter_tra_cuu_loi_ich_nghien_cuu_khoa_hoc
+
+# Story phòng lab
+- story: Danh sách phòng lab
   steps:
   - intent: phong_lab_danh_sach
-  - action: action_phong_lab_danh_sach
-  - intent: phong_lab_thiet_bi
-  - action: action_phong_lab_thiet_bi
-  - intent: phong_lab_dieu_kien_su_dung
-  - action: action_phong_lab_dieu_kien_su_dung
-  - intent: phong_lab_gio_mo_cua
-  - action: action_phong_lab_gio_mo_cua
-  - intent: phong_lab_khoa_hoc_thuc_hanh
-  - action: action_phong_lab_khoa_hoc_thuc_hanh
+  - action: utter_phong_lab_danh_sach
 
-- story: Kịch bản đa bước - nhóm viec_lam
+- story: Thiết bị phòng lab
+  steps:
+  - intent: phong_lab_thiet_bi
+  - action: utter_phong_lab_thiet_bi
+
+- story: Điều kiện sử dụng phòng lab
+  steps:
+  - intent: phong_lab_dieu_kien_su_dung
+  - action: utter_phong_lab_dieu_kien_su_dung
+
+- story: Liên hệ phòng lab
+  steps:
+  - intent: phong_lab_lien_he
+  - action: utter_phong_lab_lien_he
+
+# Story việc làm và doanh nghiệp
+- story: Cơ hội việc làm
   steps:
   - intent: tra_cuu_co_hoi_viec_lam
   - action: action_tra_cuu_co_hoi_viec_lam
-  - intent: tra_cuu_nhu_cau_tuyen_dung
-  - action: action_tra_cuu_nhu_cau_tuyen_dung
-  - intent: tra_cuu_viec_lam_quoc_te
-  - action: action_tra_cuu_viec_lam_quoc_te
-  - intent: tra_cuu_luong_nganh
-  - action: action_tra_cuu_luong_nganh
 
-- story: Kịch bản đa bước - nhóm thu_vien
+- story: Kết nối doanh nghiệp
   steps:
-  - intent: thu_vien_danh_sach
-  - action: action_thu_vien_danh_sach
-  - intent: thu_vien_gio_mo_cua
-  - action: action_thu_vien_gio_mo_cua
-  - intent: thu_vien_tai_nguyen
-  - action: action_thu_vien_tai_nguyen
-  - intent: thu_vien_phong_doc
-  - action: action_thu_vien_phong_doc
-  - intent: thu_vien_thiet_bi
-  - action: action_thu_vien_thiet_bi
+  - intent: tra_cuu_ket_noi_doanh_nghiep
+  - action: action_tra_cuu_ket_noi_doanh_nghiep
 
-- story: Kịch bản đa bước - nhóm ktx
+# Story nữ giới trong kỹ thuật
+- story: Hỏi về nữ giới trong kỹ thuật
   steps:
-  - intent: ktx_danh_sach
-  - action: action_ktx_danh_sach
-  - intent: ktx_dieu_kien
-  - action: action_ktx_dieu_kien
+  - intent: hoi_ve_nu_gioi_trong_ky_thuat
+  - action: utter_hoi_ve_nu_gioi_trong_ky_thuat
+
+# Story câu lạc bộ
+- story: Danh sách câu lạc bộ
+  steps:
+  - intent: hoi_danh_sach_cau_lac_bo
+  - action: utter_hoi_danh_sach_cau_lac_bo
+
+- story: Câu lạc bộ theo ngành học
+  steps:
+  - intent: hoi_clb_theo_nganh_hoc
+  - action: utter_hoi_clb_theo_nganh_hoc
+
+# Story ký túc xá
+- story: Kiểm tra KTX có không
+  steps:
+  - intent: ktx_co_khong
+  - action: utter_ktx_co_khong
+
+- story: Đăng ký KTX
+  steps:
+  - intent: ktx_dang_ky
+  - action: utter_ktx_dang_ky
+
+- story: Chi phí KTX
+  steps:
   - intent: ktx_chi_phi
-  - action: action_ktx_chi_phi
-  - intent: ktx_gio_mo_cua
-  - action: action_ktx_gio_mo_cua
-  - intent: ktx_tien_nghi
-  - action: action_ktx_tien_nghi
+  - action: utter_ktx_chi_phi
 
-- story: Kịch bản đa bước - nhóm phong_giao_vu
+# Stories phức tạp - Hội thoại nhiều bước
+
+- story: Hỏi thông tin sau chào hỏi
   steps:
-  - intent: phong_giao_vu_danh_sach
-  - action: action_phong_giao_vu_danh_sach
-  - intent: phong_giao_vu_gio_lam_viec
-  - action: action_phong_giao_vu_gio_lam_viec
-  - intent: phong_giao_vu_thu_tuc_dang_ky_hoc
-  - action: action_phong_giao_vu_thu_tuc_dang_ky_hoc
-  - intent: phong_giao_vu_hoc_bong
-  - action: action_phong_giao_vu_hoc_bong
-  - intent: phong_giao_vu_diem_so
-  - action: action_phong_giao_vu_diem_so
+  - intent: chao_hoi
+  - action: utter_chao_hoi
+  - intent: hoi_thong_tin_nganh
+    entities:
+    - ten_nganh
+  - action: action_hoi_thong_tin_nganh
+  - intent: cam_on
+  - action: utter_cam_on
 
-- story: Kịch bản đa bước - nhóm coso
+- story: Tư vấn tuyển sinh đầy đủ
   steps:
-  - intent: coso_danh_sach
-  - action: action_coso_danh_sach
-  - intent: coso_phong_hoc
-  - action: action_coso_phong_hoc
-  - intent: coso_san_bai_the_thao
-  - action: action_coso_san_bai_the_thao
-  - intent: coso_tien_nghi_chung
-  - action: action_coso_tien_nghi_chung
-  - intent: coso_dieu_kien_su_dung
-  - action: action_coso_dieu_kien_su_dung
+  - intent: hoi_thong_tin_nganh
+    entities:
+    - ten_nganh
+  - action: action_hoi_thong_tin_nganh
+  - intent: tra_cuu_diem_chuan
+    entities:
+    - ten_nganh
+  - action: action_tra_cuu_diem_chuan
+  - intent: tra_cuu_kha_nang_trung_tuyen
+    entities:
+    - diem
+    - ten_nganh
+  - action: action_tra_cuu_kha_nang_trung_tuyen
 
-- story: Kịch bản đa bước - nhóm song_nganh
+- story: Hỏi học phí và học bổng
   steps:
-  - intent: song_nganh_danh_sach
-  - action: action_song_nganh_danh_sach
-  - intent: song_nganh_dieu_kien_dang_ky
-  - action: action_song_nganh_dieu_kien_dang_ky
-  - intent: song_nganh_thu_tuc
-  - action: action_song_nganh_thu_tuc
-  - intent: song_nganh_thoi_gian_hoc
-  - action: action_song_nganh_thoi_gian_hoc
-  - intent: song_nganh_co_hoi_nghe_nghiep
-  - action: action_song_nganh_co_hoi_nghe_nghiep
+  - intent: tra_cuu_hoc_phi_nganh
+    entities:
+    - ten_nganh
+  - action: action_tra_cuu_hoc_phi_nganh
+  - intent: tra_cuu_hoc_bong_nganh
+    entities:
+    - ten_nganh
+  - action: action_tra_cuu_hoc_bong_nganh
 
-- story: Kịch bản đa bước - nhóm baoluu
+- story: Hỏi cơ sở vật chất
   steps:
-  - intent: baoluu_dieu_kien
-  - action: action_baoluu_dieu_kien
-  - intent: baoluu_thu_tuc
-  - action: action_baoluu_thu_tuc
-  - intent: baoluu_thoi_gian
-  - action: action_baoluu_thoi_gian
-  - intent: baoluu_ho_so
-  - action: action_baoluu_ho_so
-  - intent: baoluu_hoc_phi
-  - action: action_baoluu_hoc_phi
+  - intent: phong_lab_danh_sach
+  - action: utter_phong_lab_danh_sach
+  - intent: phong_lab_thiet_bi
+  - action: utter_phong_lab_thiet_bi
+  - intent: ktx_co_khong
+  - action: utter_ktx_co_khong
 
-- story: Kịch bản đa bước - nhóm tot_nghiep
+- story: Hỏi hoạt động ngoại khóa
   steps:
-  - intent: tot_nghiep_dieu_kien
-  - action: action_tot_nghiep_dieu_kien
-  - intent: tot_nghiep_thu_tuc
-  - action: action_tot_nghiep_thu_tuc
-  - intent: tot_nghiep_thoi_gian
-  - action: action_tot_nghiep_thoi_gian
-  - intent: tot_nghiep_ho_so
-  - action: action_tot_nghiep_ho_so
-  - intent: tot_nghiep_diem_so
-  - action: action_tot_nghiep_diem_so
+  - intent: hoi_danh_sach_cau_lac_bo
+  - action: utter_hoi_danh_sach_cau_lac_bo
+  - intent: hoi_clb_theo_nganh_hoc
+  - action: utter_hoi_clb_theo_nganh_hoc
+  - intent: tra_cuu_ket_noi_doanh_nghiep
+  - action: action_tra_cuu_ket_noi_doanh_nghiep
 
-- story: Kịch bản đa bước - nhóm thi_tieng_anh
+# Story kết thúc sau khi được tư vấn
+- story: Kết thúc sau tư vấn
   steps:
-  - intent: thi_tieng_anh_doi_tuong_dien_tu
-  - action: action_thi_tieng_anh_doi_tuong_dien_tu
-  - intent: thi_tieng_anh_hinh_thuc_dien_tu
-  - action: action_thi_tieng_anh_hinh_thuc_dien_tu
-  - intent: thi_tieng_anh_diem_chuan_dien_tu
-  - action: action_thi_tieng_anh_diem_chuan_dien_tu
-  - intent: thi_tieng_anh_lich_dien_tu
-  - action: action_thi_tieng_anh_lich_dien_tu
-  - intent: thi_tieng_anh_thu_tuc_dien_tu
-  - action: action_thi_tieng_anh_thu_tuc_dien_tu
+  - intent: hoi_thong_tin_nganh
+    entities:
+    - ten_nganh
+  - action: action_hoi_thong_tin_nganh
+  - intent: tam_biet
+  - action: utter_tam_biet
 
-- story: Kịch bản đa bước - nhóm cau_lac_bo
+# Story xử lý khi user không cung cấp đủ thông tin
+- story: Hỏi thông tin ngành nhưng chưa rõ ngành
   steps:
-  - intent: cau_lac_bo_danh_sach
-  - action: action_cau_lac_bo_danh_sach
-  - intent: cau_lac_bo_dieu_kien
-  - action: action_cau_lac_bo_dieu_kien
-  - intent: cau_lac_bo_su_kien
-  - action: action_cau_lac_bo_su_kien
-  - intent: cau_lac_bo_cuoc_thi
-  - action: action_cau_lac_bo_cuoc_thi
-  - intent: cau_lac_bo_lien_ket
-  - action: action_cau_lac_bo_lien_ket
+  - intent: hoi_thong_tin_nganh
+  - action: utter_hoi_ten_nganh
+  - intent: hoi_thong_tin_nganh
+    entities:
+    - ten_nganh
+  - action: action_hoi_thong_tin_nganh
 
-- story: Kịch bản đa bước - nhóm ptit_gioi_thieu
+- story: Tra cứu điểm nhưng chưa rõ ngành
   steps:
-  - intent: ptit_gioi_thieu_lich_su
-  - action: action_ptit_gioi_thieu_lich_su
-  - intent: ptit_gioi_thieu_su_menh_tam_nhin
-  - action: action_ptit_gioi_thieu_su_menh_tam_nhin
-  - intent: ptit_gioi_thieu_co_cau_to_chuc
-  - action: action_ptit_gioi_thieu_co_cau_to_chuc
-  - intent: ptit_gioi_thieu_dia_chi
-  - action: action_ptit_gioi_thieu_dia_chi
-  - intent: ptit_gioi_thieu_quy_mo_dao_tao
-  - action: action_ptit_gioi_thieu_quy_mo_dao_tao
-
-- story: Kịch bản đa bước - nhóm giang_vien
-  steps:
-  - intent: tra_cuu_giang_vien
-  - action: action_tra_cuu_giang_vien
-  - intent: tra_cuu_trinh_do_giang_vien
-  - action: action_tra_cuu_trinh_do_giang_vien
-  - intent: tra_cuu_chuyen_mon_giang_vien
-  - action: action_tra_cuu_chuyen_mon_giang_vien
-  - intent: tra_cuu_lich_day_giang_vien
-  - action: action_tra_cuu_lich_day_giang_vien
-
-- story: Kịch bản đa bước - nhóm chuong_trinh_hoc
-  steps:
-  - intent: tra_cuu_tong_quan_nganh
-  - action: action_tra_cuu_tong_quan_nganh
-  - intent: tra_cuu_to_hop_xet_tuyen
-  - action: action_tra_cuu_to_hop_xet_tuyen
-  - intent: tra_cuu_quy_trinh_nhap_hoc
-  - action: action_tra_cuu_quy_trinh_nhap_hoc
-  - intent: tra_cuu_ho_so_nhap_hoc
-  - action: action_tra_cuu_ho_so_nhap_hoc
-  - intent: tra_cuu_chuong_trinh_hoc_nganh
-  - action: action_tra_cuu_chuong_trinh_hoc_nganh
-
-- story: Kịch bản đa bước - nhóm nu_sinh
-  steps:
-  - intent: tra_cuu_phu_hop_nu
-  - action: action_tra_cuu_phu_hop_nu
-  - intent: tra_cuu_dac_thu_cong_viec_nu
-  - action: action_tra_cuu_dac_thu_cong_viec_nu
-  - intent: tra_cuu_viec_lam_cho_nu
-  - action: action_tra_cuu_viec_lam_cho_nu
-  - intent: tra_cuu_co_hoi_thang_tien_nu
-  - action: action_tra_cuu_co_hoi_thang_tien_nu
-
-- story: Kịch bản đa bước - nhóm lien_he
-  steps:
-  - intent: tra_cuu_thong_tin_lien_he
-  - action: action_tra_cuu_thong_tin_lien_he
-  - intent: phong_lab_lien_he
-  - action: action_phong_lab_lien_he
-  - intent: phong_giao_vu_lien_he
-  - action: action_phong_giao_vu_lien_he
-  - intent: ktx_lien_he
-  - action: action_ktx_lien_he
-  - intent: thu_vien_lien_he
-  - action: action_thu_vien_lien_he
-
-- story: Kịch bản đa bước - nhóm su_kien
-  steps:
-  - intent: thu_vien_su_kien_hoat_dong
-  - action: action_thu_vien_su_kien_hoat_dong
-  - intent: phong_giao_vu_thong_bao_ke_hoach
-  - action: action_phong_giao_vu_thong_bao_ke_hoach
-
+  - intent: tra_cuu_kha_nang_trung_tuyen
+  - action: utter_hoi_diem_va_nganh
+  - intent: tra_cuu_kha_nang_trung_tuyen
+    entities:
+    - diem
+    - ten_nganh
+  - action: action_tra_cuu_kha_nang_trung_tuyen
