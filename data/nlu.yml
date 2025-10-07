@@ -41,6 +41,30 @@ nlu:
     - Bot là ai?
     - Tôi đang nói chuyện với ai?
 
+- intent: hoi_chuc_nang_bot
+  examples: |
+    - Bot làm được gì?
+    - Bạn biết làm gì không?
+    - Cho mình biết bạn có chức năng gì
+    - Bot giúp gì được cho mình?
+    - Bạn tư vấn được những gì?
+    - Bot có thể trả lời câu hỏi gì?
+    - Mình muốn biết bot làm gì
+    - Bạn giúp được gì cho sinh viên?
+    - Nói cho mình vài chức năng của bạn đi
+    - Bot này dùng để làm gì vậy?
+    - Mình hỏi bạn có thể làm gì?
+    - Bot có thể hỗ trợ mình học không?
+    - Cho mình xem bot làm được những gì
+    - Bạn có thể tư vấn tuyển sinh không?
+    - Bot giúp sinh viên mới như thế nào?
+    - Nói mình nghe vài việc bot làm được
+    - Bạn có thể giúp mình tìm thông tin ngành học không?
+    - Bot có chức năng gì hay không?
+    - Mình muốn xem bạn làm gì được
+    - Bot này giúp mình được những gì?
+
+
 - intent: lien_he_khoa_phong_giao_vu
   examples: |
     - Tôi muốn liên hệ với khoa Điện tử
@@ -79,10 +103,12 @@ nlu:
     - Ai phụ trách học vụ sinh viên năm nhất vậy ạ?
     - Cần hỏi giấy báo nhập học thì gọi phòng nào?
     - Em muốn biết ai phụ trách hồ sơ sinh viên của khoa
+    - Tôi muốn hỏi các câu hỏi khác thì liên hệ ai
+    
 
 - intent: hoi_thong_tin_nganh
   examples: |
-    # ===== KỸ THUẬT ĐIỀU KHIỂN & TỰ ĐỘNG HÓA =====
+ 
     - Ngành [Kỹ thuật Điều khiển và Tự động hóa](ten_nganh) là ngành như thế nào ạ
     - Thông tin về ngành [Kỹ thuật Điều khiển và Tự động hóa](ten_nganh)
     - Tư vấn cho mình về ngành [Kỹ thuật Điều khiển và Tự động hóa](ten_nganh) với ạ
@@ -94,7 +120,7 @@ nlu:
     - Ngành [Kỹ thuật Điều khiển và Tự động hóa](ten_nganh) có khó học không
     - Giới thiệu về ngành [Kỹ thuật Điều khiển và Tự động hóa](ten_nganh)
     - Thông tin về ngành [Kỹ thuật Điều khiển và Tự động hóa](ten_nganh)
-    # ===== CÔNG NGHỆ VI MẠCH BÁN DẪN =====
+ 
     - Ngành [Công nghệ Vi mạch Bán dẫn](ten_nganh) là gì
     - Thông tin ngành [Công nghệ Vi mạch Bán dẫn](ten_nganh)
     - Cho mình xin thông tin ngành [Công nghệ Vi mạch Bán dẫn](ten_nganh)
@@ -106,7 +132,7 @@ nlu:
     - Ngành [Công nghệ Vi mạch Bán dẫn](ten_nganh) có khó không
     - Em cần thông tin tổng quan về ngành [Công nghệ Vi mạch Bán dẫn](ten_nganh)
     - Thông tin về ngành Công nghệ Vi mạch Bán dẫn](ten_nganh)
-    # ===== CÔNG NGHỆ KỸ THUẬT ĐIỆN, ĐIỆN TỬ =====
+ 
     - Ngành [Công nghệ Kỹ thuật Điện, Điện tử](ten_nganh) là ngành như thế nào ạ
     - Thông tin về ngành [Công nghệ Kỹ thuật Điện, Điện tử](ten_nganh)
     - Tư vấn cho mình về ngành [Công nghệ Kỹ thuật Điện, Điện tử](ten_nganh) với ạ
@@ -119,9 +145,6 @@ nlu:
     - Ngành [Công nghệ Kỹ thuật Điện, Điện tử](ten_nganh) có khó không
     - Thông tin về ngành [Công nghệ Kỹ thuật Điện, Điện tử](ten_nganh)
 
-# ==========================
-# TRA CỨU MÃ NGÀNH
-# ==========================
 - intent: tra_cuu_ma_nganh
   examples: |
     - Mã ngành của ngành [Kỹ thuật điều khiển và tự động hóa](ten_nganh) là gì?
@@ -151,9 +174,6 @@ nlu:
     - Mã ngành của [Kỹ thuật điều khiển và tự động hóa](ten_nganh)
 
 
-# ==========================
-# TRA CỨU ĐIỂM CHUẨN
-# ==========================
 - intent: tra_cuu_diem_chuan
   examples: |
     - Điểm chuẩn THPT ngành [Kỹ thuật điều khiển và tự động hóa](ten_nganh) là bao nhiêu?
@@ -183,10 +203,6 @@ nlu:
     - Ngành [Công nghệ kỹ thuật điện, điện tử](ten_nganh) năm nay điểm cao không?
     - Em muốn biết điểm chuẩn ngành [Kỹ thuật điều khiển và tự động hóa](ten_nganh)
 
-
-# ==========================
-# TRA CỨU KHẢ NĂNG TRÚNG TUYỂN
-# ==========================
 - intent: tra_cuu_kha_nang_trung_tuyen
   examples: |
     - Em được [26](diem) điểm có đỗ ngành [Điều khiển và Tự động hóa](ten_nganh) không?
@@ -241,17 +257,27 @@ nlu:
     - Thí sinh đạt giải quốc gia có được tuyển thẳng vào [Điều khiển và Tự động hóa](ten_nganh) không?
     - Học sinh trường chuyên có được cộng điểm ưu tiên không?
     - Xét tuyển ưu tiên cho đối tượng nào?
+    - Ai được cộng điểm ưu tiên xét tuyển
+    - Đối tượng ưu tiên trong xét tuyển
     - Trường có chính sách tuyển thẳng học sinh giỏi không?
     - Có ưu tiên cho học sinh đạt giải học sinh giỏi quốc gia không?
     - Con thương binh có được cộng điểm khi xét tuyển ngành [Công nghệ Kỹ thuật Điện, điện tử](ten_nganh) không?
+    - Con thương binh được cộng bao nhiêu điểm ưu tiên
+    - Con thương binh có được cộng điểm ưu tiên không
     - Chính sách ưu tiên khu vực trong tuyển sinh ngành [Vi mạch bán dẫn](ten_nganh) như thế nào?
     - Có cộng điểm cho học sinh thuộc vùng sâu vùng xa khi xét tuyển ngành [Điều khiển và Tự động hóa](ten_nganh) không?
     - Ngành [Công nghệ Kỹ thuật Điện, điện tử](ten_nganh) có tuyển thẳng học sinh trường chuyên không?
     - Thí sinh đạt giải nhất khoa học kỹ thuật có được vào thẳng không?
     - Học sinh giỏi tỉnh có được xét ưu tiên khi đăng ký ngành [Vi mạch bán dẫn](ten_nganh) không?
+    - HSG tỉnh được cộng bao nhiêu điểm ưu tiên
+    - hsg tỉnh có được ưu tiên gì không
     - Những ai được hưởng chế độ cộng điểm ưu tiên khi xét tuyển?
     - Trường có xét tuyển thẳng theo diện học sinh giỏi không?
     - Chính sách ưu tiên đối với khu vực 1, 2, 3 là như thế nào?
+    - Chính sách ưu tiên cho khu vực I
+    - Chính sách ưu tiên cho khu vực II
+    - Chính sách ưu tiên cho khu vực III như thế nào
+    - Học sinh khu vực 1 được cộng bao nhiêu điểm ưu tiên
 
 
 - intent: xet_tuyen_ho_so
@@ -480,7 +506,76 @@ nlu:
     - Học bổng như nào
     - Điều kiện nhận học bổng
     - Bao nhiêu điểm mới được nhận học bổng
+
+- intent: hoi_he_dao_tao
+  examples: |
+  
+    - Ngành [Kỹ thuật Điều khiển và Tự động hóa](ten_nganh) có những hệ đào tạo nào?
+    - Hệ đào tạo của ngành [Công nghệ Kỹ thuật Điện, Điện tử](ten_nganh) là gì?
+    - Ngành [Công nghệ Vi mạch bán dẫn](ten_nganh) đào tạo hệ gì?
+    - Cho em hỏi hệ đào tạo ngành [Kỹ thuật Điều khiển và Tự động hóa](ten_nganh)
+    - Hệ đào tạo ngành [Công nghệ Kỹ thuật Điện, Điện tử](ten_nganh) gồm những gì?
+    - Ngành [Công nghệ Vi mạch bán dẫn](ten_nganh) có các hệ nào?
+    - Hệ đào tạo ngành [Kỹ thuật Điều khiển và Tự động hóa](ten_nganh) ra sao?
+    - Ngành [Công nghệ Kỹ thuật Điện, Điện tử](ten_nganh) có đào tạo hệ chính quy không?
+    - Hệ liên thông của ngành [Công nghệ Vi mạch bán dẫn](ten_nganh) là gì?
+    - Ngành [Kỹ thuật Điều khiển và Tự động hóa](ten_nganh) bao nhiêu hệ?
+    - Ngành [Tự động hóa](ten_nganh) có hệ gì?
+    - Hệ đào tạo [Điện tử](ten_nganh) thế nào?
+    - [Vi mạch](ten_nganh) có những hệ nào?
+    - Ngành [Điện, điện tử](ten_nganh) đào tạo hệ gì?
+    - [Tự động hóa](ten_nganh) có hệ liên thông không?
+    - Hệ đào tạo của [Điện tử](ten_nganh) là gì?
+    - [Vi mạch bán dẫn](ten_nganh) có hệ chất lượng cao không?
+    - Ngành [Điện](ten_nganh) có những hệ đào tạo nào?
+    - [Tự động](ten_nganh) học hệ gì?
+    - Hệ đào tạo [chip](ten_nganh) thế nào?
     
+    - Các hệ đào tạo trong trường là gì?
+    - Trường có những hệ đào tạo nào?
+    - Hệ đào tạo gồm những loại gì?
+    - Cho em hỏi về các hệ đào tạo
+    - Hệ chính quy và hệ chất lượng cao khác nhau thế nào?
+    - Hệ liên thông là gì?
+    - Hệ đào tạo từ xa có không?
+    - Có hệ vừa học vừa làm không?
+    - Hệ đào tạo quốc tế thế nào?
+    - Hệ đào tạo tín chỉ là gì?
+    - Hệ đào tạo
+    - Hệ đào tạo là gì
+    
+- intent: hoi_thoi_gian_dao_tao
+  examples: |
+    - Ngành [Kỹ thuật Điều khiển và Tự động hóa](ten_nganh) học bao nhiêu năm?
+    - Thời gian đào tạo ngành [Công nghệ Vi mạch Bán dẫn](ten_nganh) là bao lâu?
+    - Học ngành [Công nghệ Kỹ thuật Điện, Điện tử](ten_nganh) mất mấy năm?
+    - Chương trình đào tạo kéo dài bao lâu?
+    - Bao nhiêu năm để tốt nghiệp ngành [Điện tử](ten_nganh)?
+    - Thời gian học đại học ngành [Tự động hóa](ten_nganh) là mấy năm?
+    - Ngành [Vi mạch](ten_nganh) học trong bao lâu?
+    - Mất mấy năm để hoàn thành chương trình [Kỹ thuật Điều khiển](ten_nganh)?
+    - Thời gian đào tạo chính quy ngành [Điện điện tử](ten_nganh)?
+    - Học bao lâu thì ra trường ngành [Công nghệ Vi mạch](ten_nganh)?
+    - Chương trình cử nhân ngành [Tự động hóa](ten_nganh) kéo dài mấy năm?
+    - Thời gian học tập tại khoa Điện tử là bao lâu?
+    - Ngành [Kỹ thuật Điều khiển](ten_nganh) cần bao nhiêu năm học?
+    - Thời hạn hoàn thành chương trình [Điện tử](ten_nganh)?
+    - Học ngành này mất thời gian bao nhiêu?
+    - Thời lượng đào tạo ngành [Công nghệ Bán dẫn](ten_nganh)?
+    - Mấy năm để lấy bằng kỹ sư [Điều khiển Tự động](ten_nganh)?
+    - Thời gian học tập trung bình tại khoa?
+    - Ngành [Điện tử Viễn thông](ten_nganh) học trong bao lâu?
+    - Chương trình đào tạo ngành [Kỹ thuật Điện](ten_nganh) kéo dài mấy năm?
+    - Thời gian để tốt nghiệp ngành [Công nghệ Vi mạch](ten_nganh)?
+    - Học bao nhiêu năm thì xong ngành [Tự động hóa](ten_nganh)?
+    - Thời hạn đào tạo chính thức của ngành [Điện tử](ten_nganh)?
+    - Ngành [Kỹ thuật Điều khiển](ten_nganh) có thời gian học bao lâu?
+    - Mất mấy năm học tại khoa Điện tử?
+    - Thời gian đào tạo hệ chính quy ngành [Vi mạch](ten_nganh)?
+    - Học trong bao lâu để lấy bằng [Điện điện tử](ten_nganh)?
+    - Thời lượng chương trình đào tạo ngành [Tự động hóa](ten_nganh)?
+    - Bao nhiêu năm học cho ngành [Công nghệ Vi mạch Bán dẫn](ten_nganh)?
+    - Thời gian hoàn thành khóa học ngành [Kỹ thuật Điều khiển](ten_nganh)?
 
 - intent: tra_cuu_khai_niem_nghien_cuu_khoa_hoc
   examples: |
@@ -692,76 +787,6 @@ nlu:
     - Điều kiện vào phòng lab
 
 
-- intent: phong_lab_gio_mo_cua
-  examples: |
-    - Phòng lab mở cửa mấy giờ?
-    - Giờ hoạt động của phòng lab ngành [Vi mạch bán dẫn](ten_nganh)
-    - Lab khoa [Điện tử](ten_khoa) mở cửa những ngày nào?
-    - Khi nào tôi có thể vào phòng lab?
-    - Lịch lab thực hành của sinh viên là gì?
-    - Phòng lab mở cửa từ mấy giờ đến mấy giờ?
-    - Lab hoạt động những ngày nào?
-    - Giờ mở cửa lab cho sinh viên?
-    - Lab có mở cuối tuần không?
-    - Khi nào lab không hoạt động?
-    - Phòng lab mở cửa sáng hay chiều?
-    - Lab có mở buổi tối không?
-    - Giờ hoạt động của lab [Tự động hóa] là gì?
-    - Lab có mở trong kỳ nghỉ không?
-    - Lab có lịch đăng ký giờ mở cửa không?
-    - Khi nào lab nhận sinh viên vào?
-    - Lab mở cửa vào ngày lễ không?
-    - Phòng lab có lịch cố định không?
-    - Lab có mở giờ linh hoạt không?
-    - Lab hoạt động theo tuần hay tháng?
-    - Lab mở cửa vào thứ mấy?
-    - Lab có lịch học thực hành không?
-    - Tôi muốn biết giờ mở lab [Vi mạch]
-    - Lab mở từ mấy giờ đến mấy giờ?
-    - Lab mở cửa hôm nay không?
-    - Lab có mở ban đêm không?
-    - Lab có lịch biểu cụ thể không?
-    - Khi nào sinh viên có thể vào lab?
-    - Lab mở cửa theo lịch nào?
-    - Lab mở cho sinh viên từ khi nào?
-
-
-- intent: phong_lab_khoa_hoc_thuc_hanh
-  examples: |
-    - Phòng lab dùng cho môn học nào?
-    - Lab ngành [Điện, điện tử](ten_nganh) có thực hành gì?
-    - Khóa học thực hành trong phòng lab [Vi mạch bán dẫn](ten_lab)
-    - Tôi muốn biết môn học sử dụng phòng lab
-    - Lab này phục vụ sinh viên ngành nào?
-    - Lab dùng cho môn [Điện tử cơ bản]
-    - Phòng lab có thực hành về [Robot] không?
-    - Lab được dùng cho khóa học nào?
-    - Lab có thực hành gì trong học kỳ này?
-    - Phòng lab dùng cho sinh viên ngành [Tự động hóa]
-    - Lab dùng cho môn thực hành AI không?
-    - Lab thực hành cho sinh viên năm hai
-    - Phòng lab cho môn IoT
-    - Lab dùng cho môn Điện tử nâng cao
-    - Lab phục vụ khóa học tự động hóa
-    - Phòng lab dùng cho sinh viên ngành Vi mạch
-    - Lab thực hành cho môn lập trình nhúng
-    - Lab phục vụ môn Robot học
-    - Lab dùng cho khóa học chuyên ngành
-    - Lab dùng cho môn Cơ điện tử
-    - Lab phục vụ học phần AI
-    - Lab dùng cho môn Thực hành PLC
-    - Lab có môn học nào thực hành không?
-    - Lab dành cho sinh viên ngành Điện tử
-    - Lab dùng cho khóa học IoT
-    - Lab thực hành cho môn Điện tử số
-    - Lab phục vụ môn Cảm biến thông minh
-    - Lab dùng cho môn Điện tử cơ bản
-    - Lab dành cho môn học nào?
-    - Lab phục vụ khóa học lập trình nhúng
-    - Phòng lab thực hành gì
-    - Phòng lab học gì
-
-
 - intent: phong_lab_lien_he
   examples: |
     - Ai phụ trách phòng lab
@@ -785,7 +810,7 @@ nlu:
     - Số điện thoại liên hệ lab?
     - Lab có fanpage không?
     - Ai phụ trách lab này?
-    - Tôi muốn liên hệ lab [Tự động hóa]
+    - Tôi muốn liên hệ lab 
     - Lab có quản lý trực tiếp không?
     - Lab có người hỗ trợ sinh viên không?
     - Tôi cần liên hệ phòng lab
@@ -852,6 +877,13 @@ nlu:
     - Các doanh nghiệp đối tác có tuyển sinh viên mới ra trường không?
     - Học viện có chương trình kết nối doanh nghiệp cho sinh viên không?
     - Học viện liên kết với những doanh nghiệp nào
+    - Trường có liên kết với doanh nghiệp nước ngoài không
+    - Học viện có hỗ trợ thực tập cho sinh viên
+    - Các công ty hợp tác với học viện
+    - Khoa điện tử liên kết với những doanh nghiệp nào
+    - Sinh viên khoa Điện tử có thể thực tập ở đâu?
+    - Chương trình liên kết doanh nghiệp ở trường
+    
     
 
 - intent: hoi_ve_nu_gioi_trong_ky_thuat
@@ -887,479 +919,225 @@ nlu:
     - Nữ ngành [Vi mạch] có thuận lợi gì?
 
 
-- intent: cau_lac_bo_danh_sach
+- intent: hoi_danh_sach_cau_lac_bo
   examples: |
-    - Khoa [Điện tử](ten_khoa) có câu lạc bộ nào?
-    - Ngành [Kỹ thuật Điều khiển và Tự động hóa](ten_nganh) có câu lạc bộ không?
-    - Tôi muốn biết câu lạc bộ của [Công nghệ Vi mạch bán dẫn](ten_nganh) là gì
-    - CLB trong khoa [Điện tử](ten_khoa) gồm những gì?
-    - Ngành [Điện, điện tử](ten_nganh) có CLB nào hoạt động không?
-    - Cho tôi danh sách câu lạc bộ của [Điện tử](ten_khoa)
-    - Câu lạc bộ của khoa [Điện tử](ten_khoa) hiện có bao nhiêu?
-- intent: cau_lac_bo_dieu_kien
+    - Trường có nhiều câu lạc bộ không?
+    - Trường có những câu lạc bộ nào?
+    - Trường có CLB nào
+    - Các CLB ở trường
+    - Học viện có những câu lạc bộ nào
+    - Học viện có CLB gì
+    - Khoa điện tử có những clb gì
+    - Cho em hỏi danh sách câu lạc bộ của trường
+    - Danh sách CLB hiện có của trường là gì?
+    - Em muốn biết tất cả câu lạc bộ của học viện
+    - Trường có CLB hoạt động sôi nổi không?
+    - Trường có CLB gì hay không?
+    - Tôi muốn xem danh sách các CLB trong trường
+    - Cho mình biết các CLB trong trường đại học
+    - CLB nào đang tuyển sinh viên mới?
+    - Câu lạc bộ nào đang tuyển thành viên
+    - Nên tham gia câu lạc bộ nào
+    - Khoa điện tử nên tham gia câu lạc bộ nào
+    - Khoa điện tử có clb nào
+    - Có CLB nào cho sinh viên thích khoa học không?
+    - Trường có CLB thể thao, văn nghệ gì?
+    - Có câu lạc bộ nào dành cho sinh viên mới không?
+    - Có CLB nào thú vị cho sinh viên năm nhất không?
+    - CLB nào nổi bật trong trường?
+    - Kể tên các câu lạc bộ ở PTIT?
+    - Trường mình có những CLB gì?
+    - Liệt kê các câu lạc bộ đang hoạt động?
+    - CLB nào đang hot trong trường?
+    - Có CLB nào liên quan đến robot không?
+    - CLB về lập trình có không?
+    - CLB thể thao nào đang hoạt động?
+    - CLB văn nghệ có những gì?
+    - Có CLB tình nguyện không?
+    - CLB học thuật nào nổi bật?
+    - Danh sách tất cả CLB PTIT?
+    - Trường mình có bao nhiêu CLB?
+    - CLB nào đang có nhiều thành viên?
+    - Có những nhóm sinh hoạt nào trong trường?
+    - Đội nhóm nào đang hoạt động tích cực?
+    - CLB nào được nhiều sinh viên tham gia?
+    - Trường có những CLB gì cho sinh viên?
+    - Liệt kê các câu lạc bộ đang tuyển sinh
+    - Cho mình biết CLB nổi bật trong trường
+    - CLB nào phù hợp với sinh viên năm nhất?
+    - Danh sách CLB học thuật, thể thao, văn nghệ?
+    - Có CLB robotics hoặc lập trình không?
+    - CLB nào hot trong năm nay?
+    - Trường có CLB nào cho học sinh mới?
+    - Tôi muốn tham gia CLB, có danh sách không?
+    - CLB nào hay được sinh viên tham gia?
+    - Có CLB AI hay công nghệ không?
+    - Liệt kê tất cả CLB hiện đang hoạt động
+    - CLB tình nguyện và hoạt động cộng đồng?
+    - Có CLB thể thao, bóng đá, bóng rổ?
+    - CLB nghệ thuật, văn hóa có không?
+    - Các CLB nổi bật nhất của trường là gì?
+    - Cho mình danh sách CLB năm nay
+    - CLB học thuật nào dành cho sinh viên mới?
+    - Danh sách CLB hiện có trong trường
+    - CLB nào đáng tham gia nhất?
+    - Các CLB trong trường hiện có những gì?
+    - CLB đang tuyển thành viên là những CLB nào?
+    - Trường có CLB ngoại khóa nào?
+    - Danh sách CLB năm nay?
+    - CLB robot và lập trình trong trường?
+    - CLB thể thao và văn nghệ có không?
+    - CLB tình nguyện đang hoạt động?
+    - CLB nào phù hợp với sinh viên mới?
+
+- intent: hoi_clb_theo_nganh_hoc
   examples: |
-    - Điều kiện để tham gia câu lạc bộ khoa [Điện tử](ten_khoa) là gì?
-    - Tôi muốn tham gia câu lạc bộ nhưng không biết điều kiện
-    - Ai có thể tham gia CLB ngành [Vi mạch bán dẫn](ten_nganh)?
-    - Yêu cầu để trở thành thành viên câu lạc bộ là gì?
-    - Sinh viên năm mấy có thể tham gia câu lạc bộ?
-    - Cần kỹ năng gì để tham gia câu lạc bộ khoa [Điện tử](ten_khoa)?
-- intent: cau_lac_bo_su_kien
-  examples: |
-    - Có sự kiện gì sắp tới của câu lạc bộ khoa [Điện tử](ten_khoa)?
-    - Câu lạc bộ [Thiết kế chip](ten_nganh) có event gì không?
-    - Sắp tới CLB có workshop gì không?
-    - CLB có hoạt động ngoại khóa nào không?
-    - Hội thảo sắp tới của câu lạc bộ là gì?
-    - Câu lạc bộ tổ chức meetup khi nào?
-- intent: cau_lac_bo_cuoc_thi
-  examples: |
-    - Câu lạc bộ [Thiết kế chip](ten_nganh) có cuộc thi gì không?
-    - Câu lạc bộ khoa [Điện tử](ten_khoa) tổ chức cuộc thi gì?
-    - CLB có contest hay hackathon nào không?
-    - Tôi muốn tham gia cuộc thi do CLB tổ chức
-    - Cuộc thi robot hay IoT của câu lạc bộ là gì?
-    - CLB có competition nào trong năm không?
-- intent: cau_lac_bo_lien_ket
-  examples: |
-    - Câu lạc bộ ngành [Điện, điện tử](ten_nganh) có liên kết với doanh nghiệp không?
-    - Câu lạc bộ [Vi mạch bán dẫn](ten_nganh) hợp tác với công ty nào?
-    - CLB có sponsor hay đối tác không?
-    - Hợp tác với doanh nghiệp nào của câu lạc bộ?
-    - Liên kết thực tập hay workshop với doanh nghiệp nào?
-    - CLB có kết nối doanh nghiệp hỗ trợ sinh viên không?
+    - Ngành [Điện, điện tử](ten_nganh) nên vào câu lạc bộ nào?
+    - Em học ngành [Điện, điện tử](ten_nganh) thì vào câu lạc bộ nào?
+    - Tôi muốn biết các CLB của [Vi mạch](ten_nganh)
+    - Ngành [Tự động hóa](ten_nganh) có CLB nào nổi bật?
+    - Các câu lạc bộ của ngành [Điện tử](ten_nganh) là gì?
+    - Ngành [Điện, điện tử](ten_nganh) có CLB nào hoạt động?
+    - Danh sách CLB theo ngành [Tự động hóa](ten_nganh)
+    - CLB phù hợp với ngành [Vi mạch](ten_nganh)?
+    - Sinh viên ngành [Điện tử](ten_nganh) nên tham gia CLB gì?
+    - CLB chuyên môn cho ngành [Tự động hóa](ten_nganh)?
+    - Ngành [Điện, điện tử](ten_nganh) có CLB nào hay?
+    - CLB hỗ trợ học tập ngành [Vi mạch](ten_nganh)?
+    - Câu lạc bộ dành riêng cho ngành [Điện tử](ten_nganh)?
+    - Học [Tự động hóa](ten_nganh) nên tham gia CLB gì?
+    - Ngành [Vi mạch](ten_nganh) có CLB chuyên ngành nào?
+    - CLB nào tốt cho sinh viên [Điện, điện tử](ten_nganh)?
+    - [Tự động hóa](ten_nganh) nên join CLB nào?
+    - CLB học thuật cho ngành [Vi mạch](ten_nganh)?
+    - Ngành [Điện tử](ten_nganh) có CLB robotics không?
+    - [Điện, điện tử](ten_nganh) nên tham gia CLB IoT không?
+    - CLB lập trình có phù hợp với [Tự động hóa](ten_nganh) không?
+    - Sinh viên [Vi mạch](ten_nganh) nên tham gia CLB gì?
+    - CLB nào hỗ trợ chuyên môn ngành [Điện tử](ten_nganh)?
+    - Ngành [Tự động hóa](ten_nganh) có CLB về AI không?
+    - [Điện, điện tử](ten_nganh) phù hợp với CLB nào nhất?
+    - Cho mình danh sách CLB ngành [Vi mạch](ten_nganh)
+    - CLB học thuật, kỹ thuật ngành [Điện tử](ten_nganh)?
+    - Ngành [Tự động hóa](ten_nganh) nên tham gia CLB nào?
+    - CLB kỹ năng mềm phù hợp với ngành [Vi mạch](ten_nganh)?
+    - Các CLB nổi bật dành cho sinh viên [Điện tử](ten_nganh)?
+    - Sinh viên [Tự động hóa](ten_nganh) nên tham gia CLB nào?
+    - CLB học thuật và kỹ năng cho ngành [Vi mạch](ten_nganh)?
+    - CLB kỹ thuật nào phù hợp với ngành [Điện tử](ten_nganh)?
+    - Ngành [Điện, điện tử](ten_nganh) có CLB nổi bật không?
+    - Sinh viên [Vi mạch](ten_nganh) nên tham gia CLB kỹ thuật nào?
+    - CLB robotics, lập trình cho ngành [Điện tử](ten_nganh)?
+    - Ngành [Tự động hóa](ten_nganh) có CLB AI nào không?
+    - CLB kỹ năng, học thuật cho sinh viên [Điện, điện tử](ten_nganh)?
+    - Các CLB theo chuyên ngành [Vi mạch](ten_nganh)?
+    - Ngành [Điện tử](ten_nganh) nên tham gia CLB kỹ năng mềm nào?
+    - CLB nghiên cứu và học thuật ngành [Tự động hóa](ten_nganh)?
+    - Ngành [Vi mạch](ten_nganh) có CLB thực hành kỹ thuật nào?
+    - CLB lập trình, AI, robotics cho [Điện tử](ten_nganh)?
+    - Sinh viên [Tự động hóa](ten_nganh) nên tham gia CLB chuyên môn nào?
+    - Ngành [Điện, điện tử](ten_nganh) có CLB robot nào không?
+    - CLB IoT, lập trình phù hợp với ngành [Vi mạch](ten_nganh)?
+    - Ngành [Điện tử](ten_nganh) nên tham gia CLB kỹ thuật nào?
+    - CLB chuyên ngành nào nổi bật cho [Tự động hóa](ten_nganh)?
+    - Các CLB học thuật, kỹ thuật của ngành [Vi mạch](ten_nganh)?
+    - Sinh viên [Điện tử](ten_nganh) nên tham gia CLB robotics nào?
+    - CLB kỹ thuật và lập trình cho ngành [Tự động hóa](ten_nganh)?
 
 
-- intent: ktx_danh_sach
+- intent: ktx_co_khong
   examples: |
-    - Trường có những kí túc xá nào?
-    - Danh sách các KTX của trường
-    - Tôi muốn biết tất cả phòng KTX hiện có
-    - Khoa [Điện tử](ten_khoa) có KTX nào không?
-    - Liệt kê các KTX đang hoạt động
-- intent: ktx_dieu_kien
-  examples: |
-    - Ai được phép ở KTX?
-    - Điều kiện để ở KTX của trường là gì?
-    - Sinh viên năm mấy có thể đăng ký KTX?
-    - Cần giấy tờ gì để ở KTX?
-    - Có yêu cầu gì về điểm hoặc học lực để ở KTX?
-- intent: ktx_chi_phi
-  examples: |
-    - Học phí KTX là bao nhiêu?
-    - Chi phí ở KTX mỗi tháng là gì?
-    - Giá thuê phòng KTX hiện nay?
-    - Phòng KTX đơn / đôi có giá bao nhiêu?
-    - Tôi muốn biết tiền KTX hàng tháng
-- intent: ktx_gio_mo_cua
-  examples: |
-    - KTX mở cửa mấy giờ?
-    - Giờ ra vào KTX như thế nào?
-    - Lịch sinh hoạt hàng ngày của KTX?
-    - KTX có trực 24/7 không?
-    - Khi nào sinh viên phải về KTX?
-- intent: ktx_tien_nghi
-  examples: |
-    - KTX có những tiện nghi gì?
-    - Phòng KTX được trang bị những gì?
-    - KTX có máy giặt, wifi không?
-    - Có phòng học, phòng máy tính trong KTX không?
-    - Tôi muốn biết cơ sở vật chất KTX
+    - Trường có kí túc xá không?
+    - Học viện có kí túc xá không
+    - Có kí túc xá không
+    - Co ki tuc xa cho sinh vien khong
+    - Co ktx khong
+    - Truong co ki tuc xa khong
+    - Truong co ktx khongg
+    - KTX có ở trong trường không?
+    - Trường có chỗ ở cho sinh viên không?
+    - Sinh viên có được ở KTX không?
+    - KTX trường mình có không?
+    - Sinh viên năm nhất có KTX không?
+    - KTX có tồn tại trong trường không?
+    - Trường có ký túc xá riêng cho sinh viên không?
+    - Mình muốn biết trường có KTX không?
+    - Có chỗ ở nào trong trường cho sinh viên không?
+    - Trường có ký túc xá nội trú không?
+    - KTX dành cho sinh viên mới có không?
+    - Trường có khu ký túc xá không?
+    - Có phòng ở KTX cho sinh viên không?
+    - Sinh viên có thể ở KTX của trường không?
+    - KTX hoạt động ở trường mình đúng không?
+    - KTX có dành cho tất cả sinh viên không?
+    - Mình nghe nói có KTX, có đúng không?
+    - KTX có trong khuôn viên trường không?
+    - Sinh viên muốn ở KTX có được không?
+
+
 - intent: ktx_dang_ky
   examples: |
     - Cách đăng ký KTX của trường?
+    - Tôi muốn ở kí túc xá
+    - Muốn ở kí túc xá thì cần làm gì
+    - Đăng kí ở kí túc xá như nào
+    - Ở kí túc xá có cần đăng kí không
+    - Cách đăng ký ktx
     - Tôi muốn đăng ký ở KTX thì làm sao?
-    - Hình thức đăng ký KTX hiện nay?
     - Khi nào mở đăng ký KTX?
-    - Tôi cần chuẩn bị gì để đăng ký KTX?
-- intent: ktx_lien_he
-  examples: |
-    - Ai quản lý KTX của trường?
-    - Liên hệ KTX qua email hoặc số điện thoại?
-    - Tôi muốn gặp người phụ trách KTX
-    - KTX có fanpage hoặc website không?
-    - Email liên hệ KTX là gì?
-- intent: ktx_quy_dinh
-  examples: |
-    - Quy định sinh hoạt trong KTX là gì?
-    - KTX có nội quy ra vào không?
-    - Tôi cần biết các quy tắc của KTX
-    - KTX có cấm hút thuốc hay không?
-    - Sinh viên phải tuân thủ những gì khi ở KTX?
+    - Hình thức đăng ký KTX là gì?
+    - Làm sao để đăng ký ở KTX?
+    - Thủ tục đăng ký KTX như thế nào?
+    - Tôi muốn nộp hồ sơ đăng ký KTX
+    - Đăng ký KTX có cần hồ sơ gì?
+    - Mình muốn biết cách đăng ký KTX
+    - Đăng ký KTX bắt đầu từ khi nào?
+    - KTX có đăng ký trực tuyến không?
+    - Làm thủ tục đăng ký KTX mất bao lâu?
+    - Cách điền đơn đăng ký KTX
+    - Nộp hồ sơ KTX ở đâu?
+    - Tôi muốn hướng dẫn đăng ký KTX
+    - Sinh viên cần chuẩn bị gì để đăng ký KTX?
+    - Đăng ký KTX năm nay khác năm trước không?
+    - Có cần ký giấy cam kết không?
+    - Tôi muốn biết các bước đăng ký KTX
+    - Có thể đăng ký KTX qua email không?
+    - Ở kí túc xá có cần đăng kí hay có điều kiện gì không
+    - Điều kien de dang ky ktx
 
-
-
-- intent: thu_vien_danh_sach
+- intent: ktx_chi_phi
   examples: |
-    - Trường có những thư viện nào?
-    - Danh sách thư viện hiện có
-    - Tôi muốn biết tất cả thư viện trong trường
-    - Thư viện của khoa [Điện tử](ten_khoa) là gì?
-    - Liệt kê các thư viện đang hoạt động
-- intent: thu_vien_gio_mo_cua
-  examples: |
-    - Thư viện mở cửa mấy giờ?
-    - Giờ hoạt động của thư viện là gì?
-    - Thư viện có mở thứ bảy, chủ nhật không?
-    - Khi nào tôi có thể vào thư viện đọc sách?
-    - Lịch sinh hoạt của thư viện trong tuần
-- intent: thu_vien_tai_nguyen
-  examples: |
-    - Thư viện có những loại sách gì?
-    - Tôi muốn tìm tạp chí, báo khoa học trong thư viện
-    - Thư viện có e-book không?
-    - Sách tham khảo môn [Điện tử](ten_nganh) có trong thư viện không?
-    - Thư viện có tài liệu nghiên cứu, luận văn không?
-- intent: thu_vien_phong_doc
-  examples: |
-    - Thư viện có phòng đọc riêng không?
-    - Tôi muốn biết cơ sở vật chất phòng đọc
-    - Phòng đọc của thư viện có wifi không?
-    - Thư viện có phòng học nhóm không?
-    - Không gian học tập của thư viện gồm những gì?
-- intent: thu_vien_thiet_bi
-  examples: |
-    - Thư viện có máy tính không?
-    - Tôi muốn mượn máy photocopy hoặc scan
-    - Thiết bị phục vụ sinh viên gồm những gì?
-    - Thư viện có máy in, máy scan, máy photocopy không?
-    - Tôi cần dùng thiết bị trong thư viện thì liên hệ ai?
-- intent: thu_vien_dieu_kien_su_dung
-  examples: |
-    - Ai được phép sử dụng thư viện?
-    - Điều kiện để mượn sách là gì?
-    - Sinh viên mới có thể sử dụng thư viện không?
-    - Tôi cần đăng ký thẻ thư viện hay không?
-    - Có quy định gì khi sử dụng thư viện?
-- intent: thu_vien_dang_ky
-  examples: |
-    - Cách đăng ký thẻ thư viện
-    - Tôi muốn mượn sách phải làm gì?
-    - Thủ tục đăng ký sử dụng thư viện
-    - Tôi cần chuẩn bị gì để được vào thư viện?
-    - Làm sao để mượn sách, tài liệu?
-- intent: thu_vien_lien_he
-  examples: |
-    - Ai phụ trách thư viện?
-    - Liên hệ thư viện qua email hoặc số điện thoại?
-    - Tôi cần gặp quản lý thư viện
-    - Thư viện có fanpage hoặc website không?
-    - Tôi cần hỗ trợ về thư viện liên hệ ai?
-- intent: thu_vien_su_kien_hoat_dong
-  examples: |
-    - Thư viện có sự kiện gì sắp tới?
-    - Workshop, talk show trong thư viện
-    - Hoạt động ngoại khóa của thư viện là gì?
-    - Tôi muốn tham gia event của thư viện
-    - Thư viện có chương trình hướng dẫn tìm tài liệu không?
-
-
-- intent: phong_giao_vu_danh_sach
-  examples: |
-    - Trường có những phòng giáo vụ nào?
-    - Danh sách các phòng giáo vụ hiện có
-    - Tôi muốn biết phòng giáo vụ của khoa [Điện tử](ten_khoa)
-    - Liệt kê các phòng giáo vụ đang hoạt động
-    - Phòng giáo vụ phụ trách những khoa nào?
-- intent: phong_giao_vu_gio_lam_viec
-  examples: |
-    - Phòng giáo vụ mở cửa mấy giờ?
-    - Giờ làm việc của phòng giáo vụ là gì?
-    - Khi nào tôi có thể đến phòng giáo vụ?
-    - Lịch làm việc của phòng giáo vụ trong tuần
-    - Phòng giáo vụ có làm việc thứ bảy, chủ nhật không?
-- intent: phong_giao_vu_thu_tuc_dang_ky_hoc
-  examples: |
-    - Tôi muốn đăng ký môn học thì làm sao?
-    - Thủ tục đăng ký học ở phòng giáo vụ?
-    - Cách nộp đơn đăng ký môn học
-    - Khi nào đăng ký học kỳ mới?
-    - Phòng giáo vụ hỗ trợ đăng ký môn học như thế nào?
-- intent: phong_giao_vu_hoc_bong
-  examples: |
-    - Tôi muốn biết học bổng hiện có
-    - Phòng giáo vụ có hỗ trợ sinh viên gì về tài chính?
-    - Cách đăng ký học bổng, hỗ trợ học phí
-    - Học bổng cho sinh viên ngành [Điện tử](ten_nganh) là gì?
-    - Tôi cần liên hệ để hỏi về học bổng
-- intent: phong_giao_vu_diem_so
-  examples: |
-    - Tôi muốn xem điểm môn học
-    - Bảng điểm sinh viên được cập nhật khi nào?
-    - Phòng giáo vụ cung cấp bảng điểm ra sao?
-    - Ai liên hệ để hỏi điểm số?
-    - Phòng giáo vụ có hỗ trợ in bảng điểm không?
-- intent: phong_giao_vu_nop_ho_so
-  examples: |
-    - Tôi muốn nộp hồ sơ học tập
-    - Thủ tục nộp giấy tờ cho phòng giáo vụ
-    - Hồ sơ sinh viên cần nộp gồm những gì?
-    - Tôi cần chuẩn bị gì để hoàn tất hồ sơ?
-    - Quy trình nộp hồ sơ ở phòng giáo vụ là gì?
-- intent: phong_giao_vu_thong_bao_ke_hoach
-  examples: |
-    - Phòng giáo vụ có thông báo gì mới?
-    - Kế hoạch học tập kỳ này là gì?
-    - Lịch thi, lịch học, thông báo quan trọng
-    - Tôi muốn nhận thông báo từ phòng giáo vụ
-    - Thông báo học tập cho sinh viên khoa [Điện tử](ten_khoa)
-- intent: phong_giao_vu_lien_he
-  examples: |
-    - Ai phụ trách phòng giáo vụ?
-    - Liên hệ phòng giáo vụ qua email hoặc số điện thoại?
-    - Tôi cần gặp quản lý phòng giáo vụ
-    - Phòng giáo vụ có fanpage hoặc website không?
-    - Tôi cần hỗ trợ về học tập, liên hệ ai?
-
-
-
-- intent: coso_danh_sach
-  examples: |
-    - Trường có những cơ sở vật chất nào?
-    - Danh sách cơ sở vật chất của trường
-    - Tôi muốn biết tất cả phòng học, phòng lab, thư viện
-    - Liệt kê các cơ sở vật chất hiện có
-    - Khoa [Điện tử](ten_khoa) có những cơ sở vật chất gì?
-- intent: coso_phong_hoc
-  examples: |
-    - Trường có bao nhiêu phòng học?
-    - Phòng học của khoa [Điện tử](ten_khoa) được trang bị gì?
-    - Tôi muốn biết cơ sở vật chất phòng học
-    - Phòng học có máy chiếu, điều hòa không?
-    - Phòng học hiện đại của trường gồm những gì?
-- intent: coso_san_bai_the_thao
-  examples: |
-    - Trường có sân bóng, sân tennis không?
-    - Tôi muốn biết cơ sở vật chất thể thao
-    - Các sân thể thao của trường gồm gì?
-    - Sân vận động, phòng gym của trường có tiện nghi gì?
-    - Thời gian sử dụng sân bãi thể thao là gì?
-- intent: coso_tien_nghi_chung
-  examples: |
-    - Trường có wifi không?
-    - Căng tin, phòng máy tính, máy photocopy có không?
-    - Tiện nghi chung của trường gồm gì?
-    - Tôi muốn biết cơ sở vật chất phục vụ sinh viên
-    - Trường có phòng họp, phòng hội thảo không?
-- intent: coso_dieu_kien_su_dung
-  examples: |
-    - Ai được sử dụng phòng lab, phòng học?
-    - Điều kiện để sử dụng thư viện, phòng máy tính?
-    - Sinh viên có cần đăng ký trước khi vào phòng học hay lab không?
-    - Có quy định gì khi sử dụng sân bãi thể thao?
-    - Tôi cần chuẩn bị gì để sử dụng cơ sở vật chất?
-- intent: coso_lien_he
-  examples: |
-    - Ai quản lý cơ sở vật chất trường?
-    - Liên hệ phòng quản lý cơ sở vật chất qua email hoặc số điện thoại?
-    - Tôi muốn gặp người phụ trách cơ sở vật chất
-    - Email hoặc fanpage quản lý cơ sở vật chất là gì?
-    - Tôi cần hỗ trợ về cơ sở vật chất liên hệ ai?
-
-
-- intent: song_nganh_danh_sach
-  examples: |
-    - Trường có những chương trình song ngành nào?
-    - Danh sách các song ngành hiện có
-    - Tôi muốn biết tất cả chương trình song ngành
-    - Song ngành của khoa [Điện tử](ten_khoa) là gì?
-    - Liệt kê các song ngành đang tuyển sinh
-- intent: song_nganh_dieu_kien_dang_ky
-  examples: |
-    - Điều kiện để đăng ký song ngành là gì?
-    - Sinh viên cần những tiêu chuẩn gì để học song ngành?
-    - Tôi muốn biết yêu cầu học lực khi đăng ký song ngành
-    - Có yêu cầu về điểm trung bình hay tín chỉ không?
-    - Ai được phép đăng ký song ngành?
-- intent: song_nganh_thu_tuc
-  examples: |
-    - Thủ tục đăng ký song ngành là gì?
-    - Tôi cần làm gì để đăng ký học song ngành?
-    - Hồ sơ đăng ký song ngành gồm những gì?
-    - Khi nào mở đăng ký song ngành?
-    - Phòng nào phụ trách đăng ký song ngành?
-- intent: song_nganh_thoi_gian_hoc
-  examples: |
-    - Thời gian học song ngành là bao lâu?
-    - Lộ trình học song ngành như thế nào?
-    - Học song ngành có kéo dài thêm thời gian tốt nghiệp không?
-    - Các học phần trong song ngành gồm gì?
-    - Tôi muốn biết kế hoạch học tập khi học song ngành
-- intent: song_nganh_co_hoi_nghe_nghiep
-  examples: |
-    - Học song ngành ra trường làm gì?
-    - Cơ hội nghề nghiệp của sinh viên song ngành
-    - Tôi muốn biết ngành nghề phù hợp sau khi học song ngành
-    - Song ngành có giúp tăng khả năng xin việc không?
-    - Sinh viên song ngành được ưu tiên ở doanh nghiệp nào?
-- intent: song_nganh_hoc_phi
-  examples: |
-    - Học phí song ngành là bao nhiêu?
-    - Tôi muốn biết chi phí học song ngành
-    - Học phí có khác so với ngành chính không?
-    - Trả học phí song ngành theo kỳ hay theo năm?
-    - Phí đăng ký song ngành là gì?
-- intent: song_nganh_lien_he
-  examples: |
-    - Ai phụ trách chương trình song ngành?
-    - Liên hệ tư vấn song ngành qua email hoặc số điện thoại?
-    - Tôi cần gặp quản lý chương trình song ngành
-    - Song ngành có fanpage hoặc website không?
-    - Tôi cần hỗ trợ thông tin về song ngành liên hệ ai?
-
-
-
-- intent: baoluu_dieu_kien
-  examples: |
-    - Điều kiện để bảo lưu học tập là gì?
-    - Sinh viên cần đáp ứng tiêu chuẩn gì để bảo lưu?
-    - Ai được phép xin bảo lưu?
-    - Tôi muốn biết yêu cầu bảo lưu của khoa [Điện tử](ten_khoa)
-    - Có giới hạn thời gian học trước khi bảo lưu không?
-- intent: baoluu_thu_tuc
-  examples: |
-    - Thủ tục bảo lưu học tập như thế nào?
-    - Tôi cần làm gì để xin bảo lưu?
-    - Hồ sơ bảo lưu gồm những gì?
-    - Khi nào có thể nộp đơn bảo lưu?
-    - Phòng nào phụ trách thủ tục bảo lưu?
-- intent: baoluu_thoi_gian
-  examples: |
-    - Thời gian tối đa được bảo lưu là bao lâu?
-    - Tôi muốn biết thời hạn bảo lưu
-    - Có thể kéo dài thời gian bảo lưu không?
-    - Bảo lưu có ảnh hưởng đến thời gian tốt nghiệp không?
-    - Khi nào phải quay lại học sau thời gian bảo lưu?
-- intent: baoluu_ho_so
-  examples: |
-    - Tôi cần chuẩn bị giấy tờ gì để bảo lưu?
-    - Hồ sơ bảo lưu gồm những gì?
-    - Có cần xác nhận từ khoa hoặc phòng giáo vụ không?
-    - Sinh viên cần nộp hồ sơ ở đâu?
-    - Thời hạn nộp hồ sơ bảo lưu là gì?
-- intent: baoluu_hoc_phi
-  examples: |
-    - Học phí trong thời gian bảo lưu tính thế nào?
-    - Tôi có phải đóng học phí khi bảo lưu không?
-    - Bảo lưu có ảnh hưởng đến học phí không?
-    - Chi phí đăng ký bảo lưu là gì?
-    - Có ưu đãi học phí nào khi bảo lưu không?
-- intent: baoluu_quyen_loi_nghia_vu
-  examples: |
-    - Quyền lợi của sinh viên khi bảo lưu là gì?
-    - Nghĩa vụ của sinh viên trong thời gian bảo lưu
-    - Tôi có thể tham gia hoạt động của trường khi bảo lưu không?
-    - Sinh viên bảo lưu có được giữ chỗ trong lớp học không?
-    - Quyền lợi học bổng hay tài trợ khi bảo lưu
-- intent: baoluu_lien_he
-  examples: |
-    - Ai phụ trách bảo lưu học tập?
-    - Liên hệ tư vấn bảo lưu qua email hoặc số điện thoại?
-    - Tôi cần gặp quản lý bảo lưu
-    - Phòng bảo lưu có fanpage hoặc website không?
-    - Tôi cần hỗ trợ về bảo lưu liên hệ ai?
-
-
-- intent: tot_nghiep_dieu_kien
-  examples: |
-    - Điều kiện tốt nghiệp ngành [Điện tử](ten_nganh) là gì?
-    - Sinh viên cần hoàn thành gì để tốt nghiệp?
-    - Tôi muốn biết các yêu cầu tốt nghiệp
-    - Học phần, tín chỉ cần đạt để ra trường
-    - Những tiêu chuẩn để được nhận bằng tốt nghiệp
-- intent: tot_nghiep_thu_tuc
-  examples: |
-    - Thủ tục để nhận bằng tốt nghiệp
-    - Tôi cần làm gì để được công nhận tốt nghiệp?
-    - Hồ sơ tốt nghiệp gồm những gì?
-    - Nộp giấy tờ tốt nghiệp ở đâu?
-    - Các bước hoàn tất thủ tục tốt nghiệp
-- intent: tot_nghiep_thoi_gian
-  examples: |
-    - Khi nào có lễ tốt nghiệp?
-    - Thời gian công nhận tốt nghiệp là khi nào?
-    - Tôi muốn biết lịch tốt nghiệp của năm nay
-    - Lễ ra trường được tổ chức vào tháng mấy?
-    - Khi nào sinh viên nhận bằng tốt nghiệp?
-- intent: tot_nghiep_ho_so
-  examples: |
-    - Tôi cần chuẩn bị giấy tờ gì để tốt nghiệp?
-    - Hồ sơ tốt nghiệp gồm những gì?
-    - Cần bản sao hay bản gốc giấy tờ nào?
-    - Sinh viên cần nộp hồ sơ ở đâu?
-    - Thời hạn nộp hồ sơ tốt nghiệp là gì?
-- intent: tot_nghiep_diem_so
-  examples: |
-    - Tôi muốn xem điểm tốt nghiệp
-    - Bảng điểm tốt nghiệp được cập nhật khi nào?
-    - Phòng giáo vụ cung cấp điểm tốt nghiệp ra sao?
-    - Ai liên hệ để hỏi điểm tốt nghiệp?
-    - Làm thế nào để kiểm tra điểm tốt nghiệp?
-- intent: tot_nghiep_chung_nhan
-  examples: |
-    - Khi nào tôi nhận được bằng tốt nghiệp?
-    - Chứng nhận tốt nghiệp được cấp ở đâu?
-    - Bằng tốt nghiệp gửi về địa chỉ nào?
-    - Tôi muốn biết mẫu chứng nhận tốt nghiệp
-    - Thời gian nhận bằng tốt nghiệp là khi nào?
-- intent: tot_nghiep_lien_he
-  examples: |
-    - Ai phụ trách tốt nghiệp ngành [Điện tử](ten_nganh)?
-    - Liên hệ phòng tốt nghiệp qua email hoặc số điện thoại?
-    - Tôi cần gặp quản lý tốt nghiệp
-    - Phòng tốt nghiệp có fanpage hoặc website không?
-    - Tôi cần hỗ trợ về tốt nghiệp liên hệ ai?    
-
-- intent: thi_tieng_anh_doi_tuong_dien_tu
-  examples: |
-    - Ai phải thi tiếng Anh đầu vào ngành [Điều khiển và Tự động hóa](ten_nganh)?
-    - Sinh viên [Công nghệ Kỹ thuật Điện, điện tử](ten_nganh) có phải thi không?
-    - Tôi học [Vi mạch Bán dẫn](ten_nganh) có được miễn thi nếu có chứng chỉ TOEFL?
-    - Sinh viên mới nhập học khoa Điện tử có phải dự thi không?
-    - Có ngoại lệ cho những người có chứng chỉ tiếng Anh quốc tế không?
-- intent: thi_tieng_anh_hinh_thuc_dien_tu
-  examples: |
-    - Bài thi tiếng Anh đầu vào 3 ngành gồm những phần nào?
-    - Hình thức thi là trắc nghiệm hay viết luận?
-    - Có kiểm tra nghe, nói, đọc, viết không?
-    - Thời gian thi mỗi phần bao lâu?
-    - Thi trên máy hay trên giấy?
-- intent: thi_tieng_anh_diem_chuan_dien_tu
-  examples: |
-    - Điểm chuẩn tiếng Anh đầu vào ngành [CNTT](ten_nganh) là bao nhiêu?
-    - Ngành [Điều khiển và Tự động hóa](ten_nganh) cần đạt bao nhiêu điểm để đậu?
-    - Chuẩn đầu ra tiếng Anh cho sinh viên 3 ngành khoa Điện tử là gì?
-    - Nếu không đạt điểm chuẩn, tôi phải làm gì?
-    - Có điểm chuẩn khác nhau cho từng ngành không?
-- intent: thi_tieng_anh_lich_dien_tu
-  examples: |
-    - Khi nào tổ chức kỳ thi tiếng Anh đầu vào 3 ngành khoa Điện tử?
-    - Lịch thi tiếng Anh đầu vào năm 2025 của PTIT là gì?
-    - Có lịch thi bổ sung không?
-    - Tôi thi ở cơ sở Hà Nội hay TP.HCM?
-    - Địa điểm thi từng ngành có khác nhau không?
-- intent: thi_tieng_anh_thu_tuc_dien_tu
-  examples: |
-    - Thủ tục đăng ký thi tiếng Anh đầu vào 3 ngành như thế nào?
-    - Tôi cần nộp hồ sơ ở đâu?
-    - Có lệ phí thi không?
-    - Đăng ký online hay trực tiếp?
-    - Hạn cuối đăng ký kỳ thi tiếng Anh đầu vào là khi nào?
-- intent: thi_tieng_anh_truong_hop_dac_biet_dien_tu
-  examples: |
-    - Tôi đã có chứng chỉ TOEFL/IELTS có phải thi không?
-    - Nếu trượt kỳ thi đầu vào có được thi lại không?
-    - Sinh viên năm cuối có phải thi không?
-    - Có miễn thi cho sinh viên giỏi ngoại ngữ không?
-    - Có hình thức thi thay thế cho những trường hợp đặc biệt không?
-- intent: thi_tieng_anh_lien_he_dien_tu
-  examples: |
-    - Ai phụ trách kỳ thi tiếng Anh đầu vào khoa Điện tử?
-    - Liên hệ tư vấn kỳ thi qua email hoặc số điện thoại?
-    - Tôi cần gặp quản lý kỳ thi tiếng Anh
-    - Phòng khảo thí có website hoặc fanpage không?
-    - Tôi cần hỗ trợ thông tin về thi tiếng Anh liên hệ ai?
-
+    - Chi phí khi ở KTX là bao nhiêu?
+    - Giá thuê phòng KTX hiện nay?
+    - Phòng KTX đơn/đôi có giá bao nhiêu?
+    - Tiền KTX mỗi tháng là bao nhiêu?
+    - Phí ở KTX là bao nhiêu?
+    - Chi phí KTX tính theo tháng hay học kỳ?
+    - Phí ở KTX gồm những gì?
+    - Giá thuê KTX cho sinh viên năm nhất?
+    - Tôi muốn biết tiền KTX
+    - Phí KTX đã bao gồm điện nước chưa?
+    - Giá KTX có thay đổi không?
+    - Chi phí KTX có phụ thu không?
+    - Phòng KTX giá thấp nhất bao nhiêu?
+    - Phòng KTX cao cấp giá bao nhiêu?
+    - Chi phí KTX một học kỳ là bao nhiêu?
+    - Tôi muốn biết mức phí KTX
+    - Tiền thuê phòng KTX năm nay?
+    - KTX có hỗ trợ giảm phí không?
+    - Chi phí KTX cho sinh viên ngoại tỉnh?
+    - KTX giá rẻ nhất là bao nhiêu?
+    - Giá ở ktx như thế nào
+    - Giá ở ktx bao nhiêu 1 năm
+    - Giá ở ktx 1 tháng
+    - Chi phí ở ktx như nào
+    - Chi phí ở kí túc như thế nào
+    - Giá kí túc xá cho sinh viên 
+    - Tien o ktx bao nhieu
+    - Chi phi o ktx
+    - Gia phong o ktx
+    - Toi muon biet ve chi phi ki tuc xa
+  
 
 # synonym cho Kỹ thuật Điều khiển và Tự động hóa
 - synonym: Kỹ thuật Điều khiển và Tự động hóa
@@ -1368,68 +1146,148 @@ nlu:
     - ngành Tự động hóa
     - Kỹ thuật Tự động hóa
     - Điều khiển và Tự động hóa
-    - tdh
     - Điều khiển tự động hóa
     - điều khiển & tự động hóa
-    - kỹ thuật điều khiển & tự động hóa
     - kỹ thuật điều khiển tự động hóa
-    - KTĐK-TĐH
-    - KTĐK và TĐH
     - ngành điều khiển tự động
     - automation
     - control and automation
     - control automation engineering
+    - automation engineering
+    - KTĐK-TĐH
+    - KTĐK và TĐH
+    - ĐK-TĐH
+    - tdh
+    - dk va tdh
+    - dieu khien va tu dong hoa
+    - dieu khien tu dong hoa
+    - tu dong hoa
+    - ky thuat dieu khien va tu dong hoa
+    - dk&tđh
+    - dktdh
 
-# synonym cho Công nghệ Kỹ thuật Điện, điện tử
-- synonym: Công nghệ Kỹ thuật Điện, điện tử
+# synonym cho Công nghệ Kỹ thuật Điện, Điện tử
+- synonym: Công nghệ Kỹ thuật Điện, Điện tử
   examples: |
+    - Công nghệ Kỹ thuật Điện tử
     - ngành điện
     - ngành điện tử
     - Điện, điện tử
-    - Kỹ thuật điện
-    - Công nghệ điện
-    - Điện tử 
-    - điện tử
+    - kỹ thuật điện
     - kỹ thuật điện tử
-    - đt
-    - điện
-    - điện tử & điện
-    - kỹ thuật điện, điện tử
-    - kỹ thuật điện điện tử
+    - Công nghệ điện
     - CNKT điện
     - CNKT điện tử
-    - ngành điện điện tử
+    - CNKT điện điện tử
+    - điện điện tử
+    - điện
+    - điện tử
+    - điện tử & điện
     - Electrical Engineering
     - Electrical and Electronic Engineering
     - EE
     - EEE
- 
+    - cong nghe ky thuat dien dien tu
+    - cong nghe ky thuat dien tu
+    - cong nghe dien dien tu
+    - cnkt dien dien tu
+    - dien dien tu
+    - dien tu
+    - nganh dien dien tu
+    - dien tu va dien
+    - ktdt
+    - ktđt
+    - ktđ
+    - cn dien
+    - cn dien tu
+
 # synonym cho Công nghệ Vi mạch bán dẫn
 - synonym: Công nghệ Vi mạch bán dẫn
   examples: |
     - Vi mạch
     - vi mạch bán dẫn
-    - Vi Mạch Bán Dẫn
     - ngành vi mạch
     - ngành vi mạch bán dẫn
-    - Kỹ thuật bán dẫn
-    - Bán dẫn
-    - vmbd
-    - công nghệ vmbd
-    - vi mạch & bán dẫn
     - công nghệ vi mạch bán dẫn
-    - ngành vi mạch
-    - bán dẫn
-    - công nghệ bán dẫn
-    - vi mạch
     - kỹ thuật vi mạch
-    - vi mạch & bán dẫn
-    - công nghệ vi mạch bán dẫn
+    - kỹ thuật bán dẫn
+    - Bán dẫn
+    - công nghệ bán dẫn
     - CN vi mạch
     - CN bán dẫn
-    - Semiconductor
-    - Semiconductor Engineering
-    - IC design
-    - Integrated Circuit
+    - vmbd
+    - vm bd
+    - cnvm
+    - vi mach ban dan
+    - cong nghe vi mach ban dan
+    - cong nghe vi mach
+    - cong nghe ban dan
+    - semiconductor
+    - semiconductor engineering
+    - ic
+    - ic design
+    - chip
+    - chip design
+    - integrated circuit
     - ngành IC
     - thiết kế vi mạch
+    - thiết kế chip
+
+
+- synonym: ktx
+  examples: |
+    - ktx
+    - KTX
+    - kí túc xá
+    - Kí túc xá
+    - KÍ TÚC XÁ
+    - ký túc xá
+    - Ký túc xá
+    - KÝ TÚC XÁ
+    - ky tuc xa
+    - Ky tuc xa
+    - KY TUC XA
+    - ki tuc xa
+    - Ki tuc xa
+    - KI TUC XA
+
+
+- lookup: ten_nganh
+  examples: |
+    - Kỹ thuật Điều khiển và Tự động hóa
+    - Công nghệ Kỹ thuật Điện tử
+    - Công nghệ Vi mạch bán dẫn
+    - Tự động hóa
+    - Vi mạch
+    - Kỹ thuật Điều khiển và Tự động hóa
+
+- lookup: co_so
+  examples: |
+    - Hà Nội
+    - HN
+    - Hà Đông
+    - Hòa Lạc
+    - TP HCM
+    - HCM
+    - cơ sở phía Nam
+    - cơ sở Bắc
+    - miền Bắc
+    - miền Nam
+
+- lookup: phuong_thuc
+  examples: |
+    - thi TN THPT
+    - thi tốt nghiệp
+    - điểm thi tốt nghiệp
+    - xét học bạ
+    - học bạ
+    - SAT
+    - ACT
+    - HSA
+    - TSA
+    - SPT
+    - APT
+    - tuyển thẳng
+    - ưu tiên xét tuyển
+    
+
