@@ -1,4 +1,4 @@
-# actions.py
+
 import unicodedata
 from typing import Any, Text, Dict, List
 from rasa_sdk import Action, Tracker
@@ -6,12 +6,12 @@ from rasa_sdk.executor import CollectingDispatcher
 from rasa_sdk.events import SlotSet
 
 
-# ==================== UTILITY FUNCTIONS ====================
+
 def remove_accents(text: Text) -> Text:
     """Remove Vietnamese accents from text using unicodedata"""
     if not text:
         return text
-    # Chuẩn hóa unicode và loại bỏ dấu
+
     text = unicodedata.normalize('NFD', text)
     return ''.join(c for c in text if unicodedata.category(c) != 'Mn')
 
@@ -50,7 +50,7 @@ def chuan_hoa_ten_nganh(ten_nganh: Text) -> Text:
         if key in ten_khong_dau:
             return value
 
-    # Check direct match with official names
+
     official_names = {
         "Kỹ thuật Điều khiển và Tự động hóa": "Kỹ thuật Điều khiển và Tự động hóa",
         "Công nghệ Kỹ thuật Điện, Điện tử": "Công nghệ Kỹ thuật Điện, Điện tử",
@@ -64,7 +64,7 @@ def chuan_hoa_ten_nganh(ten_nganh: Text) -> Text:
     return None
 
 
-# ==================== ACTION CLASSES ====================
+
 class ActionHoiThongTinNganh(Action):
 
 
@@ -78,7 +78,7 @@ class ActionHoiThongTinNganh(Action):
         ten_nganh = tracker.get_slot("ten_nganh")
         ten_nganh_chuan = chuan_hoa_ten_nganh(ten_nganh) if ten_nganh else None
 
-        # Database thông tin ngành
+
         thong_tin_nganh = {
             "Kỹ thuật Điều khiển và Tự động hóa": {
                 "ma_nganh": "7520216",
@@ -287,7 +287,7 @@ class ActionTraCuuKhaNangTrungTuyen(Action):
             dispatcher.utter_message(text=message)
             return []
 
-        # Điểm chuẩn tham khảo 2024
+
         diem_chuan_tham_khao = {
             "Kỹ thuật Điều khiển và Tự động hóa": 24.5,
             "Công nghệ Kỹ thuật Điện, Điện tử": 24.0,
@@ -491,6 +491,7 @@ class ActionXetTuyenUuTienDienTu(Action):
             }
         }
 
+
         message = "🎯 **CHÍNH SÁCH ƯU TIÊN XÉT TUYỂN**\n\n"
 
         message += "📍 **ƯU TIÊN KHU VỰC:**\n"
@@ -523,6 +524,337 @@ class ActionXetTuyenUuTienDienTu(Action):
         dispatcher.utter_message(text=message)
         return [SlotSet("ten_nganh", ten_nganh_chuan or ten_nganh)]
 
+
+class ActionXetTuyenHoSo(Action):
+    """Action for providing admission application documentation information"""
+
+    def name(self) -> Text:
+        return "action_xet_tuyen_ho_so"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+
+        ten_nganh = tracker.get_slot("ten_nganh")
+        ten_nganh_chuan = chuan_hoa_ten_nganh(ten_nganh) if ten_nganh else None
+
+
+        ho_so_xet_tuyen = {
+            "thanh_phan_ho_so": [
+                "✅ **Phiếu đăng ký xét tuyển** (theo mẫu của trường)",
+                "✅ **Bản sao học bạ THPT** (có công chứng)",
+                "✅ **Bản sao bằng tốt nghiệp THPT** hoặc **Giấy chứng nhận tốt nghiệp tạm thời**",
+                "✅ **Bản sao CMND/CCCD** (có công chứng)",
+                "✅ **Giấy chứng nhận ưu tiên** (nếu có)",
+                "✅ **Ảnh 3x4** (4 tấm, ghi rõ họ tên, ngày sinh phía sau)",
+                "✅ **Phong bì có dán tem** (ghi rõ địa chỉ nhận giấy báo)"
+            ],
+            "yeu_cau_cong_chung": [
+                "Tất cả bản sao phải được công chứng trong vòng 6 tháng",
+                "Học bạ công chứng toàn bộ các trang",
+                "Bằng tốt nghiệp/Giấy CN tốt nghiệp công chứng",
+                "CMND/CCCD công chứng mặt trước và sau"
+            ],
+            "hinh_thuc_nop_ho_so": {
+                "truc_tiep": "Nộp trực tiếp tại Phòng Đào tạo - PTIT",
+                "buu_dien": "Gửi hồ sơ qua bưu điện theo địa chỉ tuyển sinh",
+                "online": "Đăng ký online qua cổng tuyển sinh của Bộ GD&ĐT và PTIT"
+            },
+            "dia_chi_nop_ho_so": {
+                "co_so_ha_noi": "Phòng Đào tạo, Tầng 1, Nhà A1, 122 Hoàng Quốc Việt, Cầu Giấy, Hà Nội",
+                "co_so_hcm": "Phòng Đào tạo, 11 Nguyễn Đình Chiểu, P. Đa Kao, Quận 1, TP.HCM",
+                "thoi_gian_lam_viec": "Thứ 2 - Thứ 6: 7h30 - 17h00, Thứ 7: 7h30 - 12h00"
+            },
+            "le_phi": {
+                "phi_xet_tuyen": "30.000 VNĐ/nguyện vọng",
+                "phi_nhap_hoc": "Theo thông báo khi trúng tuyển",
+                "hinh_thuc_dong": "Chuyển khoản hoặc nộp trực tiếp"
+            },
+            "thoi_gian": {
+                "mo_dang_ky": "01/04 hàng năm",
+                "ket_thuc_dot_1": "20/06 hàng năm",
+                "dot_bo_sung": "Theo thông báo của trường",
+                "cong_khai_ket_qua": "15-20 ngày sau khi nộp hồ sơ"
+            },
+            "huong_dan_online": {
+                "buoc_1": "Truy cập https://dangky.ptit.edu.vn",
+                "buoc_2": "Đăng ký tài khoản và điền thông tin cá nhân",
+                "buoc_3": "Chọn ngành, tổ hợp xét tuyển",
+                "buoc_4": "Tải lên bản scan các giấy tờ cần thiết",
+                "buoc_5": "Xác nhận và nộp lệ phí online",
+                "buoc_6": "Theo dõi kết quả và xác nhận nhập học"
+            }
+        }
+
+        message = "📋 **HƯỚNG DẪN HỒ SƠ XÉT TUYỂN - KHOA ĐIỆN TỬ PTIT**\n\n"
+
+
+        message += "🎒 **THÀNH PHẦN HỒ SƠ ĐẦY ĐỦ:**\n"
+        for thanh_phan in ho_so_xet_tuyen['thanh_phan_ho_so']:
+            message += f"{thanh_phan}\n"
+
+        message += "\n🏛️ **YÊU CẦU CÔNG CHỨNG:**\n"
+        for yeu_cau in ho_so_xet_tuyen['yeu_cau_cong_chung']:
+            message += f"• {yeu_cau}\n"
+
+
+        message += "\n📮 **HÌNH THỨC NỘP HỒ SƠ:**\n"
+        message += f"• **Trực tiếp:** {ho_so_xet_tuyen['hinh_thuc_nop_ho_so']['truc_tiep']}\n"
+        message += f"• **Bưu điện:** {ho_so_xet_tuyen['hinh_thuc_nop_ho_so']['buu_dien']}\n"
+        message += f"• **Online:** {ho_so_xet_tuyen['hinh_thuc_nop_ho_so']['online']}\n"
+
+
+        message += "\n📍 **ĐỊA CHỈ NỘP HỒ SƠ:**\n"
+        message += f"• **Hà Nội:** {ho_so_xet_tuyen['dia_chi_nop_ho_so']['co_so_ha_noi']}\n"
+        message += f"• **TP.HCM:** {ho_so_xet_tuyen['dia_chi_nop_ho_so']['co_so_hcm']}\n"
+        message += f"• **Thời gian làm việc:** {ho_so_xet_tuyen['dia_chi_nop_ho_so']['thoi_gian_lam_viec']}\n"
+
+
+        message += "\n💰 **LỆ PHÍ XÉT TUYỂN:**\n"
+        message += f"• **Phí xét tuyển:** {ho_so_xet_tuyen['le_phi']['phi_xet_tuyen']}\n"
+        message += f"• **Phí nhập học:** {ho_so_xet_tuyen['le_phi']['phi_nhap_hoc']}\n"
+        message += f"• **Hình thức đóng:** {ho_so_xet_tuyen['le_phi']['hinh_thuc_dong']}\n"
+
+
+        message += "\n⏰ **THỜI GIAN TUYỂN SINH:**\n"
+        message += f"• **Mở đăng ký:** {ho_so_xet_tuyen['thoi_gian']['mo_dang_ky']}\n"
+        message += f"• **Kết thúc đợt 1:** {ho_so_xet_tuyen['thoi_gian']['ket_thuc_dot_1']}\n"
+        message += f"• **Đợt bổ sung:** {ho_so_xet_tuyen['thoi_gian']['dot_bo_sung']}\n"
+        message += f"• **Công bố kết quả:** {ho_so_xet_tuyen['thoi_gian']['cong_khai_ket_qua']}\n"
+
+
+        message += "\n💻 **HƯỚNG DẪN ĐĂNG KÝ ONLINE:**\n"
+        for buoc, huong_dan in ho_so_xet_tuyen['huong_dan_online'].items():
+            message += f"• **{buoc.replace('_', ' ').title()}:** {huong_dan}\n"
+
+
+        message += "\n❓ **CÂU HỎI THƯỜNG GẶP:**\n"
+        message += "• **Nộp online có cần nộp bản cứng?** Chỉ cần nộp bản cứng khi nhập học\n"
+        message += "• **Sai thông tin có sửa được?** Được sửa trong thời hạn đăng ký\n"
+        message += "• **Thiếu giấy tờ?** Bổ sung trong vòng 7 ngày sau khi nộp\n"
+        message += "• **Nộp muộn?** Chỉ được nộp trong các đợt bổ sung (nếu có)\n"
+
+
+        if ten_nganh_chuan:
+            message += f"\n🎯 **LƯU Ý CHO NGÀNH {ten_nganh_chuan.upper()}:**\n"
+            message += "• Hồ sơ giống các ngành khác trong khoa Điện tử\n"
+            message += "• Không yêu cầu giấy tờ đặc biệt nào khác\n"
+            message += "• Ưu tiên xét hồ sơ nộp sớm\n"
+
+
+        message += "\n📞 **HỖ TRỢ HỒ SƠ:**\n"
+        message += "• **Hotline:** (024) 3354 5678\n"
+        message += "• **Email:** tuyensinh@ptit.edu.vn\n"
+        message += "• **Website:** https://tuyensinh.ptit.edu.vn\n"
+        message += "• **Fanpage:** https://facebook.com/ptit.tuyensinh\n"
+
+        message += "\n💡 **LỜI KHUYÊN:**\n"
+        message += "• Chuẩn bị hồ sơ sớm, tránh nước đến chân mới nhảy\n"
+        message += "• Kiểm tra kỹ thông tin trước khi nộp\n"
+        message += "• Giữ lại biên lai/bản sao hồ sơ đã nộp\n"
+        message += "• Theo dõi thông báo thường xuyên trên website trường\n"
+
+        dispatcher.utter_message(text=message)
+        return [SlotSet("ten_nganh", ten_nganh_chuan or ten_nganh)]
+
+
+class ActionTraCuuChiTieu(Action):
+    """Action for looking up enrollment quotas by major"""
+
+    def name(self) -> Text:
+        return "action_tra_cuu_chi_tieu"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+
+        ten_nganh = tracker.get_slot("ten_nganh")
+        nam = tracker.get_slot("nam")
+        ten_nganh_chuan = chuan_hoa_ten_nganh(ten_nganh) if ten_nganh else None
+
+        if not nam:
+            nam = "2024"
+
+
+        chi_tieu_data = {
+            "2024": {
+                "Kỹ thuật Điều khiển và Tự động hóa": "150 chỉ tiêu",
+                "Công nghệ Kỹ thuật Điện, Điện tử": "170 chỉ tiêu",
+                "Công nghệ Vi mạch Bán dẫn": "110 chỉ tiêu"
+            },
+            "2023": {
+                "Kỹ thuật Điều khiển và Tự động hóa": "140 chỉ tiêu",
+                "Công nghệ Kỹ thuật Điện, Điện tử": "160 chỉ tiêu",
+                "Công nghệ Vi mạch Bán dẫn": "100 chỉ tiêu"
+            },
+            "2025": {
+                "Kỹ thuật Điều khiển và Tự động hóa": "160 chỉ tiêu",
+                "Công nghệ Kỹ thuật Điện, Điện tử": "180 chỉ tiêu",
+                "Công nghệ Vi mạch Bán dẫn": "120 chỉ tiêu"
+            }
+        }
+
+        if nam not in chi_tieu_data:
+            message = f"❌ Chưa có dữ liệu chỉ tiêu năm {nam}\n"
+            message += f"📊 Các năm có dữ liệu: {', '.join(chi_tieu_data.keys())}"
+            dispatcher.utter_message(text=message)
+            return []
+
+        nam_data = chi_tieu_data[nam]
+
+        if ten_nganh_chuan and ten_nganh_chuan in nam_data:
+            chi_tieu = nam_data[ten_nganh_chuan]
+            message = f"🎯 **CHỈ TIÊU NĂM {nam} - {ten_nganh_chuan.upper()}**\n\n"
+            message += f"📊 {chi_tieu}\n\n"
+            message += "💡 **Phân bổ chỉ tiêu:**\n"
+            message += "• Xét điểm thi THPT: 70%\n"
+            message += "• Xét học bạ: 20%\n"
+            message += "• Ưu tiên & Tuyển thẳng: 10%\n\n"
+            message += "🌐 **Chi tiết:** https://tuyensinh.ptit.edu.vn/chi-tieu"
+
+        elif ten_nganh:
+            message = f"🔍 Chỉ tiêu năm {nam} cho '{ten_nganh}'\n\n"
+            message += f"📊 **CHỈ TIÊU CÁC NGÀNH NĂM {nam}:**\n\n"
+            for nganh, chi_tieu in nam_data.items():
+                message += f"• **{nganh}:** {chi_tieu}\n"
+
+            message += f"\n💡 Hỏi cụ thể: \"Chỉ tiêu ngành [tên ngành] năm {nam}\""
+
+        else:
+            message = f"🎯 **CHỈ TIÊU TUYỂN SINH NĂM {nam} - KHOA ĐIỆN TỬ PTIT**\n\n"
+
+            for nganh, chi_tieu in nam_data.items():
+                message += f"📊 **{nganh}**\n"
+                message += f"• {chi_tieu}\n\n"
+
+            message += "📈 **XU HƯỚNG CHỈ TIÊU:**\n"
+            message += "• Tăng nhẹ hàng năm do nhu cầu nhân lực cao\n"
+            message += "• Tập trung vào chất lượng đào tạo\n"
+            message += "• Ưu tiên sinh viên có năng lực tốt\n\n"
+
+            message += "💡 **LƯU Ý QUAN TRỌNG:**\n"
+            message += "• Chỉ tiêu có thể thay đổi theo quyết định của Bộ GD&ĐT\n"
+            message += "• Cạnh tranh phụ thuộc vào số lượng hồ sơ đăng ký\n"
+            message += "• Nên đăng ký sớm để tăng cơ hội trúng tuyển\n\n"
+
+            message += "🌐 **Cập nhật mới nhất:** https://tuyensinh.ptit.edu.vn/chi-tieu"
+
+        dispatcher.utter_message(text=message)
+        return [SlotSet("ten_nganh", ten_nganh_chuan or ten_nganh), SlotSet("nam", nam)]
+
+
+class ActionTraCuuToHopXetTuyen(Action):
+    """Action for looking up admission subject combinations by major"""
+
+    def name(self) -> Text:
+        return "action_tra_cuu_to_hop_xet_tuyen"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+
+        ten_nganh = tracker.get_slot("ten_nganh")
+        nam = tracker.get_slot("nam")
+        ten_nganh_chuan = chuan_hoa_ten_nganh(ten_nganh) if ten_nganh else None
+
+        if not nam:
+            nam = "2024"
+
+
+        to_hop_data = {
+            "Kỹ thuật Điều khiển và Tự động hóa": {
+                "to_hop": ["A00 (Toán, Lý, Hóa)", "A01 (Toán, Lý, Anh)", "D01 (Toán, Văn, Anh)",
+                           "D07 (Toán, Hóa, Anh)"],
+                "mon_chinh": "Toán, Vật lý",
+                "diem_uu_tien": "Ưu tiên thí sinh giỏi Toán, Lý",
+                "ty_le_trung_tuyen": "A00: 45%, A01: 35%, D01: 15%, D07: 5%"
+            },
+            "Công nghệ Kỹ thuật Điện, Điện tử": {
+                "to_hop": ["A00 (Toán, Lý, Hóa)", "A01 (Toán, Lý, Anh)", "D01 (Toán, Văn, Anh)",
+                           "D07 (Toán, Hóa, Anh)"],
+                "mon_chinh": "Toán, Vật lý",
+                "diem_uu_tien": "Ưu tiên thí sinh có tư duy kỹ thuật",
+                "ty_le_trung_tuyen": "A00: 50%, A01: 30%, D01: 15%, D07: 5%"
+            },
+            "Công nghệ Vi mạch Bán dẫn": {
+                "to_hop": ["A00 (Toán, Lý, Hóa)", "A01 (Toán, Lý, Anh)", "D01 (Toán, Văn, Anh)",
+                           "D07 (Toán, Hóa, Anh)"],
+                "mon_chinh": "Toán, Vật lý, Hóa học",
+                "diem_uu_tien": "Ưu tiên thí sinh giỏi Toán, Lý, Hóa",
+                "ty_le_trung_tuyen": "A00: 60%, A01: 25%, D07: 10%, D01: 5%"
+            }
+        }
+
+
+        thong_tin_chung = {
+            "phuong_thuc_xet_tuyen": [
+                "Xét điểm thi THPT Quốc gia",
+                "Xét học bạ THPT",
+                "Xét tuyển kết hợp",
+                "Ưu tiên xét tuyển"
+            ],
+            "diem_uu_tien": "Theo quy định của Bộ GD&ĐT",
+            "thoi_gian_xet_tuyen": "Theo lịch của Bộ GD&ĐT hàng năm"
+        }
+
+        if ten_nganh_chuan and ten_nganh_chuan in to_hop_data:
+            info = to_hop_data[ten_nganh_chuan]
+            message = f"📚 **TỔ HỢP XÉT TUYỂN {nam} - {ten_nganh_chuan.upper()}**\n\n"
+
+            message += f"🎯 **CÁC TỔ HỢP MÔN:**\n"
+            for i, to_hop in enumerate(info['to_hop'], 1):
+                message += f"{i}. {to_hop}\n"
+
+            message += f"\n📊 **THÔNG TIN CHI TIẾT:**\n"
+            message += f"• **Môn chính:** {info['mon_chinh']}\n"
+            message += f"• **Điểm ưu tiên:** {info['diem_uu_tien']}\n"
+            message += f"• **Tỷ lệ trúng tuyển:** {info['ty_le_trung_tuyen']}\n\n"
+
+            message += f"💡 **LỜI KHUYÊN:**\n"
+            message += "• Chọn tổ hợp phù hợp với thế mạnh của bạn\n"
+            message += "• Ưu tiên tổ hợp có tỷ lệ trúng tuyển cao\n"
+            message += "• Ôn tập kỹ các môn chính\n\n"
+
+            message += "🌐 **Đăng ký xét tuyển:** https://dangky.ptit.edu.vn"
+
+        elif ten_nganh:
+            message = f"🔍 Tổ hợp xét tuyển cho '{ten_nganh}'\n\n"
+            message += f"📚 **TỔ HỢP XÉT TUYỂN CÁC NGÀNH NĂM {nam}:**\n\n"
+
+            for nganh, info in to_hop_data.items():
+                message += f"🎯 **{nganh}**\n"
+                message += f"• {', '.join(info['to_hop'][:2])}\n\n"
+
+            message += f"💡 Hỏi cụ thể: \"Tổ hợp xét tuyển ngành [tên ngành]\""
+
+        else:
+            message = f"📚 **TỔ HỢP XÉT TUYỂN NĂM {nam} - KHOA ĐIỆN TỬ PTIT**\n\n"
+
+            for nganh, info in to_hop_data.items():
+                message += f"🎯 **{nganh}**\n"
+                for to_hop in info['to_hop']:
+                    message += f"• {to_hop}\n"
+                message += f"📊 Tỷ lệ: {info['ty_le_trung_tuyen']}\n\n"
+
+            message += "📋 **PHƯƠNG THỨC XÉT TUYỂN:**\n"
+            for i, phuong_thuc in enumerate(thong_tin_chung['phuong_thuc_xet_tuyen'], 1):
+                message += f"{i}. {phuong_thuc}\n"
+
+            message += f"\n🎯 **LỜI KHUYÊN CHỌN TỔ HỢP:**\n"
+            message += "• **A00:** Phù hợp thí sinh giỏi các môn tự nhiên\n"
+            message += "• **A01:** Phù hợp thí sinh giỏi Toán, Lý và có ngoại ngữ\n"
+            message += "• **D01:** Phù hợp thí sinh có thế mạnh ngoại ngữ\n"
+            message += "• **D07:** Phù hợp thí sinh giỏi Toán, Hóa và ngoại ngữ\n\n"
+
+            message += "💎 **LƯU Ý QUAN TRỌNG:**\n"
+            message += "• Có thể đăng ký nhiều tổ hợp cho cùng 1 ngành\n"
+            message += "• Hệ thống tự chọn tổ hợp có điểm cao nhất\n"
+            message += "• Nên chọn tổ hợp phù hợp với năng lực thực tế\n\n"
+
+            message += "🌐 **Tra cứu điểm:** https://tuyensinh.ptit.edu.vn/diem-chuan"
+
+        dispatcher.utter_message(text=message)
+        return [SlotSet("ten_nganh", ten_nganh_chuan or ten_nganh), SlotSet("nam", nam)]
 
 class ActionTraCuuHocPhiNganh(Action):
     """Action for looking up tuition fees by major"""
@@ -561,7 +893,7 @@ class ActionTraCuuHocPhiNganh(Action):
             }
         }
 
-        # Thông tin học phí chung
+
         thong_tin_chung = {
             "tin_chi_toi_thieu": "15 tín chỉ/kỳ",
             "tin_chi_toi_da": "18 tín chỉ/kỳ",
@@ -671,7 +1003,7 @@ class ActionTraCuuHocBongNganh(Action):
             }
         }
 
-        # Thông tin học bổng chung
+
         hoc_bong_chung = {
             "loai_hoc_bong": [
                 "Học bổng Khuyến khích học tập",
@@ -857,7 +1189,7 @@ class ActionTraCuuCoHoiViecLam(Action):
             }
         }
 
-        # Thông tin chung về thị trường lao động
+
         thi_truong_chung = {
             "nhu_cau_nhan_luc": "Rất cao, đặc biệt trong lĩnh vực 4.0",
             "tang_truong_nganh": "15-20% mỗi năm",
@@ -1027,7 +1359,7 @@ class ActionTraCuuKetNoiDoanhNghiep(Action):
             }
         }
 
-        # Thông tin chung về kết nối doanh nghiệp
+
         ket_noi_chung = {
             "loai_hinh_hop_tac": [
                 "Thực tập & Tuyển dụng",
