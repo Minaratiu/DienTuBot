@@ -1,6 +1,9 @@
 version: "3.1"
 
 nlu:
+
+
+
 - intent: chao_hoi
   examples: |
     - chào ad
@@ -14,6 +17,12 @@ nlu:
     - Chào bot
     - Bắt đầu tư vấn
     - User
+    - hi
+    - hello
+    - hi ae
+    - xin chào
+    - chào bạn
+    - hi ptit
 
 - intent: tam_biet
   examples: |
@@ -108,7 +117,6 @@ nlu:
 
 - intent: hoi_thong_tin_nganh
   examples: |
- 
     - Ngành [Kỹ thuật Điều khiển và Tự động hóa](ten_nganh) là ngành như thế nào ạ
     - Thông tin về ngành [Kỹ thuật Điều khiển và Tự động hóa](ten_nganh)
     - Tư vấn cho mình về ngành [Kỹ thuật Điều khiển và Tự động hóa](ten_nganh) với ạ
@@ -120,7 +128,6 @@ nlu:
     - Ngành [Kỹ thuật Điều khiển và Tự động hóa](ten_nganh) có khó học không
     - Giới thiệu về ngành [Kỹ thuật Điều khiển và Tự động hóa](ten_nganh)
     - Thông tin về ngành [Kỹ thuật Điều khiển và Tự động hóa](ten_nganh)
- 
     - Ngành [Công nghệ Vi mạch Bán dẫn](ten_nganh) là gì
     - Thông tin ngành [Công nghệ Vi mạch Bán dẫn](ten_nganh)
     - Cho mình xin thông tin ngành [Công nghệ Vi mạch Bán dẫn](ten_nganh)
@@ -132,7 +139,6 @@ nlu:
     - Ngành [Công nghệ Vi mạch Bán dẫn](ten_nganh) có khó không
     - Em cần thông tin tổng quan về ngành [Công nghệ Vi mạch Bán dẫn](ten_nganh)
     - Thông tin về ngành Công nghệ Vi mạch Bán dẫn](ten_nganh)
- 
     - Ngành [Công nghệ Kỹ thuật Điện, Điện tử](ten_nganh) là ngành như thế nào ạ
     - Thông tin về ngành [Công nghệ Kỹ thuật Điện, Điện tử](ten_nganh)
     - Tư vấn cho mình về ngành [Công nghệ Kỹ thuật Điện, Điện tử](ten_nganh) với ạ
@@ -202,6 +208,7 @@ nlu:
     - Mức điểm trúng tuyển vào ngành [Công nghệ kỹ thuật điện, điện tử](ten_nganh) là bao nhiêu?
     - Ngành [Công nghệ kỹ thuật điện, điện tử](ten_nganh) năm nay điểm cao không?
     - Em muốn biết điểm chuẩn ngành [Kỹ thuật điều khiển và tự động hóa](ten_nganh)
+
 
 - intent: tra_cuu_kha_nang_trung_tuyen
   examples: |
@@ -509,7 +516,6 @@ nlu:
 
 - intent: hoi_he_dao_tao
   examples: |
-  
     - Ngành [Kỹ thuật Điều khiển và Tự động hóa](ten_nganh) có những hệ đào tạo nào?
     - Hệ đào tạo của ngành [Công nghệ Kỹ thuật Điện, Điện tử](ten_nganh) là gì?
     - Ngành [Công nghệ Vi mạch bán dẫn](ten_nganh) đào tạo hệ gì?
@@ -530,7 +536,6 @@ nlu:
     - Ngành [Điện](ten_nganh) có những hệ đào tạo nào?
     - [Tự động](ten_nganh) học hệ gì?
     - Hệ đào tạo [chip](ten_nganh) thế nào?
-    
     - Các hệ đào tạo trong trường là gì?
     - Trường có những hệ đào tạo nào?
     - Hệ đào tạo gồm những loại gì?
@@ -719,7 +724,7 @@ nlu:
 - intent: phong_lab_thiet_bi
   examples: |
     - Phòng lab có thiết bị gì?
-    - Các máy móc trong phòng lab [Vi mạch bán dẫn](ten_lab)
+    - Các máy móc trong phòng lab
     - Lab của khoa [Điện tử](ten_khoa) được trang bị những gì?
     - Tôi muốn biết thiết bị thực hành trong phòng lab
     - Phòng lab có thiết bị robot không?
@@ -823,7 +828,6 @@ nlu:
 
 - intent: tra_cuu_co_hoi_viec_lam
   examples: |
-    # Kỹ thuật Điều khiển và Tự động hóa
     - Sinh viên ngành [Kỹ thuật Điều khiển và Tự động hóa](ten_nganh) ra trường làm gì?
     - Học xong ngành [Kỹ thuật Điều khiển và Tự động hóa](ten_nganh) có thể làm nghề gì?
     - Tư vấn cho mình việc làm của ngành [Kỹ thuật Điều khiển và Tự động hóa](ten_nganh)
@@ -834,7 +838,6 @@ nlu:
     - Tư vấn cho mình việc làm của ngành [Tự động hóa](ten_nganh) với ạ
     - Ad cho mình hỏi học xong ngành [Điều khiển và Tự động hóa](ten_nganh) có thể làm gì ạ
     - Cơ hội việc làm của ngành [Điều khiển tự động hóa](ten_nganh)
-
     - Sinh viên ngành [Công nghệ Kỹ thuật Điện, Điện tử](ten_nganh) ra trường làm gì?
     - Học xong ngành [Công nghệ Kỹ thuật Điện, Điện tử](ten_nganh) có thể làm nghề gì?
     - Tư vấn việc làm ngành [Điện, điện tử](ten_nganh)
@@ -845,7 +848,6 @@ nlu:
     - Cho mình hỏi cơ hội làm việc ngành [Công nghệ điện](ten_nganh)
     - Tư vấn việc làm ngành [Điện tử & điện](ten_nganh)
     - Học xong ngành [KTĐT](ten_nganh) có thể xin việc ở đâu?
-
     - Sinh viên ngành [Công nghệ Vi mạch bán dẫn](ten_nganh) ra trường làm gì?
     - Học xong ngành [Vi mạch](ten_nganh) có thể làm nghề gì?
     - Tư vấn việc làm ngành [Công nghệ bán dẫn](ten_nganh)
@@ -1139,7 +1141,7 @@ nlu:
     - Toi muon biet ve chi phi ki tuc xa
   
 
-# synonym cho Kỹ thuật Điều khiển và Tự động hóa
+
 - synonym: Kỹ thuật Điều khiển và Tự động hóa
   examples: |
     - Tự động hóa
@@ -1166,7 +1168,7 @@ nlu:
     - dk&tđh
     - dktdh
 
-# synonym cho Công nghệ Kỹ thuật Điện, Điện tử
+
 - synonym: Công nghệ Kỹ thuật Điện, Điện tử
   examples: |
     - Công nghệ Kỹ thuật Điện tử
@@ -1201,7 +1203,7 @@ nlu:
     - cn dien
     - cn dien tu
 
-# synonym cho Công nghệ Vi mạch bán dẫn
+
 - synonym: Công nghệ Vi mạch bán dẫn
   examples: |
     - Vi mạch
@@ -1290,4 +1292,3 @@ nlu:
     - tuyển thẳng
     - ưu tiên xét tuyển
     
-
