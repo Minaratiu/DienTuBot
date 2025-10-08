@@ -2,307 +2,22 @@ version: "3.1"
 
 stories:
 
-# Story chào hỏi cơ bản
-- story: Chào hỏi
-  steps:
-  - intent: chao_hoi
-  - action: utter_chao_hoi
-
-# Story kết thúc hội thoại
-- story: Tạm biệt
-  steps:
-  - intent: tam_biet
-  - action: utter_tam_biet
-
-# Story cảm ơn
-- story: Cảm ơn
-  steps:
-  - intent: cam_on
-  - action: utter_cam_on
-
-# Story giới thiệu và chức năng bot
-- story: Hỏi về bot
-  steps:
-  - intent: gioi_thieu_bot
-  - action: utter_gioi_thieu_bot
-
-- story: Hỏi chức năng bot
-  steps:
-  - intent: hoi_chuc_nang_bot
-  - action: utter_hoi_chuc_nang_bot
-
-# Story liên hệ khoa phòng
-- story: Liên hệ khoa phòng giáo vụ
-  steps:
-  - intent: lien_he_khoa_phong_giao_vu
-  - action: utter_lien_he_khoa_phong_giao_vu
-
-# Story thông tin ngành học (có entity)
-- story: Hỏi thông tin ngành cụ thể
-  steps:
-  - intent: hoi_thong_tin_nganh
-    entities:
-    - ten_nganh
-  - action: action_hoi_thong_tin_nganh
-
-- story: Hỏi thông tin ngành không có entity - hỏi lại
-  steps:
-  - intent: hoi_thong_tin_nganh
-  - action: utter_hoi_ten_nganh
-
-# Story tra cứu mã ngành
-- story: Tra cứu mã ngành có entity
-  steps:
-  - intent: tra_cuu_ma_nganh
-    entities:
-    - ten_nganh
-  - action: action_tra_cuu_ma_nganh
-
-- story: Tra cứu mã ngành không có entity - hỏi lại
-  steps:
-  - intent: tra_cuu_ma_nganh
-  - action: utter_hoi_ten_nganh
-
-# Story tra cứu điểm chuẩn
-- story: Tra cứu điểm chuẩn có entity
-  steps:
-  - intent: tra_cuu_diem_chuan
-    entities:
-    - ten_nganh
-  - action: action_tra_cuu_diem_chuan
-
-- story: Tra cứu điểm chuẩn có cả ngành và loại xét tuyển
-  steps:
-  - intent: tra_cuu_diem_chuan
-    entities:
-    - ten_nganh
-    - loai_xet_tuyen
-  - action: action_tra_cuu_diem_chuan
-
-- story: Tra cứu điểm chuẩn không có ngành - hỏi lại
-  steps:
-  - intent: tra_cuu_diem_chuan
-  - action: utter_hoi_ten_nganh
-
-# Story tra cứu khả năng trúng tuyển
-- story: Tra cứu khả năng trúng tuyển có điểm và ngành
-  steps:
-  - intent: tra_cuu_kha_nang_trung_tuyen
-    entities:
-    - diem
-    - ten_nganh
-  - action: action_tra_cuu_kha_nang_trung_tuyen
-
-- story: Tra cứu khả năng trúng tuyển chỉ có điểm
-  steps:
-  - intent: tra_cuu_kha_nang_trung_tuyen
-    entities:
-    - diem
-  - action: utter_hoi_ten_nganh
-
-- story: Tra cứu khả năng trúng tuyển không có điểm - hỏi lại
-  steps:
-  - intent: tra_cuu_kha_nang_trung_tuyen
-  - action: utter_hoi_diem
-
-- story: Tra cứu khả năng trúng tuyển không có gì - hỏi lại
-  steps:
-  - intent: tra_cuu_kha_nang_trung_tuyen
-  - action: utter_hoi_diem_va_nganh
-
-# Story xét tuyển
-- story: Điều kiện xét tuyển
-  steps:
-  - intent: xet_tuyen_dieu_kien_dien_tu
-  - action: action_xet_tuyen_dieu_kien_dien_tu
-
-- story: Ưu tiên xét tuyển
-  steps:
-  - intent: xet_tuyen_uu_tien_dien_tu
-  - action: action_xet_tuyen_uu_tien_dien_tu
-
-- story: Hồ sơ xét tuyển
-  steps:
-  - intent: xet_tuyen_ho_so
-  - action: action_xet_tuyen_ho_so
-
-# Story chỉ tiêu và tổ hợp xét tuyển
-- story: Tra cứu chỉ tiêu
-  steps:
-  - intent: tra_cuu_chi_tieu
-  - action: action_tra_cuu_chi_tieu
-
-- story: Tra cứu tổ hợp xét tuyển
-  steps:
-  - intent: tra_cuu_to_hop_xet_tuyen
-  - action: action_tra_cuu_to_hop_xet_tuyen
-
-# Story học phí
-- story: Tra cứu học phí ngành cụ thể
-  steps:
-  - intent: tra_cuu_hoc_phi_nganh
-    entities:
-    - ten_nganh
-  - action: action_tra_cuu_hoc_phi_nganh
-
-- story: Hỏi học phí chung
-  steps:
-  - intent: hoi_hoc_phi_chung
-  - action: utter_hoi_hoc_phi_chung
-
-- story: Tra cứu học phí không có ngành - hỏi lại
-  steps:
-  - intent: tra_cuu_hoc_phi_nganh
-  - action: utter_hoi_ten_nganh
-
-# Story học bổng
-- story: Tra cứu học bổng ngành cụ thể
-  steps:
-  - intent: tra_cuu_hoc_bong_nganh
-    entities:
-    - ten_nganh
-  - action: action_tra_cuu_hoc_bong_nganh
-
-- story: Hỏi học bổng chung
-  steps:
-  - intent: hoi_hoc_bong_chung
-  - action: utter_hoi_hoc_bong_chung
-
-- story: Tra cứu học bổng không có ngành - hỏi lại
-  steps:
-  - intent: tra_cuu_hoc_bong_nganh
-  - action: utter_hoi_ten_nganh
-
-# Story hệ đào tạo và thời gian
-- story: Hỏi hệ đào tạo
-  steps:
-  - intent: hoi_he_dao_tao
-  - action: utter_hoi_he_dao_tao
-
-- story: Hỏi thời gian đào tạo
-  steps:
-  - intent: hoi_thoi_gian_dao_tao
-  - action: utter_hoi_thoi_gian_dao_tao
-
-# Story nghiên cứu khoa học
-- story: Khái niệm nghiên cứu khoa học
-  steps:
-  - intent: tra_cuu_khai_niem_nghien_cuu_khoa_hoc
-  - action: utter_tra_cuu_khai_niem_nghien_cuu_khoa_hoc
-
-- story: Điều kiện nghiên cứu khoa học
-  steps:
-  - intent: tra_cuu_dieu_kien_nghien_cuu_khoa_hoc
-  - action: utter_tra_cuu_dieu_kien_nghien_cuu_khoa_hoc
-
-- story: Lợi ích nghiên cứu khoa học
-  steps:
-  - intent: tra_cuu_loi_ich_nghien_cuu_khoa_hoc
-  - action: utter_tra_cuu_loi_ich_nghien_cuu_khoa_hoc
-
-# Story phòng lab
-- story: Danh sách phòng lab
-  steps:
-  - intent: phong_lab_danh_sach
-  - action: utter_phong_lab_danh_sach
-
-- story: Thiết bị phòng lab
-  steps:
-  - intent: phong_lab_thiet_bi
-  - action: utter_phong_lab_thiet_bi
-
-- story: Điều kiện sử dụng phòng lab
-  steps:
-  - intent: phong_lab_dieu_kien_su_dung
-  - action: utter_phong_lab_dieu_kien_su_dung
-
-- story: Liên hệ phòng lab
-  steps:
-  - intent: phong_lab_lien_he
-  - action: utter_phong_lab_lien_he
-
-# Story việc làm và doanh nghiệp
-- story: Cơ hội việc làm
-  steps:
-  - intent: tra_cuu_co_hoi_viec_lam
-  - action: action_tra_cuu_co_hoi_viec_lam
-
-- story: Kết nối doanh nghiệp
-  steps:
-  - intent: tra_cuu_ket_noi_doanh_nghiep
-  - action: action_tra_cuu_ket_noi_doanh_nghiep
-
-# Story nữ giới trong kỹ thuật
-- story: Hỏi về nữ giới trong kỹ thuật
-  steps:
-  - intent: hoi_ve_nu_gioi_trong_ky_thuat
-  - action: utter_hoi_ve_nu_gioi_trong_ky_thuat
-
-# Story câu lạc bộ
-- story: Danh sách câu lạc bộ
-  steps:
-  - intent: hoi_danh_sach_cau_lac_bo
-  - action: utter_hoi_danh_sach_cau_lac_bo
-
-- story: Câu lạc bộ theo ngành học
-  steps:
-  - intent: hoi_clb_theo_nganh_hoc
-  - action: utter_hoi_clb_theo_nganh_hoc
-
-# Story ký túc xá
-- story: Kiểm tra KTX có không
-  steps:
-  - intent: ktx_co_khong
-  - action: utter_ktx_co_khong
-
-- story: Đăng ký KTX
-  steps:
-  - intent: ktx_dang_ky
-  - action: utter_ktx_dang_ky
-
-- story: Chi phí KTX
-  steps:
-  - intent: ktx_chi_phi
-  - action: utter_ktx_chi_phi
-
-# Stories phức tạp - Hội thoại nhiều bước
-
-- story: Hỏi thông tin sau chào hỏi
+- story: Tư vấn tuyển sinh cơ bản
   steps:
   - intent: chao_hoi
   - action: utter_chao_hoi
   - intent: hoi_thong_tin_nganh
-    entities:
-    - ten_nganh
-  - action: action_hoi_thong_tin_nganh
-  - intent: cam_on
-  - action: utter_cam_on
-
-- story: Tư vấn tuyển sinh đầy đủ
-  steps:
-  - intent: hoi_thong_tin_nganh
-    entities:
-    - ten_nganh
   - action: action_hoi_thong_tin_nganh
   - intent: tra_cuu_diem_chuan
-    entities:
-    - ten_nganh
   - action: action_tra_cuu_diem_chuan
-  - intent: tra_cuu_kha_nang_trung_tuyen
-    entities:
-    - diem
-    - ten_nganh
-  - action: action_tra_cuu_kha_nang_trung_tuyen
+  - intent: cam_on
+  - action: utter_cam_on
 
 - story: Hỏi học phí và học bổng
   steps:
   - intent: tra_cuu_hoc_phi_nganh
-    entities:
-    - ten_nganh
   - action: action_tra_cuu_hoc_phi_nganh
   - intent: tra_cuu_hoc_bong_nganh
-    entities:
-    - ten_nganh
   - action: action_tra_cuu_hoc_bong_nganh
 
 - story: Hỏi cơ sở vật chất
@@ -314,41 +29,55 @@ stories:
   - intent: ktx_co_khong
   - action: utter_ktx_co_khong
 
-- story: Hỏi hoạt động ngoại khóa
+- story: Hỏi điều kiện xét tuyển
+  steps:
+  - intent: xet_tuyen_dieu_kien_dien_tu
+  - action: action_xet_tuyen_dieu_kien_dien_tu
+  - intent: xet_tuyen_ho_so
+  - action: action_xet_tuyen_ho_so
+
+- story: Hỏi nghiên cứu khoa học
+  steps:
+  - intent: tra_cuu_khai_niem_nghien_cuu_khoa_hoc
+  - action: utter_tra_cuu_khai_niem_nghien_cuu_khoa_hoc
+  - intent: tra_cuu_dieu_kien_nghien_cuu_khoa_hoc
+  - action: utter_tra_cuu_dieu_kien_nghien_cuu_khoa_hoc
+
+- story: Hỏi cơ hội việc làm
+  steps:
+  - intent: tra_cuu_co_hoi_viec_lam
+  - action: action_tra_cuu_co_hoi_viec_lam
+  - intent: tra_cuu_ket_noi_doanh_nghiep
+  - action: action_tra_cuu_ket_noi_doanh_nghiep
+
+- story: Hỏi thông tin đào tạo
+  steps:
+  - intent: hoi_he_dao_tao
+  - action: utter_hoi_he_dao_tao
+  - intent: hoi_thoi_gian_dao_tao
+  - action: utter_hoi_thoi_gian_dao_tao
+
+- story: Hỏi KTX đầy đủ
+  steps:
+  - intent: ktx_co_khong
+  - action: utter_ktx_co_khong
+  - intent: ktx_dang_ky
+  - action: utter_ktx_dang_ky
+  - intent: ktx_chi_phi
+  - action: utter_ktx_chi_phi
+
+- story: Hỏi hoạt động sinh viên
   steps:
   - intent: hoi_danh_sach_cau_lac_bo
   - action: utter_hoi_danh_sach_cau_lac_bo
   - intent: hoi_clb_theo_nganh_hoc
   - action: utter_hoi_clb_theo_nganh_hoc
-  - intent: tra_cuu_ket_noi_doanh_nghiep
-  - action: action_tra_cuu_ket_noi_doanh_nghiep
 
-# Story kết thúc sau khi được tư vấn
-- story: Kết thúc sau tư vấn
+- story: Hỏi lab chi tiết
   steps:
-  - intent: hoi_thong_tin_nganh
-    entities:
-    - ten_nganh
-  - action: action_hoi_thong_tin_nganh
-  - intent: tam_biet
-  - action: utter_tam_biet
-
-# Story xử lý khi user không cung cấp đủ thông tin
-- story: Hỏi thông tin ngành nhưng chưa rõ ngành
-  steps:
-  - intent: hoi_thong_tin_nganh
-  - action: utter_hoi_ten_nganh
-  - intent: hoi_thong_tin_nganh
-    entities:
-    - ten_nganh
-  - action: action_hoi_thong_tin_nganh
-
-- story: Tra cứu điểm nhưng chưa rõ ngành
-  steps:
-  - intent: tra_cuu_kha_nang_trung_tuyen
-  - action: utter_hoi_diem_va_nganh
-  - intent: tra_cuu_kha_nang_trung_tuyen
-    entities:
-    - diem
-    - ten_nganh
-  - action: action_tra_cuu_kha_nang_trung_tuyen
+  - intent: phong_lab_danh_sach
+  - action: utter_phong_lab_danh_sach
+  - intent: phong_lab_dieu_kien_su_dung
+  - action: utter_phong_lab_dieu_kien_su_dung
+  - intent: phong_lab_lien_he
+  - action: utter_phong_lab_lien_he
