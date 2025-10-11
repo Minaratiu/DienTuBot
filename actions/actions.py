@@ -5,6 +5,79 @@ from rasa_sdk import Action, Tracker
 from rasa_sdk.executor import CollectingDispatcher
 from rasa_sdk.events import SlotSet
 
+import sqlite3
+import hashlib
+import unicodedata
+from typing import Any, Text, Dict, List
+from rasa_sdk import Action, Tracker
+from rasa_sdk.executor import CollectingDispatcher
+from rasa_sdk.events import SlotSet
+# //key noi voi database
+def get_db_connection():
+    conn = sqlite3.connect("user_data.db")
+    conn.row_factory = sqlite3.Row
+    return conn
+#bam mat khau
+def hash_password(password):
+    return hashlib.sha256(password.encode()).hexdigest()
+
+class ActionRegister(Action):
+    def name(self) -> Text:
+        return "action_register"
+    def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        username = tracker.get_slot("username")
+        password = tracker.get_slot("password")
+
+        if not username or not password:
+            dispatcher.utter_message(text="Cannot be empty")
+            return []
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM users WHERE username = ?", (username,))
+        if cursor.fetchone():
+            dispatcher.utter_message(text=f"Username '{username}' is already registered.")
+        else:
+            passwordHash = hash_password(password)
+            cursor.execute("INSERT INTO users (username, password_hash) VALUES (?, ?)", (username, passwordHash))
+            conn.commit()
+        conn.close()
+        return [SlotSet("password", None)]
+
+
+class ActionLogin(Action):
+    def name(self) -> Text:
+        return "action_login"
+    def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        username = tracker.get_slot("username")
+        password = tracker.get_slot("password")
+        if not username or not password:
+            dispatcher.utter_message(text="Cannot be empty")
+            return []
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        passwordHash = hash_password(password)
+        cursor.execute("SELECT * FROM users WHERE username = ? AND password_hash = ?", (username, passwordHash))
+        user = cursor.fetchone()
+        conn.close()
+
+        if user:
+            dispatcher.utter_message(text=f"Login successfully! Welcome {user['username']}")
+            return [SlotSet("logged_in", True), SlotSet("password", None)]
+        else:
+            dispatcher.utter_message(text=f"Username or password is incorrect")
+            return [SlotSet("logged-in", False), SlotSet("password", None)]
+
+class ActionLogout(Action):
+    def name(self) -> Text:
+        return "action_logout"
+    def run(
+        self,
+        dispatcher: "CollectingDispatcher",
+        tracker: Tracker,
+        domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        dispatcher.utter_message(text="Logout successfully!")
+        return [SlotSet("logged_out", False), SlotSet("password", None)]
+
 
 
 def remove_accents(text: Text) -> Text:

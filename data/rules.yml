@@ -1,6 +1,38 @@
 version: "3.1"
 
 rules:
+- rule: Kích hoạt form đăng ký
+  steps:
+  - intent: register
+  - action: register_form
+  - active_loop: register_form
+
+- rule: Gửi form đăng ký
+  condition:
+  - active_loop: register_form
+  steps:
+  - action: register_form
+  - active_loop: null
+  - action: action_register
+
+- rule: Kích hoạt form đăng nhập
+  steps:
+  - intent: login
+  - action: login_form
+  - active_loop: login_form
+
+- rule: Gửi form đăng nhập
+  condition:
+  - active_loop: login_form
+  steps:
+  - action: login_form
+  - active_loop: null
+  - action: action_login
+
+- rule: Đăng xuất
+  steps:
+  - intent: logout
+  - action: action_logout
 
 
 - rule: Chào hỏi

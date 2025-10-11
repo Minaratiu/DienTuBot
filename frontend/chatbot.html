@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot PTIT</title>
+
+
+    <style>
+        /* --- PHẦN 1: CSS --- */
+
+        /* === BIẾN MÀU CHO CHỦ ĐỀ SÁNG/TỐI === */
+        :root {
+            --bg-color: #E0FFFF; /*mau nen chinh*/
+            --text-color: #333; /*mau chu chung*/
+            --h1-color: #333; /*mau tieu de*/
+            --chat-bg-color: #ffffff; /*mau khung chat chinh*/
+            --border-color: #ccc; /*mau duong vien*/
+            --input-bg-color: #f0f2f5; /*mau khu vuc tin nhan ở dưới cùng*/
+            --user-msg-bg: #e9e9eb; /*mau bong bóng chat ng dùng*/
+            --user-msg-text: #000000; /*mau chu ng dung*/
+            --bot-msg-bg: #CD5C5C; /*mau bong bóng chat bot*/
+            --bot-msg-text: #ffffff; /*mau chu bot*/
+        }
+
+        body.dark-mode {
+            --bg-color: #212121;
+            --text-color: #e0e0e0;
+            --h1-color: #e0e0e0;
+            --chat-bg-color: #424242;
+            --border-color: #444;
+            --input-bg-color: #808080;
+            --user-msg-bg: #D3D3D3;
+            --user-msg-text: #000000;
+        }
+        /* ======================================= */
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            box-sizing: border-box;
+            /* Áp dụng biến màu */
+            background-color: var(--bg-color);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        h1 {
+            color: var(--h1-color);
+            margin-bottom: 20px;
+        }
+
+        /* === CSS MỚI CHO NÚT TRƯỢT === */
+        .theme-switch {
+             position: fixed; /* Ghim nút vào màn hình */
+            bottom: 60px;    /* Cách mép dưới 20px */
+            left: 60px;      /* Cách mép trái 20px */
+            z-index: 1000;   /* Đảm bảo nút luôn nổi lên trên các thành phần khác */
+            display: inline-block;
+            height: 24px;
+            width: 50px;
+        }
+        .theme-switch input { display: none; }
+        .slider {
+            background-color: #ccc;
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        .slider:before {
+            background-color: #fff;
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider { background-color: #007bff; }
+        input:checked + .slider:before { transform: translateX(26px); }
+
+
+         #logout-btn {
+            position: fixed; /* Ghim nút vào góc màn hình */
+            top: 20px;
+            right: 20px;
+            padding: 8px 16px;
+            font-size: 16px;
+            font-weight: 500;
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 1001;
+            transition: background-color 0.2s;
+        }
+        #logout-btn:hover {
+            background-color: #c82333;
+        }
+        /* ============================ */
+
+        .chat-container {
+            width: 100%;
+            max-width: 800px;
+            height: 100%;
+            max-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            background-color: var(--chat-bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+        }
+         .chat-container span {
+            background-color: #FF0000;
+            background-size: cover;
+            padding: 10px 30px 10px 10px;
+            color: #FFFFFF;
+            text-align: center;
+            font-size: 26px;
+            border: 1px solid var(--border-color);
+        }
+
+        .chat-history {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .message {
+            margin-bottom: 12px;
+            padding: 10px 15px;
+            border-radius: 20px;
+            max-width: 75%;
+            line-height: 1.4;
+            font-size: 19px;
+        }
+
+        .user-message {
+            align-self: flex-end;
+            margin-left: auto;
+            /* Áp dụng biến màu */
+            background-color: var(--user-msg-bg);
+            color: var(--user-msg-text);
+        }
+
+        .bot-message {
+            align-self: flex-start;
+            /* Áp dụng biến màu */
+            background-color: var(--bot-msg-bg);
+            color: var(--bot-msg-text);
+        }
+
+        .chat-input-container {
+            display: flex;
+            padding: 10px;
+            /* Áp dụng biến màu */
+            background-color: var(--input-bg-color);
+            border-top: 1px solid var(--border-color);
+        }
+
+        #userInput {
+            flex-grow: 1;
+            border-radius: 20px;
+            padding: 12px;
+            outline: none;
+            font-size: 17px;
+            /* Áp dụng biến màu */
+            background-color: var(--chat-bg-color);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+        }
+
+        #sendButton {
+            border: none;
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            margin-left: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        #user-greeting {
+    color: var(--h1-color);
+    font-size: 20px;
+    font-weight: 600;
+    margin-top: -15px; /* Kéo lên gần tiêu đề hơn */
+    margin-bottom: 20px;
+}
+        #sendButton:hover { background-color: #0056b3; }
+    </style>
+</head>
+<body>
+    <button id="logout-btn">Đăng xuất</button>
+    <h1 id="welcome-title">Chatbot Tư vấn tuyển sinh cho khoa Kỹ thuật Điện tử 1</h1>
+    <p id="user-greeting"></p>
+    <label class="theme-switch">
+      <input type="checkbox" id="theme-toggle">
+      <span class="slider"></span>
+    </label>
+    <div class="chat-container">
+        <span><strong>Chatbot</strong></span>
+        <div class="chat-history" id="chatHistory"></div>
+        <div class="chat-input-container">
+            <input type="text" id="userInput" placeholder="Nhập câu hỏi của bạn...">
+            <button id="sendButton">Gửi</button>
+        </div>
+    </div>
+
+    <script>
+    // Bọc toàn bộ logic trong 'DOMContentLoaded' để đảm bảo HTML đã tải xong
+    document.addEventListener('DOMContentLoaded', () => {
+
+        // ===================================================================
+        // PHẦN 1: BẢO VỆ TRANG VÀ QUẢN LÝ PHIÊN ĐĂNG NHẬP
+        // ===================================================================
+        const loggedInUser = localStorage.getItem('loggedInUser');
+
+        // 1.1: Kiểm tra đăng nhập
+        if (!loggedInUser) {
+            alert("Bạn cần đăng nhập để sử dụng chatbot!");
+            window.location.href = 'loginAndSignUp.html'; // Tên file đăng nhập của bạn
+            return; // Dừng chạy script nếu chưa đăng nhập
+        }
+
+        // 1.2: Cập nhật tiêu đề chào mừng
+        document.getElementById('user-greeting').textContent = `Chào mừng, ${loggedInUser}!`;
+
+        // 1.3: Gán sự kiện cho nút Đăng xuất
+        const logoutButton = document.getElementById('logout-btn');
+        logoutButton.addEventListener('click', () => {
+            localStorage.removeItem('loggedInUser'); // Xóa thông tin đăng nhập
+            localStorage.removeItem('chat_history'); // Xóa luôn lịch sử chat
+            alert('Bạn đã đăng xuất thành công!');
+            window.location.href = 'loginAndSignUp.html'; // Quay về trang đăng nhập
+        });
+
+        // ===================================================================
+        // PHẦN 2: LOGIC ĐỔI GIAO DIỆN (THEME) SÁNG/TỐI
+        // ===================================================================
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
+
+        themeToggle.addEventListener('change', function() {
+            body.classList.toggle('dark-mode');
+            localStorage.setItem('theme', body.classList.contains('dark-mode') ? 'dark' : 'light');
+        });
+
+        // Tải theme đã lưu khi vào trang
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            themeToggle.checked = true;
+            body.classList.add('dark-mode');
+        }
+
+        // ===================================================================
+        // PHẦN 3: LOGIC CHATBOT VÀ LỊCH SỬ HỘI THOẠI
+        // ===================================================================
+        const userInput = document.getElementById('userInput');
+        const sendButton = document.getElementById('sendButton');
+        const chatHistory = document.getElementById('chatHistory');
+        let conversationHistory = [];
+
+        // 3.1: Gửi tin nhắn đến Rasa
+        async function sendMessage() {
+            const userText = userInput.value.trim();
+            if (userText === '') return;
+
+            appendMessage(userText, 'user-message');
+            userInput.value = '';
+
+            try {
+                const response = await fetch('http://localhost:5005/webhooks/rest/webhook', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        sender: loggedInUser, // Gửi username đã đăng nhập làm sender ID
+                        message: userText
+                    })
+                });
+                const data = await response.json();
+                data.forEach(botMessage => {
+                    appendMessage(botMessage.text, 'bot-message');
+                });
+            } catch (error) {
+                console.error("Lỗi kết nối đến Rasa:", error);
+                appendMessage("Xin lỗi, tôi không thể kết nối đến máy chủ.", 'bot-message');
+            }
+        }
+
+        // 3.2: Hiển thị tin nhắn lên giao diện
+        function appendMessage(text, className, shouldSave = true) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message', className);
+            messageDiv.innerHTML = text.replace(/\n/g, '<br>'); // Hỗ trợ xuống dòng
+            chatHistory.appendChild(messageDiv);
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+
+            if (shouldSave) {
+                conversationHistory.push({ text, className });
+                saveChatHistory();
+            }
+        }
+
+        // 3.3: Lưu/Tải lịch sử chat
+        function saveChatHistory() {
+            localStorage.setItem('chat_history', JSON.stringify(conversationHistory));
+        }
+
+        function loadChatHistory() {
+            try {
+                const savedHistory = localStorage.getItem('chat_history');
+                if (savedHistory) {
+                    conversationHistory = JSON.parse(savedHistory);
+                    conversationHistory.forEach(message => {
+                        appendMessage(message.text, message.className, false);
+                    });
+                }
+            } catch (error) {
+                console.error("Không thể tải lịch sử chat:", error);
+                localStorage.removeItem('chat_history');
+            }
+        }
+
+        // 3.4: Gửi lời chào mặc định
+        function sendWelcomeMessage() {
+            if (conversationHistory.length === 0) {
+                setTimeout(() => {
+                    appendMessage("Chào bạn, tôi là chatbot tư vấn tuyển sinh. Tôi có thể giúp gì được cho bạn?", 'bot-message');
+                }, 500);
+            }
+        }
+
+        // 3.5: Gán các sự kiện
+        sendButton.addEventListener('click', sendMessage);
+        userInput.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // Chạy các hàm khởi tạo
+        loadChatHistory();
+        sendWelcomeMessage();
+    });
+</script>
+
+</body>
+</html>

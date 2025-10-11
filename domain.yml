@@ -8,6 +8,10 @@ version: "3.1"
   # tương ứng thì intents cũng sẽ phải được khai báo vào trong mục intents bên dưới.
 
 intents:
+  - register
+  - login
+  - logout
+  - inform
   - chao_hoi
   - tam_biet
   - cam_on
@@ -49,13 +53,15 @@ intents:
   - hoi_danh_gia_chat_luong
 
 
+
 entities:
   - ten_nganh
   - diem
   - nam
   - loai_xet_tuyen
   - ten_khoa
-
+  - username
+  - password
 
 slots:
   ten_nganh:
@@ -88,6 +94,19 @@ slots:
     mappings:
     - type: from_entity
       entity: ten_khoa
+  username:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_text
+
+
+  password:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_text
+
 
 
 actions:
@@ -104,6 +123,22 @@ actions:
   - action_tra_cuu_hoc_bong_nganh
   - action_tra_cuu_co_hoi_viec_lam
   - action_tra_cuu_ket_noi_doanh_nghiep
+  - action_register
+  - action_login
+  - action_logout
+
+
+forms:
+  register_form:
+    required_slots:
+      - username
+      - password
+
+  login_form:
+    required_slots:
+      - username
+      - password
+
 
 responses:
   utter_chao_hoi:

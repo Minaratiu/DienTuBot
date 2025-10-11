@@ -1,6 +1,31 @@
 version: "3.1"
 
 nlu:
+- intent: register
+  examples: |
+    - đăng ký
+    - tạo tài khoản
+    - tôi muốn đăng ký
+    - register
+
+- intent: login
+  examples: |
+    - đăng nhập
+    - login
+    - tôi muốn đăng nhập
+
+- intent: logout
+  examples: |
+    - đăng xuất
+    - logout
+    - thoát tài khoản
+
+- intent: inform
+  examples: |
+    - username là [testuser](username)
+    - password là [123456](password)
+    - [testuser](username)
+    - [123456](password)
 
 
 
