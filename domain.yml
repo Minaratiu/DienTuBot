@@ -1,7 +1,5 @@
 version: "3.1"
-session_config:
-  session_expiration_time: 60
-  carry_over_slots_to_new_session: true
+
   #file domain.yml này là để viết những câu trả lời đơn giản mà mặc định người dùng hỏi A thì phải trả lời là B (thường áp dụng cho các câu hỏi cơ bản như chào hỏi, tạm biệt, giới thiệt bot...)
   # với những câu hỏi có trả lời mặc định như chào hỏi,tạm biệt cảm ơn... thì sẽ viết câu trả lời trong responses như phía bên dưới:
   #  VD   utter_chao_hoi: - text: "Chào bạn, tôi là chatbot tư vấn tuyển sinh của Khoa Điện tử - Học viện Công nghệ Bưu chính Viễn thông (PTIT). Tôi có thể giúp gì cho bạn?"
@@ -12,345 +10,314 @@ session_config:
 intents:
   - chao_hoi
   - tam_biet
-  - gioi_thieu_bot
   - cam_on
-  - tra_cuu_diem_chuan_thpt_nam_2025
+  - gioi_thieu_bot
+  - hoi_chuc_nang_bot
+  - lien_he_khoa_phong_giao_vu
+  - hoi_thong_tin_nganh
   - tra_cuu_ma_nganh
-  - tra_cuu_diem_xet_tuyen_tai_nang
-  - tra_cuu_diem_theo_xet_tuyen_ket_hop
-  - tra_cuu_diem_theo_chung_chi_sat
-  - tra_cuu_diem_theo_chung_chi_act
-  - tra_cuu_diem_theo_bai_thi_hsa
-  - tra_cuu_diem_theo_bai_thi_tsa
-  - tra_cuu_diem_theo_bai_thi_spt
-  - tra_cuu_diem_theo_bai_thi_apt
+  - tra_cuu_diem_chuan
   - tra_cuu_kha_nang_trung_tuyen
-  - xet_tuyen_nguyen_vong_dien_tu
   - xet_tuyen_dieu_kien_dien_tu
-  - xet_tuyen_thu_tuc_dien_tu
-  - xet_tuyen_truong_hop_dac_biet_dien_tu
   - xet_tuyen_uu_tien_dien_tu
-  - xet_tuyen_lien_he_dien_tu
-  - tra_cuu_chi_tieu_nganh
-  - tra_cuu_chi_tieu_theo_co_so
-  - tra_cuu_chi_tieu_theo_phuong_thuc
-  - tra_cuu_chi_tieu_tong_quat
-  - tra_cuu_thoi_gian_tuyen_sinh
-  - tra_cuu_thoi_gian_nhap_hoc
-  - tra_cuu_tong_quan_nganh
-  - tra_cuu_thoi_gian_dao_tao
+  - xet_tuyen_ho_so
+  - tra_cuu_chi_tieu
   - tra_cuu_to_hop_xet_tuyen
   - tra_cuu_hoc_phi_nganh
-  - tra_cuu_lotrinh_tang_hoc_phi
-  - tra_cuu_hoc_phi_theo_tin_chi
-  - tra_cuu_co_so_dao_tao
-  - tra_cuu_co_hoc_bong
-  - tra_cuu_loai_hoc_bong
-  - tra_cuu_dieu_kien_hoc_bong
-  - tra_cuu_gia_tri_hoc_bong
+  - hoi_hoc_phi_chung
+  - tra_cuu_hoc_bong_nganh
+  - hoi_hoc_bong_chung
+  - hoi_he_dao_tao
+  - hoi_thoi_gian_dao_tao
   - tra_cuu_khai_niem_nghien_cuu_khoa_hoc
-  - tra_cuu_co_hoi_nghien_cuu_khoa_hoc
   - tra_cuu_dieu_kien_nghien_cuu_khoa_hoc
   - tra_cuu_loi_ich_nghien_cuu_khoa_hoc
-  - tra_cuu_noi_dung_nghien_cuu_khoa_hoc
   - phong_lab_danh_sach
   - phong_lab_thiet_bi
   - phong_lab_dieu_kien_su_dung
-  - phong_lab_gio_mo_cua
-  - phong_lab_khoa_hoc_thuc_hanh
   - phong_lab_lien_he
-  - phong_lab_lien_ket_doanh_nghiep
   - tra_cuu_co_hoi_viec_lam
-  - tra_cuu_nhu_cau_tuyen_dung
-  - tra_cuu_viec_lam_quoc_te
-  - tra_cuu_luong_nganh
-  - tra_cuu_dieu_kien_tuyen_sinh
-  - tra_cuu_quy_trinh_nhap_hoc
-  - tra_cuu_ho_so_nhap_hoc
-  - tra_cuu_kien_thuc_co_ban
-  - tra_cuu_kien_thuc_chuyen_mon
-  - tra_cuu_ky_nang_nghe_nghiep
-  - tra_cuu_ky_nang_mem
-  - tra_cuu_chuong_trinh_hoc_nganh
-  - tra_cuu_chuyen_nganh_trong_nganh
-  - tra_cuu_tin_chi_thuc_tap_do_an
   - tra_cuu_ket_noi_doanh_nghiep
-  - tra_cuu_thong_tin_lien_he
-  - tra_cuu_phu_hop_nu
-  - tra_cuu_dac_thu_cong_viec_nu
-  - tra_cuu_viec_lam_cho_nu
-  - tra_cuu_co_hoi_thang_tien_nu
-  - ptit_gioi_thieu_lich_su
-  - ptit_gioi_thieu_su_menh_tam_nhin
-  - ptit_gioi_thieu_co_cau_to_chuc
-  - ptit_gioi_thieu_dia_chi
-  - ptit_gioi_thieu_quy_mo_dao_tao
-  - ptit_gioi_thieu_thanh_tuu_noi_bat
-  - ptit_gioi_thieu_lien_he
-  - tra_cuu_giang_vien
-  - tra_cuu_trinh_do_giang_vien
-  - tra_cuu_chuyen_mon_giang_vien
-  - tra_cuu_lich_day_giang_vien
-  - cau_lac_bo_danh_sach
-  - cau_lac_bo_dieu_kien
-  - cau_lac_bo_su_kien
-  - cau_lac_bo_cuoc_thi
-  - cau_lac_bo_lien_ket
-  - ktx_danh_sach
-  - ktx_dieu_kien
-  - ktx_chi_phi
-  - ktx_gio_mo_cua
-  - ktx_tien_nghi
+  - hoi_ve_nu_gioi_trong_ky_thuat
+  - hoi_danh_sach_cau_lac_bo
+  - hoi_clb_theo_nganh_hoc
+  - ktx_co_khong
   - ktx_dang_ky
-  - ktx_lien_he
-  - ktx_quy_dinh
-  - thu_vien_danh_sach
-  - thu_vien_gio_mo_cua
-  - thu_vien_tai_nguyen
-  - thu_vien_phong_doc
-  - thu_vien_thiet_bi
-  - thu_vien_dieu_kien_su_dung
-  - thu_vien_dang_ky
-  - thu_vien_lien_he
-  - thu_vien_su_kien_hoat_dong
-  - phong_giao_vu_danh_sach
-  - phong_giao_vu_gio_lam_viec
-  - phong_giao_vu_thu_tuc_dang_ky_hoc
-  - phong_giao_vu_hoc_bong
-  - phong_giao_vu_diem_so
-  - phong_giao_vu_nop_ho_so
-  - phong_giao_vu_thong_bao_ke_hoach
-  - phong_giao_vu_lien_he
-  - coso_danh_sach
-  - coso_phong_hoc
-  - coso_san_bai_the_thao
-  - coso_tien_nghi_chung
-  - coso_dieu_kien_su_dung
-  - coso_lien_he
-  - song_nganh_danh_sach
-  - song_nganh_dieu_kien_dang_ky
-  - song_nganh_thu_tuc
-  - song_nganh_thoi_gian_hoc
-  - song_nganh_co_hoi_nghe_nghiep
-  - song_nganh_hoc_phi
-  - song_nganh_lien_he
-  - baoluu_dieu_kien
-  - baoluu_thu_tuc
-  - baoluu_thoi_gian
-  - baoluu_ho_so
-  - baoluu_hoc_phi
-  - baoluu_quyen_loi_nghia_vu
-  - baoluu_lien_he
-  - tot_nghiep_dieu_kien
-  - tot_nghiep_thu_tuc
-  - tot_nghiep_thoi_gian
-  - tot_nghiep_ho_so
-  - tot_nghiep_diem_so
-  - tot_nghiep_chung_nhan
-  - tot_nghiep_lien_he
-  - thi_tieng_anh_doi_tuong_dien_tu
-  - thi_tieng_anh_hinh_thuc_dien_tu
-  - thi_tieng_anh_diem_chuan_dien_tu
-  - thi_tieng_anh_lich_dien_tu
-  - thi_tieng_anh_thu_tuc_dien_tu
-  - thi_tieng_anh_truong_hop_dac_biet_dien_tu
-  - thi_tieng_anh_lien_he_dien_tu
+  - ktx_chi_phi
+  - hoi_so_luong_co_so
+  - hoi_co_so_vat_chat
+  - hoi_danh_gia_chat_luong
+
+
 entities:
   - ten_nganh
+  - diem
   - nam
-  - co_so
-  - phuong_thuc
-  - khoa
+  - loai_xet_tuyen
   - ten_khoa
-  - ten_lab
-  - ten_mon
+
 
 slots:
-  # Slots quan trọng để dự đoán hành động
   ten_nganh:
     type: text
     influence_conversation: true
-  co_so:
-    type: text
+    mappings:
+    - type: from_entity
+      entity: ten_nganh
+  diem:
+    type: float
     influence_conversation: true
-  phuong_thuc:
-    type: text
-    influence_conversation: true
-
-  # Slots chỉ để lưu thông tin
+    mappings:
+    - type: from_entity
+      entity: diem
   nam:
     type: text
     influence_conversation: false
-  khoa:
+    mappings:
+    - type: from_entity
+      entity: nam
+  loai_xet_tuyen:
     type: text
     influence_conversation: false
+    mappings:
+    - type: from_entity
+      entity: loai_xet_tuyen
   ten_khoa:
     type: text
     influence_conversation: false
-  ten_lab:
-    type: text
-    influence_conversation: false
-  ten_mon:
-    type: text
-    influence_conversation: false
-    
+    mappings:
+    - type: from_entity
+      entity: ten_khoa
+
+
 actions:
-  - action_tra_cuu_diem_chuan_thpt_nam_2025
+  - action_hoi_thong_tin_nganh
   - action_tra_cuu_ma_nganh
-  - action_tra_cuu_diem_xet_tuyen_tai_nang
-  - action_tra_cuu_diem_theo_xet_tuyen_ket_hop
-  - action_tra_cuu_diem_theo_chung_chi_sat
-  - action_tra_cuu_diem_theo_chung_chi_act
-  - action_tra_cuu_diem_theo_bai_thi_hsa
-  - action_tra_cuu_diem_theo_bai_thi_tsa
-  - action_tra_cuu_diem_theo_bai_thi_spt
-  - action_tra_cuu_diem_theo_bai_thi_apt
+  - action_tra_cuu_diem_chuan
   - action_tra_cuu_kha_nang_trung_tuyen
-  - action_xet_tuyen_nguyen_vong_dien_tu
   - action_xet_tuyen_dieu_kien_dien_tu
-  - action_xet_tuyen_thu_tuc_dien_tu
-  - action_xet_tuyen_truong_hop_dac_biet_dien_tu
   - action_xet_tuyen_uu_tien_dien_tu
-  - action_xet_tuyen_lien_he_dien_tu
-  - action_tra_cuu_chi_tieu_nganh
-  - action_tra_cuu_chi_tieu_theo_co_so
-  - action_tra_cuu_chi_tieu_theo_phuong_thuc
-  - action_tra_cuu_chi_tieu_tong_quat
-  - action_tra_cuu_thoi_gian_tuyen_sinh
-  - action_tra_cuu_thoi_gian_nhap_hoc
-  - action_tra_cuu_tong_quan_nganh
-  - action_tra_cuu_thoi_gian_dao_tao
+  - action_xet_tuyen_ho_so
+  - action_tra_cuu_chi_tieu
   - action_tra_cuu_to_hop_xet_tuyen
   - action_tra_cuu_hoc_phi_nganh
-  - action_tra_cuu_lotrinh_tang_hoc_phi
-  - action_tra_cuu_hoc_phi_theo_tin_chi
-  - action_tra_cuu_co_so_dao_tao
-  - action_tra_cuu_co_hoc_bong
-  - action_tra_cuu_loai_hoc_bong
-  - action_tra_cuu_dieu_kien_hoc_bong
-  - action_tra_cuu_gia_tri_hoc_bong
-  - action_tra_cuu_khai_niem_nghien_cuu_khoa_hoc
-  - action_tra_cuu_co_hoi_nghien_cuu_khoa_hoc
-  - action_tra_cuu_dieu_kien_nghien_cuu_khoa_hoc
-  - action_tra_cuu_loi_ich_nghien_cuu_khoa_hoc
-  - action_tra_cuu_noi_dung_nghien_cuu_khoa_hoc
-  - action_phong_lab_danh_sach
-  - action_phong_lab_thiet_bi
-  - action_phong_lab_dieu_kien_su_dung
-  - action_phong_lab_gio_mo_cua
-  - action_phong_lab_khoa_hoc_thuc_hanh
-  - action_phong_lab_lien_he
-  - action_phong_lab_lien_ket_doanh_nghiep
+  - action_tra_cuu_hoc_bong_nganh
   - action_tra_cuu_co_hoi_viec_lam
-  - action_tra_cuu_nhu_cau_tuyen_dung
-  - action_tra_cuu_viec_lam_quoc_te
-  - action_tra_cuu_luong_nganh
-  - action_tra_cuu_dieu_kien_tuyen_sinh
-  - action_tra_cuu_quy_trinh_nhap_hoc
-  - action_tra_cuu_ho_so_nhap_hoc
-  - action_tra_cuu_kien_thuc_co_ban
-  - action_tra_cuu_kien_thuc_chuyen_mon
-  - action_tra_cuu_ky_nang_nghe_nghiep
-  - action_tra_cuu_ky_nang_mem
-  - action_tra_cuu_chuong_trinh_hoc_nganh
-  - action_tra_cuu_chuyen_nganh_trong_nganh
-  - action_tra_cuu_tin_chi_thuc_tap_do_an
   - action_tra_cuu_ket_noi_doanh_nghiep
-  - action_tra_cuu_thong_tin_lien_he
-  - action_tra_cuu_phu_hop_nu
-  - action_tra_cuu_dac_thu_cong_viec_nu
-  - action_tra_cuu_viec_lam_cho_nu
-  - action_tra_cuu_co_hoi_thang_tien_nu
-  - action_ptit_gioi_thieu_lich_su
-  - action_ptit_gioi_thieu_su_menh_tam_nhin
-  - action_ptit_gioi_thieu_co_cau_to_chuc
-  - action_ptit_gioi_thieu_dia_chi
-  - action_ptit_gioi_thieu_quy_mo_dao_tao
-  - action_ptit_gioi_thieu_thanh_tuu_noi_bat
-  - action_ptit_gioi_thieu_lien_he
-  - action_tra_cuu_giang_vien
-  - action_tra_cuu_trinh_do_giang_vien
-  - action_tra_cuu_chuyen_mon_giang_vien
-  - action_tra_cuu_lich_day_giang_vien
-  - action_cau_lac_bo_danh_sach
-  - action_cau_lac_bo_dieu_kien
-  - action_cau_lac_bo_su_kien
-  - action_cau_lac_bo_cuoc_thi
-  - action_cau_lac_bo_lien_ket
-  - action_ktx_danh_sach
-  - action_ktx_dieu_kien
-  - action_ktx_chi_phi
-  - action_ktx_gio_mo_cua
-  - action_ktx_tien_nghi
-  - action_ktx_dang_ky
-  - action_ktx_lien_he
-  - action_ktx_quy_dinh
-  - action_thu_vien_danh_sach
-  - action_thu_vien_gio_mo_cua
-  - action_thu_vien_tai_nguyen
-  - action_thu_vien_phong_doc
-  - action_thu_vien_thiet_bi
-  - action_thu_vien_dieu_kien_su_dung
-  - action_thu_vien_dang_ky
-  - action_thu_vien_lien_he
-  - action_thu_vien_su_kien_hoat_dong
-  - action_phong_giao_vu_danh_sach
-  - action_phong_giao_vu_gio_lam_viec
-  - action_phong_giao_vu_thu_tuc_dang_ky_hoc
-  - action_phong_giao_vu_hoc_bong
-  - action_phong_giao_vu_diem_so
-  - action_phong_giao_vu_nop_ho_so
-  - action_phong_giao_vu_thong_bao_ke_hoach
-  - action_phong_giao_vu_lien_he
-  - action_coso_danh_sach
-  - action_coso_phong_hoc
-  - action_coso_san_bai_the_thao
-  - action_coso_tien_nghi_chung
-  - action_coso_dieu_kien_su_dung
-  - action_coso_lien_he
-  - action_song_nganh_danh_sach
-  - action_song_nganh_dieu_kien_dang_ky
-  - action_song_nganh_thu_tuc
-  - action_song_nganh_thoi_gian_hoc
-  - action_song_nganh_co_hoi_nghe_nghiep
-  - action_song_nganh_hoc_phi
-  - action_song_nganh_lien_he
-  - action_baoluu_dieu_kien
-  - action_baoluu_thu_tuc
-  - action_baoluu_thoi_gian
-  - action_baoluu_ho_so
-  - action_baoluu_hoc_phi
-  - action_baoluu_quyen_loi_nghia_vu
-  - action_baoluu_lien_he
-  - action_tot_nghiep_dieu_kien
-  - action_tot_nghiep_thu_tuc
-  - action_tot_nghiep_thoi_gian
-  - action_tot_nghiep_ho_so
-  - action_tot_nghiep_diem_so
-  - action_tot_nghiep_chung_nhan
-  - action_tot_nghiep_lien_he
-  - action_thi_tieng_anh_doi_tuong_dien_tu
-  - action_thi_tieng_anh_hinh_thuc_dien_tu
-  - action_thi_tieng_anh_diem_chuan_dien_tu
-  - action_thi_tieng_anh_lich_dien_tu
-  - action_thi_tieng_anh_thu_tuc_dien_tu
-  - action_thi_tieng_anh_truong_hop_dac_biet_dien_tu
-  - action_thi_tieng_anh_lien_he_dien_tu
-
 
 responses:
   utter_chao_hoi:
     - text: "Chào bạn, tôi là chatbot tư vấn tuyển sinh của Khoa Điện tử - Học viện Công nghệ Bưu chính Viễn thông (PTIT). Tôi có thể giúp gì cho bạn?"
     - text: "Xin chào! Bạn cần tư vấn thông tin gì về các ngành của Khoa Điện tử PTIT ạ?"
+    - text: "Xin chào! Tôi là bot tư vấn tuyển sinh khoa Điện tử - Học viện Công nghệ Bưu chính Viễn thông. Rất vui được hỗ trợ bạn!"
 
   utter_tam_biet:
     - text: "Tạm biệt bạn! Chúc bạn một ngày tốt lành!"
     - text:  "Hẹn gặp lại bạn nhé!"
+    - text: "Cảm ơn bạn đã sử dụng dịch vụ tư vấn! Chúc bạn thành công trong kỳ thi tuyển sinh sắp tới!"
 
   utter_cam_on:
     - text: "Rất vui được giúp bạn!"
     - text: "Không có gì ạ. Nếu bạn cần thêm thông tin, đừng ngần ngại hỏi nhé!"
+    - text: "Không có gì! Nếu bạn cần thêm thông tin gì, tôi luôn sẵn sàng hỗ trợ."
 
   utter_gioi_thieu_bot:
     - text: "Tôi là chatbot được tạo ra để cung cấp thông tin tuyển sinh về Khoa Điện tử của Học viện Công nghệ Bưu chính Viễn thông."
+    - text: "Tôi là chatbot tư vấn tuyển sinh chuyên về các ngành của khoa Điện tử. Tôi có thể cung cấp thông tin về tuyển sinh, đào tạo, học phí, học bổng và nhiều thông tin hữu ích khác."
+  utter_hoi_chuc_nang_bot:
+    - text: "Tôi có thể giúp bạn: Tư vấn thông tin các ngành học, tra cứu điểm chuẩn, mã ngành, học phí, học bổng, điều kiện xét tuyển, thông tin ký túc xá, phòng lab, câu lạc bộ và nhiều thông tin khác về Học viện."
+    - text: "Mình hỗ trợ được rất nhiều thứ: thông tin ngành học, điểm chuẩn, học phí, học bổng, KTX, phòng thí nghiệm, hoạt động ngoại khóa, và cả cơ hội việc làm nữa!"
+    - text: "Tôi có thể tư vấn: chương trình đào tạo, chỉ tiêu tuyển sinh, tổ hợp môn xét tuyển, chính sách ưu tiên, học bổng, cơ sở vật chất, và nhiều thông tin hữu ích khác cho sinh viên."
 
+  utter_lien_he_khoa_phong_giao_vu:
+    - text: "Để liên hệ với các khoa phòng, bạn có thể:\n- Phòng Đào tạo: 024 1234 5678\n- Khoa Điện tử: 024 1234 5679\n- Email: daotao@ptit.edu.vn\n- Fanpage: https://facebook.com/ptit.official\n- Địa chỉ: 122 Hoàng Quốc Việt, Cầu Giấy, Hà Nội"
+    - text: "Thông tin liên hệ các phòng ban:\n📞 Phòng Đào tạo: 024.1234.5678\n📞 Khoa Điện tử: 024.1234.5679\n📧 Email: daotao@ptit.edu.vn\n🌐 Website: www.ptit.edu.vn\n📍 Cơ sở Hà Nội: 122 Hoàng Quốc Việt"
+    - text: "Liên hệ Học viện qua:\n• Hotline: 024 1234 5678\n• Email: daotao@ptit.edu.vn\n• Fanpage: PTIT Official\n• Địa chỉ: 122 Hoàng Quốc Việt, Hà Nội\n• Giờ làm việc: 7h30-17h từ T2-T6"
+
+  utter_hoi_he_dao_tao:
+    - text: "Học viện đào tạo các hệ: Chính quy, Chất lượng cao, Liên thông, Vừa làm vừa học. Các ngành kỹ thuật thường đào tạo hệ chính quy 4-5 năm."
+    - text: "PTIT có đa dạng hệ đào tạo: Chính quy, Chất lượng cao, Liên thông, VLVH. Ngành kỹ thuật chủ yếu đào tạo hệ chính quy trong 4-5 năm."
+    - text: "Các hệ đào tạo tại Học viện:\n🎓 Hệ chính quy (4-5 năm)\n🌟 Hệ chất lượng cao (4-5 năm)\n🔗 Hệ liên thông (2-3 năm)\n💼 Hệ vừa làm vừa học"
+
+  utter_hoi_thoi_gian_dao_tao:
+    - text: "Thời gian đào tạo các ngành kỹ thuật tại Học viện:\n- Hệ chính quy: 4-5 năm\n- Hệ chất lượng cao: 4-5 năm\n- Hệ liên thông: 2-3 năm (tùy chương trình)"
+    - text: "Thời gian học tập:\n⏰ Hệ chính quy: 4-5 năm\n⏰ Hệ CLC: 4-5 năm\n⏰ Liên thông: 2-3 năm\nMỗi năm học có 2 học kỳ chính và 1 học kỳ hè (tùy chọn)."
+    - text: "Độ dài chương trình:\n• Cử nhân chính quy: 4 năm\n• Kỹ sư: 5 năm\n• Liên thông: 2-3 năm\n• VLVH: 4.5-5 năm"
+
+  utter_tra_cuu_khai_niem_nghien_cuu_khoa_hoc:
+    - text: "Nghiên cứu khoa học (NCKH) là hoạt động tìm tòi, khám phá bản chất, quy luật của sự vật, hiện tượng; phát triển nhận thức về thế giới tự nhiên và xã hội; sáng tạo giải pháp, công nghệ, sản phẩm mới phục vụ đời sống."
+    - text: "NCKH là quá trình khám phá tri thức mới thông qua các phương pháp khoa học, nhằm giải quyết các vấn đề thực tiễn hoặc mở rộng hiểu biết của con người."
+    - text: "Nghiên cứu khoa học giúp sinh viên phát triển tư duy phản biện, kỹ năng giải quyết vấn đề và khả năng sáng tạo thông qua việc thực hiện các đề tài nghiên cứu chuyên sâu."
+
+  utter_tra_cuu_dieu_kien_nghien_cuu_khoa_hoc:
+    - text: "Điều kiện tham gia NCKH:\n- Sinh viên từ năm 2 trở lên\n- GPA từ 2.0 trở lên\n- Có giảng viên hướng dẫn\n- Đăng ký đề tài qua hệ thống\n- Tham gia khóa học an toàn lab (nếu có)"
+    - text: "Để tham gia NCKH, sinh viên cần:\n✅ Từ năm 2 trở lên\n✅ Điểm TB từ 2.0\n✅ Có GVHD đồng ý\n✅ Đăng ký qua hệ thống\n✅ Hoàn thành khóa an toàn"
+    - text: "Yêu cầu NCKH:\n• Năm học: từ năm 2\n• GPA tối thiểu: 2.0\n• Có giảng viên hướng dẫn\n• Đăng ký online\n• Tuân thủ quy định an toàn"
+
+  utter_tra_cuu_loi_ich_nghien_cuu_khoa_hoc:
+    - text: "Lợi ích khi tham gia NCKH:\n- Cộng điểm rèn luyện, tốt nghiệp\n- Phát triển kỹ năng nghiên cứu, tư duy\n- Tăng cơ hội nhận học bổng\n- Làm đẹp CV, dễ xin việc\n- Cơ hội công bố bài báo, tham gia hội thảo"
+    - text: "Tham gia NCKH mang lại:\n🌟 Cộng điểm học tập\n🌟 Rèn luyện tư duy phản biện\n🌟 Cơ hội nhận học bổng\n🌟 Làm nổi bật hồ sơ xin việc\n🌟 Kết nối với chuyên gia"
+    - text: "Lợi ích NCKH:\n• Phát triển kỹ năng nghiên cứu\n• Tăng cơ hội nghề nghiệp\n• Mở rộng mạng lưới quan hệ\n• Cải thiện kết quả học tập\n• Có thể được công bố quốc tế"
+
+  utter_phong_lab_danh_sach:
+    - text: "Các phòng lab tại khoa Điện tử:\n- Lab Vi mạch và Thiết kế chip\n- Lab Điều khiển và Tự động hóa\n- Lab Điện tử công suất\n- Lab IoT và Hệ thống nhúng\n- Lab Robot và AI\n- Lab Đo lường và Điều khiển"
+    - text: "Danh sách phòng thí nghiệm:\n🔬 Lab Vi mạch & Chip\n🔬 Lab Tự động hóa\n🔬 Lab Điện tử công suất\n🔬 Lab IoT & Nhúng\n🔬 Lab Robot & AI\n🔬 Lab Đo lường"
+    - text: "Khoa Điện tử có các lab:\n• Thiết kế Vi mạch\n• Điều khiển Tự động\n• Điện tử Công suất\n• Hệ thống Nhúng\n• Robot & Trí tuệ nhân tạo\n• Đo lường & Điều khiển"
+
+  utter_phong_lab_thiet_bi:
+    - text: "Các phòng lab được trang bị hiện đại:\n- Máy đo oscilloscope, máy phát sóng\n- Kit IoT, Arduino, Raspberry Pi\n- Robot công nghiệp, robot di động\n- Máy hàn, máy cắt CNC\n- Thiết bị đo lường chuyên dụng\n- Phòng máy tính cấu hình cao"
+    - text: "Trang thiết bị lab hiện đại:\n📊 Oscilloscope, máy phát sóng\n🤖 Robot công nghiệp & di động\n💻 Kit IoT, Arduino, Raspberry Pi\n⚡ Máy hàn, CNC\n🔧 Thiết bị đo đạc chuyên dụng"
+    - text: "Thiết bị phòng lab:\n• Máy đo oscilloscope\n• Robot các loại\n• Bộ kit phát triển IoT\n• Máy gia công CNC\n• Hệ thống đo lường\n• Máy tính hiệu năng cao"
+
+  utter_phong_lab_dieu_kien_su_dung:
+    - text: "Điều kiện sử dụng phòng lab:\n- Sinh viên từ năm 2 trở lên\n- Đăng ký trước với quản lý lab\n- Tham gia khóa học an toàn\n- Tuân thủ nội quy phòng lab\n- Mặc đồ bảo hộ khi cần\n- Không mang đồ ăn, nước vào lab"
+    - text: "Quy định sử dụng lab:\n✅ SV từ năm 2\n✅ Đăng ký trước\n✅ Hoàn thành khóa an toàn\n✅ Tuân thủ nội quy\n✅ Mặc đồ bảo hộ\n✅ Không đồ ăn/thức uống"
+    - text: "Điều kiện vào lab:\n• Sinh viên năm 2+\n• Đăng ký trước\n• Training an toàn\n• Tuân thủ quy định\n• Trang phục phù hợp\n• Giữ gìn vệ sinh"
+
+  utter_phong_lab_lien_he:
+    - text: "Liên hệ phòng lab:\n- Quản lý lab: ThS. Nguyễn Văn A\n- Email: lab.dientu@ptit.edu.vn\n- SĐT: 024 1234 5680\n- Giờ làm việc: 8h-17h từ T2-T6\n- Địa điểm: Tầng 3, nhà A1"
+    - text: "Thông tin liên hệ lab:\n👨‍💼 Quản lý: ThS. Nguyễn Văn A\n📧 Email: lab.dientu@ptit.edu.vn\n📞 Điện thoại: 024.1234.5680\n⏰ Giờ làm: 8h-17h (T2-T6)\n📍 Vị trí: Tầng 3, nhà A1"
+    - text: "Liên hệ lab Điện tử:\n• Người phụ trách: ThS. Nguyễn Văn A\n• Email: lab.dientu@ptit.edu.vn\n• ĐT: 024 1234 5680\n• Giờ: 8h00-17h00 T2-T6\n• Địa chỉ: Tầng 3, tòa A1"
+
+  utter_hoi_ve_nu_gioi_trong_ky_thuat:
+    - text: "Nữ giới hoàn toàn phù hợp với ngành kỹ thuật! Hiện nay có rất nhiều nữ sinh viên xuất sắc trong các ngành Điện tử, Tự động hóa, Vi mạch. Công việc kỹ thuật hiện đại không nặng nhọc, tập trung vào trí tuệ và sáng tạo."
+    - text: "Nữ giới ngày càng thành công trong lĩnh vực kỹ thuật! Các ngành như Điện tử, Tự động hóa rất phù hợp với sự tỉ mỉ, sáng tạo của nữ. Tỷ lệ nữ sinh viên kỹ thuật đang tăng lên hàng năm."
+    - text: "Kỹ thuật không phân biệt giới tính! Nữ giới có nhiều lợi thế trong các ngành đòi hỏi sự tỉ mỉ, sáng tạo như thiết kế vi mạch, lập trình hệ thống nhúng. Rất nhiều cựu nữ sinh viên PTIT đang thành công trong ngành."
+
+  utter_hoi_danh_sach_cau_lac_bo:
+    - text: "Các CLB nổi bật tại Học viện:\n- CLB Robotics và AI\n- CLB Lập trình PTIT\n- CLB Điện tử - Viễn thông\n- CLB Nghiên cứu Khoa học\n- CLB Tiếng Anh\n- CLB Văn nghệ, Thể thao\n- CLB Tình nguyện"
+    - text: "Danh sách CLB hoạt động sôi nổi:\n🤖 CLB Robotics & AI\n💻 CLB Lập trình\n📡 CLB Điện tử Viễn thông\n🔬 CLB Nghiên cứu KH\n🇬🇧 CLB Tiếng Anh\n🎭 CLB Văn nghệ\n⚽ CLB Thể thao\n❤️ CLB Tình nguyện"
+    - text: "Các Câu lạc bộ tại PTIT:\n• Robotics & Trí tuệ nhân tạo\n• Lập trình & Phát triển\n• Điện tử - Viễn thông\n• Nghiên cứu Khoa học\n• Ngoại ngữ & Giao lưu\n• Nghệ thuật & Thể thao\n• Thiện nguyện & Cộng đồng"
+
+  utter_hoi_clb_theo_nganh_hoc:
+    - text: "Với ngành kỹ thuật, bạn nên tham gia:\n- CLB Robotics và AI (phù hợp Tự động hóa)\n- CLB Điện tử - Viễn thông\n- CLB Nghiên cứu Khoa học\n- CLB Lập trình PTIT\nCác CLB này giúp phát triển kỹ năng chuyên môn và kết nối với sinh viên cùng ngành."
+    - text: "CLB phù hợp cho sinh viên kỹ thuật:\n🔧 CLB Robotics & AI\n🔧 CLB Điện tử Viễn thông\n🔧 CLB Nghiên cứu KH\n🔧 CLB Lập trình\nTham gia CLB giúp bạn nâng cao chuyên môn và mở rộng mối quan hệ."
+    - text: "Gợi ý CLB theo ngành:\n• Tự động hóa → CLB Robotics & AI\n• Điện tử → CLB Điện tử Viễn thông\n• Vi mạch → CLB Nghiên cứu KH\n• Tất cả → CLB Lập trình để rèn kỹ năng coding"
+
+  utter_ktx_co_khong:
+    - text: "Có, Học viện có ký túc xá cho sinh viên. KTX được trang bị đầy đủ tiện nghi, wifi, điều hòa, khu vực sinh hoạt chung. Sinh viên năm nhất được ưu tiên đăng ký."
+    - text: "Chắc chắn rồi! PTIT có ký túc xá khang trang với đầy đủ tiện nghi: wifi, điều hòa, khu vực sinh hoạt chung. SV năm nhất được ưu tiên ở KTX."
+    - text: "Có bạn nhé! KTX PTIT rất tiện nghi với wifi, máy lạnh, phòng sinh hoạt chung. Tân sinh viên sẽ được ưu tiên trong đăng ký."
+
+  utter_ktx_dang_ky:
+    - text: "Cách đăng ký KTX:\n1. Đăng ký online qua cổng thông tin sinh viên\n2. Nộp hồ sơ (CMND, ảnh 3x4, đơn đăng ký)\n3. Đóng phí KTX theo quy định\n4. Nhận giấy xác nhận và bàn giao phòng\nThời gian đăng ký: Trước mỗi học kỳ 2 tuần"
+    - text: "Quy trình đăng ký KTX:\n📝 Đăng ký online\n📄 Nộp hồ sơ (CMND, ảnh, đơn)\n💳 Đóng phí KTX\n✅ Nhận xác nhận & bàn giao\n⏰ Thời gian: Trước HK 2 tuần"
+    - text: "Hướng dẫn đăng ký KTX:\n• Bước 1: Đăng ký trực tuyến\n• Bước 2: Chuẩn bị hồ sơ\n• Bước 3: Nộp phí KTX\n• Bước 4: Nhận phòng\n• Thời hạn: 2 tuần trước học kỳ"
+
+  utter_ktx_chi_phi:
+    - text: "Chi phí KTX:\n- Phòng 4 người: 800.000đ/tháng\n- Phòng 6 người: 600.000đ/tháng\n- Đã bao gồm điện, nước, wifi\n- Đóng theo học kỳ (4-5 tháng)\n- Có chính sách hỗ trợ sinh viên khó khăn"
+    - text: "Giá KTX:\n🏠 Phòng 4 người: 800k/tháng\n🏠 Phòng 6 người: 600k/tháng\n💡 Bao gồm điện, nước, wifi\n📅 Đóng theo học kỳ\n🤝 Hỗ trợ SV hoàn cảnh khó khăn"
+    - text: "Chi phí ở KTX:\n• Phòng 4: 800.000đ/tháng\n• Phòng 6: 600.000đ/tháng\n• Đã gồm điện nước internet\n• Thanh toán theo học kỳ\n• Có chính sách hỗ trợ đặc biệt"
+  utter_hoi_hoc_phi_chung:
+    - text: "Học phí tại Học viện dao động từ 18-25 triệu đồng/năm tùy ngành học. Học phí được thu theo tín chỉ, mỗi tín chỉ khoảng 300.000 - 450.000đ. Học viện có nhiều chính sách hỗ trợ và học bổng cho sinh viên."
+    - text: "Mức học phí PTIT:\n💰 18-25 triệu/năm (tùy ngành)\n💰 300.000-450.000đ/tín chỉ\n💵 Thu theo tín chỉ\n🎓 Nhiều học bổng hỗ trợ"
+    - text: "Thông tin học phí:\n• Trung bình: 18-25 triệu/năm\n• Mỗi tín chỉ: 300-450k\n• Hình thức thu: Theo tín chỉ\n• Hỗ trợ: Nhiều loại học bổng\n• Chính sách: Trả góp, giảm học phí"
+
+  utter_hoi_hoc_bong_chung:
+    - text: "Học viện có nhiều loại học bổng:\n- Học bổng khuyến khích học tập\n- Học bổng cho sinh viên xuất sắc\n- Học bổng do doanh nghiệp tài trợ\n- Học bổng hỗ trợ sinh viên khó khăn\nGiá trị từ 2-10 triệu đồng/học kỳ."
+    - text: "Các loại học bổng:\n🎓 Khuyến khích học tập\n🏆 Sinh viên xuất sắc\n💼 Doanh nghiệp tài trợ\n❤️ Hỗ trợ khó khăn\n💰 Giá trị: 2-10 triệu/kỳ"
+    - text: "Chính sách học bổng PTIT:\n• Học bổng học tập: 2-5 triệu/kỳ\n• Học bổng xuất sắc: 5-10 triệu/kỳ\n• Học bổng doanh nghiệp: 3-8 triệu/kỳ\n• Hỗ trợ khó khăn: 2-4 triệu/kỳ"
+
+  utter_hoi_so_luong_co_so:
+    - text: "Học viện Công nghệ Bưu chính Viễn thông có 2 cơ sở đào tạo chính:\n\n🏫 **Cơ sở Hà Nội:**\n- Địa chỉ: 122 Hoàng Quốc Việt, P. Nghĩa Tân, Q. Cầu Giấy, Hà Nội\n- Điện thoại: (024) 3352 4192\n- Là trụ sở chính của Học viện\n\n🏫 **Cơ sở Thành phố Hồ Chí Minh:**\n- Địa chỉ: Số 97, đường Man Thiện, P. Hiệp Phú, TP. Thủ Đức, TP.HCM\n- Điện thoại: (028) 3726 0993\n\nCả hai cơ sở đều được trang bị hiện đại với đầy đủ phòng học, thư viện, phòng thí nghiệm và ký túc xá cho sinh viên."
+    - text: "PTIT hiện có 2 cơ sở đào tạo:\n\n📍 **Cơ sở Hà Nội** (122 Hoàng Quốc Việt, Cầu Giấy)\n📍 **Cơ sở TP.HCM** (97 Man Thiện, Thủ Đức)\n\nCác cơ sở đều có khuôn viên rộng rãi, hệ thống phòng lab hiện đại, thư viện điện tử và khu thể thao đa dạng phục vụ nhu cầu học tập và rèn luyện của sinh viên."
+    - text: "Học viện Công nghệ Bưu chính Viễn thông có 2 cơ sở:\n\n• **Hà Nội:** 122 Hoàng Quốc Việt, Cầu Giấy\n• **TP. Hồ Chí Minh:** 97 Man Thiện, Thủ Đức\n\nCả hai cơ sở đều được đầu tư đồng bộ về cơ sở vật chất, đáp ứng tiêu chuẩn đào tạo đại học chất lượng cao trong lĩnh vực công nghệ thông tin và viễn thông."
+
+  utter_hoi_co_so_vat_chat:
+    - text: |-
+        Học viện Công nghệ Bưu chính Viễn thông được đầu tư hệ thống cơ sở vật chất hiện đại:
+
+        🏫 **Hệ thống phòng học:**
+        - Phòng học máy lạnh, projector
+        - Phòng máy tính cấu hình cao
+        - Hệ thống âm thanh, ánh sáng đầy đủ
+
+        📚 **Thư viện:**
+        - Thư viện điện tử với hàng ngàn đầu sách
+        - Kết nối cơ sở dữ liệu quốc tế
+        - Không gian học tập yên tĩnh
+
+        🔬 **Phòng thí nghiệm:**
+        - Phòng lab vi mạch, điện tử
+        - Lab IoT, robotics, AI
+        - Lab mạng máy tính, an ninh mạng
+
+        🏸 **Khu thể thao:**
+        - Sân bóng đá, bóng rổ
+        - Nhà thi đấu đa năng
+        - Phòng gym, yoga
+
+        🌐 **Hạ tầng công nghệ:**
+        - Wi-Fi tốc độ cao toàn trường
+        - Hệ thống máy chủ hiện đại
+        - Phần mềm e-learning
+
+    - text: |-
+        PTIT có cơ sở vật chất rất tốt:
+
+        • **Phòng học:** 100% có máy lạnh, thiết bị nghe nhìn
+        • **Thư viện:** Hiện đại, không gian mở, mượn sách online
+        • **Phòng lab:** Được đầu tư các thiết bị mới nhất
+        • **Ký túc xá:** Tiện nghi, an ninh, giá hợp lý
+        • **Thể thao:** Đầy đủ sân bãi, nhà thi đấu
+        • **Canteen:** Vệ sinh, đa dạng suất ăn
+
+        Tất cả đều phục vụ tốt cho việc học tập và nghiên cứu.
+
+    - text: |-
+        Cơ sở vật chất PTIT bao gồm:
+
+        📍 Hệ thống phòng học thông minh
+        📍 Thư viện số với 50.000+ đầu sách
+        📍 15+ phòng lab chuyên ngành
+        📍 Khu ký túc xá 2000 chỗ
+        📍 Nhà thi đấu, sân thể thao
+        📍 Canteen, cafe, khu giải trí
+        📍 Wi-Fi phủ sóng toàn trường
+
+        Đảm bảo môi trường học tập tốt nhất cho sinh viên.
+
+  utter_hoi_danh_gia_chat_luong:
+  - text: |-
+      Học viện Công nghệ Bưu chính Viễn thông (PTIT) là một trong những trường TOP đầu về đào tạo công nghệ thông tin và viễn thông tại Việt Nam:
+
+      🏆 **Thành tích nổi bật:**
+      - Trường trọng điểm quốc gia
+      - Top 10 trường đại học tốt nhất Việt Nam
+      - Đạt chuẩn kiểm định chất lượng giáo dục
+      - Trường đại học trọng điểm ngành ICT
+
+      📊 **Điểm mạnh:**
+      - Đội ngũ giảng viên chất lượng cao
+      - Chương trình đào tạo cập nhật
+      - Tỷ lệ sinh viên có việc làm >95%
+      - Hợp tác với nhiều doanh nghiệp lớn
+
+      PTIT luôn là lựa chọn hàng đầu cho sinh viên theo đuổi ngành công nghệ.
+
+  - text: |-
+      PTIT được đánh giá rất cao trong lĩnh vực công nghệ:
+
+      ✅ **Top trường kỹ thuật:** Thuộc nhóm trường đại học trọng điểm quốc gia
+      ✅ **Chất lượng đào tạo:** Được Bộ GD&ĐT công nhận đạt chuẩn
+      ✅ **Uy tín doanh nghiệp:** Sinh viên PTIT được các tập đoàn công nghệ lớn săn đón
+      ✅ **Cơ sở vật chất:** Đầu tư hiện đại, đồng bộ
+      ✅ **Hợp tác quốc tế:** Liên kết với nhiều trường đại học nước ngoài
+
+      Đây chắc chắn là môi trường đào tạo chất lượng cao.
+
+  - text: |-
+      PTIT là trường TOP trong lĩnh vực CNTT và Viễn thông:
+
+      • **Xếp hạng:** Top 10 đại học tốt nhất VN
+      • **Kiểm định:** Đạt chuẩn chất lượng giáo dục
+      • **Việc làm:** 95% sinh viên có việc sau 6 tháng tốt nghiệp
+      • **Doanh nghiệp:** Đối tác của Viettel, VNPT, FPT, Samsung...
+      • **Nghiên cứu:** Nhiều công trình khoa học có giá trị
+
+      Chất lượng đào tạo được khẳng định qua nhiều thế hệ sinh viên thành công.
+        
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true
