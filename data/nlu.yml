@@ -324,6 +324,9 @@ nlu:
     - Có bao nhiêu phương thức xét tuyển cho ngành [Điều khiển và Tự động hóa](ten_nganh)?
     - Trường có xét học bạ không hay chỉ lấy điểm thi?
     - Nếu sai thông tin trong hồ sơ xét tuyển thì có được sửa lại không ạ?
+    - Em cần chuẩn bị gì để nộp hồ sơ nhập học
+    - Hồ sơ nhập học gồm những gì
+    
 
 
 - intent: tra_cuu_chi_tieu
@@ -1139,6 +1142,102 @@ nlu:
     - Chi phi o ktx
     - Gia phong o ktx
     - Toi muon biet ve chi phi ki tuc xa
+    
+- intent: hoi_so_luong_co_so
+  examples: |
+    - Trường có mấy cơ sở?
+    - Trường mình có bao nhiêu cơ sở?
+    - Có mấy cơ sở đào tạo?
+    - Học viện có mấy cơ sở?
+    - PTIT có bao nhiêu cơ sở?
+    - Các cơ sở của trường?
+    - Trường có nhiều cơ sở không?
+    - Liệt kê các cơ sở của trường
+    - Trường có những cơ sở nào
+    - Cho em hỏi trường có bao nhiêu cơ sở đào tạo
+    - Học viện có cơ sở ở Hà Nội không
+    - Trường có cơ sở ở miền Nam không
+    - Cơ sở miền Bắc và miền Nam của trường
+    - Cơ sở miền Bắc và miền Nam Ptit
+    - Cơ sở miền Bắc và miền Nam có khác nhau không
+    - Co so mien bac va mien nam cua ptit
+    - Trường có cơ sở ở đâu?
+    - Trường mình có phải có 2 cơ sở không
+    - Hoc vien co 2 co so phai khong
+    - Truong minh co 2 co so phai khong
+    - Truong minh co may co so
+    - Co may co so dao tao
+    - Cơ sở đào tạo
+    - Co so dao tao ptit
+    - Co so dao tao
+
+- intent: hoi_co_so_vat_chat
+  examples: |
+    - Cơ sở vật chất của PTIT thế nào?
+    - Cơ sở vật chất của học viện có tốt không
+    - PTIT có phòng học hiện đại không?
+    - Trường có thư viện không?
+    - Hệ thống thư viện của trường?
+    - Trường có những trang thiết bị gì?
+    - Phòng thí nghiệm có những gì?
+    - Trường có điều hòa không
+    - Trường có phòng gym không
+    - Trường có phòng y tế không
+    - Cơ sở vật chất của trường có hiện đại không
+    - Trường có đầu tư về cơ sở vật chất nhiều không
+    - CSVC ở học viện mình
+    - CSVC ở trường ptit
+    - CSVC của trường có tốt không
+    - Học viện có nhà ăn không
+    - Trang thiết bị dạy học của trường?
+    - Cơ sở vật chất của trường có tốt không?
+    - Sinh viên học ở PTIT có được dùng phòng lab không?
+    - PTIT có nhiều phòng thực hành không?
+    - Thiết bị học tập tại PTIT có đầy đủ không?
+    - Trường có wifi miễn phí không?
+    - PTIT có khu tự học không?
+    - Có máy lạnh trong phòng học không?
+    - Cơ sở vật chất tại cơ sở Hà Nội thế nào?
+    - Cơ sở vật chất cơ sở TP.HCM có hiện đại không?
+    - Trường có khuôn viên rộng không?
+    - PTIT có sân bóng, nhà thi đấu thể thao không?
+    - Cơ sở vật chất có đầy đủ không?
+
+- intent: hoi_danh_gia_chat_luong
+  examples: |
+    - Trường này có phải trường top không?
+    - PTIT có phải trường tốt không?
+    - Chất lượng đào tạo của trường thế nào?
+    - Trường có uy tín không?
+    - Xếp hạng của PTIT?
+    - Trường này có nổi tiếng không?
+    - Có nên học PTIT không?
+    - So sánh PTIT với các trường khác?
+    - Trường có đạt chuẩn chất lượng không?
+    - Thứ hạng của học viện?
+    - PTIT có thuộc top trường kỹ thuật không?
+    - Đánh giá chung về trường?
+    - Trường có nổi tiếng không?
+    - Học trường này có tốt không
+    - Có nên học tại ptit
+    - Chất lượng đào tạo của học viện
+    - Trường này có phốt gì không?
+    - PTIT có nằm trong top đầu không?
+    - PTIT đứng thứ mấy trong các trường công nghệ?
+    - Chương trình đào tạo của PTIT có chất lượng không?
+    - PTIT có đáng để theo học không?
+    - PTIT có phải trường danh tiếng không?
+    - Trường này sinh viên đánh giá thế nào?
+    - Review học viện công nghệ bưu chính viễn thông
+    - Review ptit
+    - Hãy nhận xét về trường này
+    - Gioi thieu hoc vien cong nghe buu chinh vien thong
+    - Giới thiệu học viện công nghệ bưu chính viễn thông
+    
+    
+
+    
+    
   
 
 
