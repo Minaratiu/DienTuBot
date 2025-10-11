@@ -198,6 +198,21 @@ rules:
   - intent: ktx_chi_phi
   - action: utter_ktx_chi_phi
 
+- rule: Hỏi số lượng cơ sở
+  steps:
+  - intent: hoi_so_luong_co_so
+  - action: utter_hoi_so_luong_co_so
+
+- rule: Hỏi cơ sở vật chất
+  steps:
+  - intent: hoi_co_so_vat_chat
+  - action: utter_hoi_co_so_vat_chat
+
+- rule: Hỏi đánh giá chất lượng
+  steps:
+  - intent: hoi_danh_gia_chat_luong
+  - action: utter_hoi_danh_gia_chat_luong
+
 
 
 
