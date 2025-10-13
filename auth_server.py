@@ -5,7 +5,7 @@ import sqlite3
 import hashlib
 
 app = Flask(__name__)
-CORS(app) # Rất quan trọng: Cho phép frontend giao tiếp với server này
+CORS(app)
 
 # Hàm kết nối CSDL (Lấy từ actions.py của bạn)
 def get_db_connection():

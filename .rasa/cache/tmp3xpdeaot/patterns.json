@@ -1,0 +1,14 @@
+[
+  {
+    "name": "ten_nganh",
+    "pattern": "(\\bKỹ\\ thuật\\ Điều\\ khiển\\ và\\ Tự\\ động\\ hóa\\b|\\bCông\\ nghệ\\ Kỹ\\ thuật\\ Điện\\ tử\\b|\\bCông\\ nghệ\\ Vi\\ mạch\\ bán\\ dẫn\\b|\\bTự\\ động\\ hóa\\b|\\bVi\\ mạch\\b|\\bKỹ\\ thuật\\ Điều\\ khiển\\ và\\ Tự\\ động\\ hóa\\b)"
+  },
+  {
+    "name": "co_so",
+    "pattern": "(\\bHà\\ Nội\\b|\\bHN\\b|\\bHà\\ Đông\\b|\\bHòa\\ Lạc\\b|\\bTP\\ HCM\\b|\\bHCM\\b|\\bcơ\\ sở\\ phía\\ Nam\\b|\\bcơ\\ sở\\ Bắc\\b|\\bmiền\\ Bắc\\b|\\bmiền\\ Nam\\b)"
+  },
+  {
+    "name": "phuong_thuc",
+    "pattern": "(\\bthi\\ TN\\ THPT\\b|\\bthi\\ tốt\\ nghiệp\\b|\\bđiểm\\ thi\\ tốt\\ nghiệp\\b|\\bxét\\ học\\ bạ\\b|\\bhọc\\ bạ\\b|\\bSAT\\b|\\bACT\\b|\\bHSA\\b|\\bTSA\\b|\\bSPT\\b|\\bAPT\\b|\\btuyển\\ thẳng\\b|\\bưu\\ tiên\\ xét\\ tuyển\\b)"
+  }
+]

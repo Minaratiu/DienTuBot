@@ -1,0 +1,52 @@
+[
+  {
+    "tag_name": "entity",
+    "ids_to_tags": {
+      "1": "B-diem",
+      "2": "I-diem",
+      "3": "L-diem",
+      "4": "U-diem",
+      "5": "B-loai_xet_tuyen",
+      "6": "I-loai_xet_tuyen",
+      "7": "L-loai_xet_tuyen",
+      "8": "U-loai_xet_tuyen",
+      "9": "B-nam",
+      "10": "I-nam",
+      "11": "L-nam",
+      "12": "U-nam",
+      "13": "B-ten_khoa",
+      "14": "I-ten_khoa",
+      "15": "L-ten_khoa",
+      "16": "U-ten_khoa",
+      "17": "B-ten_nganh",
+      "18": "I-ten_nganh",
+      "19": "L-ten_nganh",
+      "20": "U-ten_nganh",
+      "0": "O"
+    },
+    "tags_to_ids": {
+      "B-diem": 1,
+      "I-diem": 2,
+      "L-diem": 3,
+      "U-diem": 4,
+      "B-loai_xet_tuyen": 5,
+      "I-loai_xet_tuyen": 6,
+      "L-loai_xet_tuyen": 7,
+      "U-loai_xet_tuyen": 8,
+      "B-nam": 9,
+      "I-nam": 10,
+      "L-nam": 11,
+      "U-nam": 12,
+      "B-ten_khoa": 13,
+      "I-ten_khoa": 14,
+      "L-ten_khoa": 15,
+      "U-ten_khoa": 16,
+      "B-ten_nganh": 17,
+      "I-ten_nganh": 18,
+      "L-ten_nganh": 19,
+      "U-ten_nganh": 20,
+      "O": 0
+    },
+    "num_tags": 21
+  }
+]
