@@ -1,17 +1,253 @@
-
+import google.generativeai as genai
+import os
+import time
+import requests
 import unicodedata
 from typing import Any, Text, Dict, List
 from rasa_sdk import Action, Tracker
 from rasa_sdk.executor import CollectingDispatcher
-from rasa_sdk.events import SlotSet
+from rasa_sdk.events import SlotSet, FollowupAction
 
 import sqlite3
 import hashlib
-import unicodedata
-from typing import Any, Text, Dict, List
-from rasa_sdk import Action, Tracker
-from rasa_sdk.executor import CollectingDispatcher
-from rasa_sdk.events import SlotSet
+
+
+
+class ActionDefaultFallback(Action):
+    def name(self) -> Text:
+        return "action_default_fallback"
+
+    def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        """Chuyển sang Gemini khi không có trong kịch bản - CÓ CHẶN VÒNG LẶP"""
+
+        user_message = tracker.latest_message.get('text', '')
+        confidence = tracker.latest_message.get('intent', {}).get('confidence', 0)
+
+        print(f"🔍 Fallback triggered - Confidence: {confidence:.3f}")
+        print(f"🤖 User question: {user_message}")
+
+        # 🔒 KIỂM TRA VÒNG LẶP - nếu đã fallback quá nhiều lần
+        fallback_count = tracker.get_slot("fallback_count") or 0
+        fallback_count += 1
+
+        print(f"🔢 Fallback count: {fallback_count}")
+
+        if fallback_count >= 3:  # 🔒 CHẶN SAU 3 LẦN FALLBACK
+            print("🚫 Blocking infinite loop - sending contact info")
+            contact_msg = (
+                "Hiện tại hệ thống đang gặp sự cố kỹ thuật. "
+                "Vui lòng liên hệ trực tiếp:\n"
+                "📞 Hotline: 024.335.25832\n"
+                "📧 Email: khoadientu@ptit.edu.vn"
+            )
+            dispatcher.utter_message(text=contact_msg)
+            return [SlotSet("fallback_count", 0)]  # Reset counter
+
+        # Gọi Gemini
+        dispatcher.utter_message(text="Để tôi hỗ trợ bạn tốt hơn với câu hỏi này...")
+
+        return [
+            SlotSet("fallback_count", fallback_count),
+            FollowupAction("action_fallback_gemini")
+        ]
+
+
+class ActionFallbackGemini(Action):
+    def name(self) -> Text:
+        return "action_fallback_gemini"
+
+    def __init__(self):
+        self.api_key = "AIzaSyDPhLWyxOi8VsgjlQyc0y23LSlpMyLoO2w"
+        self.api_available = True
+
+        # Danh sách model theo thứ tự ưu tiên
+        self.models_priority = [
+            'gemini-2.5-flash',
+            'gemini-2.0-flash',
+            'gemini-2.5-pro',
+        ]
+        self.current_model_index = 0
+        self.max_model_retries = 2  # 🔒 Giới hạn retry model
+
+        try:
+            genai.configure(api_key=self.api_key)
+            print("✅ Gemini configured successfully")
+        except Exception as e:
+            print(f"❌ Gemini config error: {e}")
+            self.api_available = False
+
+    def _call_gemini(self, prompt: str) -> str:
+        """Gọi Gemini API với fallback model - CÓ GIỚI HẠN RETRY"""
+        if not self.api_available:
+            return None
+
+        original_model_index = self.current_model_index
+        retry_count = 0
+
+        while retry_count < self.max_model_retries * len(self.models_priority):
+            model_name = self.models_priority[self.current_model_index]
+
+            try:
+                print(f"🔄 Trying model: {model_name} (attempt {retry_count + 1})")
+                model = genai.GenerativeModel(model_name)
+                response = model.generate_content(
+                    prompt,
+                    generation_config=genai.types.GenerationConfig(
+                        max_output_tokens=220,
+                        temperature=0.3,
+                    ),
+                    request_options={'timeout': 8}
+                )
+
+                if response and response.text:
+                    response_text = response.text.strip()
+                    if self._validate_response(response_text):
+                        print(f"✅ Success with model: {model_name}")
+                        return response_text
+                    else:
+                        print(f"❌ Invalid response from {model_name}")
+
+            except Exception as e:
+                print(f"❌ Model {model_name} failed: {e}")
+
+            # 🔄 CHUYỂN MODEL TIẾP THEO
+            self.current_model_index = (self.current_model_index + 1) % len(self.models_priority)
+            retry_count += 1
+
+            # 🔒 Nếu đã thử hết tất cả model, break
+            if self.current_model_index == original_model_index and retry_count > 0:
+                print("🚫 All models exhausted")
+                break
+
+        # 🔄 RESET VỀ MODEL ĐẦU TIÊN SAU KHI THẤT BẠI
+        self.current_model_index = 0
+        return None
+
+    def _validate_response(self, response_text: str) -> bool:
+        """Validate response từ Gemini"""
+        if not response_text:
+            return False
+
+        invalid_patterns = [
+            "câu hỏi nằm ngoài phạm vi tư vấn",
+            "không thể trả lời",
+            "i cannot",
+            "i'm sorry",
+            "xin lỗi tôi không thể trả lời",
+            "nằm ngoài phạm vi hiểu biết"
+        ]
+
+        response_lower = response_text.lower()
+        for pattern in invalid_patterns:
+            if pattern in response_lower:
+                print(f"🚫 Response contains invalid pattern: {pattern}")
+                return False
+
+        words = response_text.split()
+        is_valid = 5 <= len(words) <= 120
+        print(f"📊 Word count: {len(words)} -> {'Valid' if is_valid else 'Invalid'}")
+
+        return is_valid
+
+    def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        user_message = tracker.latest_message.get('text', '')
+
+        # System prompt cho Gemini
+        system_prompt = """
+Bạn là CHATBOT TƯ VẤN TUYỂN SINH CHÍNH THỨC của **Khoa Điện Tử – Học viện Công nghệ Bưu chính Viễn thông (PTIT)**.
+
+🎯 **Mục tiêu:**
+- Giải đáp thắc mắc về tuyển sinh Khoa Điện tử PTIT một cách ngắn gọn, dễ hiểu, có định hướng cho thí sinh.
+- Giữ giọng văn thân thiện, rõ ràng, ưu tiên liệt kê bullet để dễ đọc.
+- Giải đáp chính xác các câu hỏi liên quan tới PTIT 
+
+🏫 **Thông tin cố định (KHÔNG ĐƯỢC THAY ĐỔI):**
+- Địa chỉ: 96A Trần Phú, Hà Đông, Hà Nội
+- Điện thoại: 024.335.25832
+- Email: khoadientu@ptit.edu.vn
+
+🎓 **Các ngành đào tạo:**
+1. Kỹ thuật Điều khiển và Tự động hóa
+2. Công nghệ Vi mạch Bán dẫn
+3. Công nghệ Kỹ thuật Điện, Điện tử
+
+📌 **Thông tin tuyển sinh tham khảo 2024:**
+- Điểm chuẩn: 24 – 26 điểm (tùy ngành)
+- Tổ hợp: A00 (Toán – Lý – Hóa), A01 (Toán – Lý – Anh)
+- Chỉ tiêu: ~200 sinh viên
+- Học phí: 15 – 20 triệu / học kỳ
+- Thời gian đào tạo: 4.5 năm
+
+🗂 **Hồ sơ đăng ký cơ bản gồm:**
+- Phiếu đăng ký xét tuyển
+- Học bạ + Bằng tốt nghiệp THPT (bản sao)
+- Giấy khai sinh, CMND/CCCD (bản sao)
+- Ảnh 3x4 (4 tấm)
+
+🚫 **Giới hạn bắt BUỘC:**
+- Chỉ trả lời về TUYỂN SINH TRƯỜNG HỌC VIỆN CÔNG NGHỆ BƯU CHÍNH VIỄN THÔNG PTIT – KHÔNG tư vấn trường khác.
+- Nếu câu hỏi ngoài phạm vi → trả lời: "Câu hỏi nằm ngoài phạm vi tư vấn. Vui lòng liên hệ trực tiếp Khoa Điện Tử PTIT để được hỗ trợ."
+- Nếu dữ liệu CHƯA CÔNG BỐ → trả lời rõ: "Hiện chưa có dữ liệu chính thức, bạn có thể theo dõi website hoặc hotline của khoa để cập nhật."
+
+💬 **Quy tắc trả lời:**
+- Dưới 80 từ.
+- Ngắn gọn, chia gạch đầu dòng nếu phù hợp.
+- Có thể dùng icon như ✅ 📌 📞 để tăng thân thiện.
+- Không nói kiểu AI/robot, mà như người tư vấn tuyển sinh nhiệt tình.
+- Nếu câu hỏi không liên quan đến tuyển sinh, có thể trả lời ngắn gọn và hướng dẫn liên hệ bộ phận chuyên môn
+Hãy trả lời câu hỏi sau theo đúng quy tắc trên:
+"""
+
+        full_prompt = f"{system_prompt}\n{user_message}"
+
+        try:
+            bot_response = self._call_gemini(full_prompt)
+
+            if bot_response:
+                print(f"✅ Gemini response successful")
+                dispatcher.utter_message(text=bot_response)
+                # 🔒 RESET FALLBACK COUNTER khi thành công
+                return [
+                    SlotSet("fallback_count", 0),
+                    SlotSet("ten_nganh", None),
+                    SlotSet("nam", None),
+                    SlotSet("awaiting_year", False),
+                    SlotSet("awaiting_major", False),
+                    SlotSet("awaiting_year_phuong_thuc", False)
+                ]
+            else:
+                print("❌ All Gemini models failed")
+                self._send_fallback_response(dispatcher)
+
+        except Exception as e:
+            print(f"💥 Critical Gemini error: {e}")
+            self._send_fallback_response(dispatcher)
+
+        return []
+
+    def _send_fallback_response(self, dispatcher: CollectingDispatcher):
+        """Gửi response fallback khi Gemini hoàn toàn thất bại"""
+        fallback_responses = [
+            "Hiện tôi chưa thể trả lời câu hỏi này. Bạn vui lòng liên hệ trực tiếp Khoa Điện Tử PTIT để được hỗ trợ chi tiết nhé! 📞",
+            "Câu hỏi này cần được tư vấn chi tiết hơn. Bạn có thể liên hệ hotline 024.335.25832 để được giải đáp cụ thể! ✅",
+            "Để đảm bảo thông tin chính xác, mời bạn liên hệ trực tiếp Khoa Điện Tử PTIT qua số 024.335.25832 📞"
+        ]
+
+        import random
+        response = random.choice(fallback_responses)
+        dispatcher.utter_message(text=response)
+
+
+class ActionResetFallbackCount(Action):
+    """Action để reset fallback counter khi conversation kết thúc hoặc thành công"""
+
+    def name(self) -> Text:
+        return "action_reset_fallback_count"
+
+    def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        print("🔄 Resetting fallback counter")
+        return [SlotSet("fallback_count", 0)]
+
 # //key noi voi database
 def get_db_connection():
     conn = sqlite3.connect("user_data.db")
@@ -260,76 +496,515 @@ class ActionTraCuuMaNganh(Action):
         return message
 
 
-class ActionTraCuuDiemChuan(Action):
+DIEM_CHUAN_PTIT = {
+    2022: {
+        "Kỹ thuật Điều khiển và Tự động hóa": 23.5,
+        "Công nghệ Kỹ thuật Điện, Điện tử": 23.0,
+        "Công nghệ Vi mạch Bán dẫn": 24.0
+    },
+    2023: {
+        "Kỹ thuật Điều khiển và Tự động hóa": 24.0,
+        "Công nghệ Kỹ thuật Điện, Điện tử": 23.5,
+        "Công nghệ Vi mạch Bán dẫn": 24.5
+    },
+    2024: {
+        "Kỹ thuật Điều khiển và Tự động hóa": 24.5,
+        "Công nghệ Kỹ thuật Điện, Điện tử": 24.0,
+        "Công nghệ Vi mạch Bán dẫn": 25.0
+    },
+    2025: {
+        "Kỹ thuật Điều khiển và Tự động hóa": 25.0,
+        "Công nghệ Kỹ thuật Điện, Điện tử": 24.5,
+        "Công nghệ Vi mạch Bán dẫn": 25.5
+    }
+}
 
+# Database phương thức xét tuyển
+DIEM_CHUAN_PHUONG_THUC = {
+    "THPT": DIEM_CHUAN_PTIT,
+    "SAT": {
+        2024: {
+            "Kỹ thuật Điều khiển và Tự động hóa": 1250,
+            "Công nghệ Kỹ thuật Điện, Điện tử": 1200,
+            "Công nghệ Vi mạch Bán dẫn": 1300
+        }
+    },
+    "ACT": {
+        2024: {
+            "Kỹ thuật Điều khiển và Tự động hóa": 26,
+            "Công nghệ Kỹ thuật Điện, Điện tử": 25,
+            "Công nghệ Vi mạch Bán dẫn": 27
+        }
+    },
+    "tài năng": {
+        2024: {
+            "Kỹ thuật Điều khiển và Tự động hóa": 8.5,
+            "Công nghệ Kỹ thuật Điện, Điện tử": 8.0,
+            "Công nghệ Vi mạch Bán dẫn": 9.0
+        }
+    }
+}
+
+# Mapping từ khóa đến tên ngành chính thức
+NGANH_SYNONYMS = {
+    "kỹ thuật điều khiển và tự động hóa": "Kỹ thuật Điều khiển và Tự động hóa",
+    "điều khiển tự động": "Kỹ thuật Điều khiển và Tự động hóa",
+    "tự động hóa": "Kỹ thuật Điều khiển và Tự động hóa",
+    "kỹ thuật điều khiển": "Kỹ thuật Điều khiển và Tự động hóa",
+    "công nghệ kỹ thuật điện điện tử": "Công nghệ Kỹ thuật Điện, Điện tử",
+    "điện điện tử": "Công nghệ Kỹ thuật Điện, Điện tử",
+    "kỹ thuật điện điện tử": "Công nghệ Kỹ thuật Điện, Điện tử",
+    "công nghệ vi mạch bán dẫn": "Công nghệ Vi mạch Bán dẫn",
+    "vi mạch bán dẫn": "Công nghệ Vi mạch Bán dẫn",
+    "công nghệ vi mạch": "Công nghệ Vi mạch Bán dẫn",
+    "bán dẫn": "Công nghệ Vi mạch Bán dẫn"
+}
+
+# Mapping khoa đến các ngành
+KHOA_TO_NGANH = {
+    "khoa điện tử": [
+        "Kỹ thuật Điều khiển và Tự động hóa",
+        "Công nghệ Kỹ thuật Điện, Điện tử",
+        "Công nghệ Vi mạch Bán dẫn"
+    ],
+    "khoa kỹ thuật điện tử 1": [
+        "Kỹ thuật Điều khiển và Tự động hóa",
+        "Công nghệ Kỹ thuật Điện, Điện tử",
+        "Công nghệ Vi mạch Bán dẫn"
+    ],
+    "khoa đt": [
+        "Kỹ thuật Điều khiển và Tự động hóa",
+        "Công nghệ Kỹ thuật Điện, Điện tử",
+        "Công nghệ Vi mạch Bán dẫn"
+    ],
+    "khoa ktđt 1": [
+        "Kỹ thuật Điều khiển và Tự động hóa",
+        "Công nghệ Kỹ thuật Điện, Điện tử",
+        "Công nghệ Vi mạch Bán dẫn"
+    ],
+    "khoa ktđt": [
+        "Kỹ thuật Điều khiển và Tự động hóa",
+        "Công nghệ Kỹ thuật Điện, Điện tử",
+        "Công nghệ Vi mạch Bán dẫn"
+    ],
+    "khoa dt": [
+        "Kỹ thuật Điều khiển và Tự động hóa",
+        "Công nghệ Kỹ thuật Điện, Điện tử",
+        "Công nghệ Vi mạch Bán dẫn"
+    ]
+}
+
+# Chỉ định nghĩa các khoa Điện tử
+KHOA_SYNONYMS = {
+    "khoa điện tử": "Khoa Điện tử",
+    "khoa kỹ thuật điện tử 1": "Khoa Kỹ thuật Điện tử 1",
+    "khoa đt": "Khoa Điện tử",
+    "khoa ktđt 1": "Khoa Kỹ thuật Điện tử 1",
+    "khoa ktđt": "Khoa Kỹ thuật Điện tử",
+    "khoa dt": "Khoa Điện tử"
+}
+
+
+class BaseDiemChuanAction(Action):
+    def name(self) -> Text:
+        return "base_diem_chuan_action"
+
+    def tim_nganh_phu_hop(self, ten_nganh: str) -> str:
+
+        if not ten_nganh:
+            return None
+
+        ten_nganh_lower = ten_nganh.lower()
+
+        # Tìm trong synonyms
+        for synonym, official_name in NGANH_SYNONYMS.items():
+            if synonym in ten_nganh_lower or ten_nganh_lower in synonym:
+                return official_name
+
+        # Tìm trực tiếp
+        for official_name in DIEM_CHUAN_PTIT[2022].keys():
+            if ten_nganh_lower in official_name.lower():
+                return official_name
+
+        return None
+
+    def _la_nganh_khoa_dien_tu(self, ten_nganh: str) -> bool:
+        """Kiểm tra ngành có thuộc khoa Điện tử không"""
+        ten_nganh_chuan = self.tim_nganh_phu_hop(ten_nganh)
+        return ten_nganh_chuan is not None
+
+    def _xac_dinh_thang_diem(self, loai_xet_tuyen: str) -> str:
+        """Xác định thang điểm cho từng phương thức"""
+        thang_diem_map = {
+            "THPT": "điểm (thang 30)",
+            "SAT": "điểm (thang 1600)",
+            "ACT": "điểm (thang 36)",
+            "HSA": "điểm (thang 100)",
+            "TSA": "điểm (thang 100)",
+            "APT": "điểm (thang 100)",
+            "tài năng": "điểm (thang 10)",
+            "học bạ": "điểm (thang 10)",
+            "xét tuyển kết hợp": "điểm (thang 30)",
+            "thi đánh giá năng lực": "điểm (thang 100)"
+        }
+        return thang_diem_map.get(loai_xet_tuyen, "điểm")
+
+    def _xac_dinh_icon_nganh(self, nganh: str) -> str:
+        """Xác định icon cho từng ngành"""
+        if "Điều khiển" in nganh:
+            return "🤖"
+        elif "Điện, Điện tử" in nganh:
+            return "⚡"
+        elif "Vi mạch" in nganh:
+            return "🔌"
+        else:
+            return "🎯"
+
+    def _xu_ly_tra_cuu_nganh_voi_nam(self, dispatcher: CollectingDispatcher, ten_nganh: str, nam: str) -> List[
+        Dict[Text, Any]]:
+        """Xử lý tra cứu ngành với năm (dùng chung cho nhiều action)"""
+        try:
+            nam_int = int(nam) if nam else 2024
+            if nam_int not in [2022, 2023, 2024, 2025]:
+                dispatcher.utter_message(
+                    text=f"Hiện chỉ có điểm chuẩn các năm 2022-2025. Bạn vui lòng chọn trong khoảng này nhé!")
+                return [SlotSet("awaiting_year", False)]
+        except ValueError:
+            dispatcher.utter_message(text="Năm không hợp lệ. Vui lòng nhập năm từ 2022-2025.")
+            return [SlotSet("awaiting_year", False)]
+
+        ten_nganh_chuan = self.tim_nganh_phu_hop(ten_nganh)
+        diem = DIEM_CHUAN_PTIT.get(nam_int, {}).get(ten_nganh_chuan)
+
+        if not diem:
+            dispatcher.utter_message(text=f"❌ Không tìm thấy điểm chuẩn cho ngành {ten_nganh_chuan} năm {nam_int}")
+            return [SlotSet("awaiting_year", False)]
+
+        response = f"📊 **Điểm chuẩn {nam_int} - Khoa Điện tử:**\n"
+        response += f"• **{ten_nganh_chuan}:** {diem} điểm\n\n"
+        response += f"💡 *Điểm theo thang 30*\n"
+        response += f"🌐 *Chi tiết: https://tuyensinh.ptit.edu.vn/diem-chuan-{nam_int}*"
+
+        dispatcher.utter_message(text=response)
+        return [
+            SlotSet("fallback_count", 0),
+            SlotSet("awaiting_year", False)
+        ]
+
+
+class ActionTraCuuDiemChuanTheoNganh(BaseDiemChuanAction):
+    """Intent 1: Tra cứu điểm chuẩn theo ngành - CÓ HỎI LẠI NĂM"""
 
     def name(self) -> Text:
-        return "action_tra_cuu_diem_chuan"
+        return "action_tra_cuu_diem_chuan_theo_nganh"
 
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+    def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
         ten_nganh = tracker.get_slot("ten_nganh")
         nam = tracker.get_slot("nam")
-        ten_nganh_chuan = chuan_hoa_ten_nganh(ten_nganh) if ten_nganh else None
 
-        if not nam:
-            nam = "2024"
+        print(f"🔍 ActionTheoNganh - ten_nganh: {ten_nganh}, nam: {nam}")
 
-        diem_chuan_data = {
-            "2024": {
-                "Kỹ thuật Điều khiển và Tự động hóa": "24.5 điểm",
-                "Công nghệ Kỹ thuật Điện, Điện tử": "24.0 điểm",
-                "Công nghệ Vi mạch Bán dẫn": "25.0 điểm"
-            },
-            "2023": {
-                "Kỹ thuật Điều khiển và Tự động hóa": "24.0 điểm",
-                "Công nghệ Kỹ thuật Điện, Điện tử": "23.5 điểm",
-                "Công nghệ Vi mạch Bán dẫn": "24.5 điểm"
-            },
-            "2025": {
-                "Kỹ thuật Điều khiển và Tự động hóa": "25.0 điểm",
-                "Công nghệ Kỹ thuật Điện, Điện tử": "24.5 điểm",
-                "Công nghệ Vi mạch Bán dẫn": "25.5 điểm"
-            }
-        }
-
-        if nam not in diem_chuan_data:
-            message = f"❌ Chưa có dữ liệu điểm chuẩn năm {nam}\n"
-            message += f"📊 Các năm có dữ liệu: {', '.join(diem_chuan_data.keys())}"
-            dispatcher.utter_message(text=message)
+        # 🔍 KIỂM TRA 1: Thiếu tên ngành
+        if not ten_nganh:
+            dispatcher.utter_message(response="utter_hoi_ten_nganh")
             return []
 
-        nam_data = diem_chuan_data[nam]
+        # 🔍 KIỂM TRA 2: Ngành có thuộc khoa Điện tử không?
+        if not self._la_nganh_khoa_dien_tu(ten_nganh):
+            print(f"🔀 Chuyển Gemini: Ngành '{ten_nganh}' không thuộc khoa Điện tử")
+            dispatcher.utter_message(text="Để tôi hỗ trợ bạn tốt hơn với câu hỏi này...")
+            return [FollowupAction("action_fallback_gemini")]
 
-        if ten_nganh_chuan and ten_nganh_chuan in nam_data:
-            diem = nam_data[ten_nganh_chuan]
-            message = f"📊 **Điểm chuẩn {nam} - {ten_nganh_chuan}**\n\n"
-            message += f"⭐ {diem}\n\n"
-            message += "🌐 Xem chi tiết: https://tuyensinh.ptit.edu.vn/diem-chuan"
+        # 🔍 KIỂM TRA 3: Nếu có tên ngành nhưng thiếu năm → HỎI LẠI NĂM
+        if ten_nganh and not nam:
+            ten_nganh_chuan = self.tim_nganh_phu_hop(ten_nganh)
+            dispatcher.utter_message(text=f"Bạn muốn hỏi điểm chuẩn ngành {ten_nganh_chuan} năm nào?")
+            return [SlotSet("awaiting_year", True)]
 
+        # ✅ ĐÃ CÓ ĐỦ THÔNG TIN: Xử lý tra cứu
+        return self._xu_ly_tra_cuu_nganh_voi_nam(dispatcher, ten_nganh, nam)
+
+
+class ActionTraCuuDiemChuanTheoNam(BaseDiemChuanAction):
+    """Intent 2: Tra cứu điểm chuẩn theo năm - CÓ HỎI LẠI NGÀNH"""
+
+    def name(self) -> Text:
+        return "action_tra_cuu_diem_chuan_theo_nam"
+
+    def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+
+        ten_khoa = tracker.get_slot("ten_khoa")
+        ten_nganh = tracker.get_slot("ten_nganh")
+        nam = tracker.get_slot("nam")
+
+        print(f"🔍 ActionTheoNam - nam: {nam}, ten_nganh: {ten_nganh}, ten_khoa: {ten_khoa}")
+
+        # 🔍 KIỂM TRA 1: Thiếu năm
+        if not nam:
+            dispatcher.utter_message(response="utter_hoi_nam")
+            return []
+
+        # 🔍 KIỂM TRA 2: Nếu có tên khoa → phải là khoa Điện tử
+        if ten_khoa and ten_khoa.lower().strip() not in KHOA_SYNONYMS:
+            print(f"🔀 Chuyển Gemini: Khoa '{ten_khoa}' không thuộc phạm vi")
+            dispatcher.utter_message(text="Để tôi hỗ trợ bạn tốt hơn với câu hỏi này...")
+            return [FollowupAction("action_fallback_gemini")]
+
+        # 🔍 KIỂM TRA 3: Nếu có tên ngành → phải thuộc khoa Điện tử
+        if ten_nganh and not self._la_nganh_khoa_dien_tu(ten_nganh):
+            print(f"🔀 Chuyển Gemini: Ngành '{ten_nganh}' không thuộc khoa Điện tử")
+            dispatcher.utter_message(text="Để tôi hỗ trợ bạn tốt hơn với câu hỏi này...")
+            return [FollowupAction("action_fallback_gemini")]
+
+        # 🔍 KIỂM TRA 4: Có năm nhưng thiếu cả ngành và khoa → HỎI LẠI NGÀNH
+        if nam and not ten_nganh and not ten_khoa:
+            dispatcher.utter_message(text=f"Bạn muốn hỏi điểm chuẩn năm {nam} cho ngành nào hoặc khoa nào?")
+            return [SlotSet("awaiting_major", True)]
+
+        # ✅ ĐÃ CÓ ĐỦ THÔNG TIN: Xử lý tra cứu
+        return self._xu_ly_tra_cuu(dispatcher, ten_khoa, ten_nganh, nam)
+
+    def _xu_ly_tra_cuu(self, dispatcher: CollectingDispatcher, ten_khoa: str, ten_nganh: str, nam: str):
+        """Xử lý tra cứu điểm chuẩn"""
+        try:
+            nam_int = int(nam)
+            if nam_int not in [2022, 2023, 2024, 2025]:
+                dispatcher.utter_message(
+                    text=f"Hiện chỉ có điểm chuẩn các năm 2022-2025. Bạn vui lòng chọn trong khoảng này nhé!")
+                return []
+        except ValueError:
+            dispatcher.utter_message(text="Năm không hợp lệ. Vui lòng nhập năm từ 2022-2025.")
+            return []
+
+        # Xử lý theo khoa
+        if ten_khoa:
+            return self.tra_cuu_theo_khoa(dispatcher, ten_khoa, nam_int)
+
+        # Xử lý theo ngành
         elif ten_nganh:
-            message = f"❌ Không tìm thấy điểm chuẩn cho '{ten_nganh}' năm {nam}\n\n"
-            message += self._tao_danh_sach_diem_chuan(nam_data, nam)
+            return self._xu_ly_tra_cuu_nganh_voi_nam(dispatcher, ten_nganh, nam)
 
+        return [SlotSet("fallback_count", 0)]
+
+    def tra_cuu_theo_khoa(self, dispatcher: CollectingDispatcher, ten_khoa: str, nam: int):
+        """Tra cứu điểm theo khoa"""
+        khoa_lower = ten_khoa.lower().strip()
+        ten_khoa_chuan = KHOA_SYNONYMS.get(khoa_lower, khoa_lower.title())
+
+        if khoa_lower not in KHOA_TO_NGANH:
+            dispatcher.utter_message(text=f"❌ Không tìm thấy thông tin điểm chuẩn cho '{ten_khoa}'")
+            return []
+
+        cac_nganh = KHOA_TO_NGANH[khoa_lower]
+        response = f"📊 **Điểm chuẩn {nam} - {ten_khoa_chuan}:**\n\n"
+
+        found_data = False
+        for nganh in cac_nganh:
+            diem = DIEM_CHUAN_PTIT.get(nam, {}).get(nganh)
+            if diem:
+                icon = self._xac_dinh_icon_nganh(nganh)
+                response += f"{icon} **{nganh}:** {diem} điểm\n"
+                found_data = True
+
+        if not found_data:
+            response = f"❌ Không tìm thấy điểm chuẩn {nam} cho {ten_khoa_chuan}"
         else:
-            message = f"📊 **ĐIỂM CHUẨN CÁC NGÀNH NĂM {nam}**\n\n"
-            message += self._tao_danh_sach_diem_chuan(nam_data, nam)
+            response += f"\n💡 *Điểm theo thang 30*"
+            response += f"\n🌐 *Chi tiết: https://tuyensinh.ptit.edu.vn/diem-chuan-{nam}*"
 
-        dispatcher.utter_message(text=message)
-        return [SlotSet("ten_nganh", ten_nganh_chuan or ten_nganh), SlotSet("nam", nam)]
+        dispatcher.utter_message(text=response)
+        return [SlotSet("fallback_count", 0)]
 
-    def _tao_danh_sach_diem_chuan(self, nam_data: Dict, nam: Text) -> Text:
-        """Tạo danh sách điểm chuẩn"""
-        message = ""
-        for ten_nganh, diem in nam_data.items():
-            message += f"• **{ten_nganh}:** {diem}\n"
 
-        message += f"\n🌐 Chi tiết: https://tuyensinh.ptit.edu.vn/diem-chuan-{nam}"
-        message += f"\n💡 Điểm theo thang 30, xét tổ hợp A00, A01, D01, D07"
-        return message
+class ActionTraCuuDiemChuanTheoPhuongThuc(BaseDiemChuanAction):
+    """Intent 3: Tra cứu điểm chuẩn theo phương thức xét tuyển"""
 
+    def name(self) -> Text:
+        return "action_tra_cuu_diem_chuan_theo_phuong_thuc"
+
+    def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+
+        loai_xet_tuyen = tracker.get_slot("loai_xet_tuyen")
+        ten_nganh = tracker.get_slot("ten_nganh")
+        ten_khoa = tracker.get_slot("ten_khoa")
+        nam = tracker.get_slot("nam")
+
+        print(f"🔍 ActionPhuongThuc - loai_xet_tuyen: {loai_xet_tuyen}, ten_nganh: {ten_nganh}, nam: {nam}")
+
+        # 🔍 KIỂM TRA 1: Thiếu phương thức
+        if not loai_xet_tuyen:
+            dispatcher.utter_message(response="utter_hoi_loai_xet_tuyen")
+            return []
+
+        # 🔍 KIỂM TRA 2: Thiếu cả ngành và khoa
+        if not ten_nganh and not ten_khoa:
+            dispatcher.utter_message(response="utter_hoi_nganh_hoac_khoa")
+            return []
+
+        # 🔍 KIỂM TRA 3: Phải thuộc khoa Điện tử
+        if ten_khoa and ten_khoa.lower().strip() not in KHOA_SYNONYMS:
+            print(f"🔀 Chuyển Gemini: Khoa '{ten_khoa}' không thuộc phạm vi")
+            dispatcher.utter_message(text="Để tôi hỗ trợ bạn tốt hơn với câu hỏi này...")
+            return [FollowupAction("action_fallback_gemini")]
+
+        if ten_nganh and not self._la_nganh_khoa_dien_tu(ten_nganh):
+            print(f"🔀 Chuyển Gemini: Ngành '{ten_nganh}' không thuộc khoa Điện tử")
+            dispatcher.utter_message(text="Để tôi hỗ trợ bạn tốt hơn với câu hỏi này...")
+            return [FollowupAction("action_fallback_gemini")]
+
+        # 🔍 KIỂM TRA 4: Có phương thức nhưng thiếu năm → HỎI LẠI NĂM
+        if loai_xet_tuyen and not nam:
+            dispatcher.utter_message(text=f"Bạn muốn hỏi điểm {loai_xet_tuyen} năm nào?")
+            return [SlotSet("awaiting_year_phuong_thuc", True)]
+
+        # ✅ ĐÃ CÓ ĐỦ THÔNG TIN: Xử lý tra cứu
+        nam_xet_tuyen = self.xac_dinh_nam(nam, loai_xet_tuyen)
+
+        if ten_nganh:
+            return self.tra_cuu_theo_nganh(dispatcher, loai_xet_tuyen, nam_xet_tuyen, ten_nganh)
+        elif ten_khoa:
+            return self.tra_cuu_theo_khoa(dispatcher, loai_xet_tuyen, nam_xet_tuyen, ten_khoa)
+
+        return [SlotSet("fallback_count", 0)]
+
+    def xac_dinh_nam(self, nam: str, loai_xet_tuyen: str) -> int:
+        """Xác định năm xét tuyển"""
+        if nam:
+            try:
+                return int(nam)
+            except:
+                pass
+
+        # Lấy năm mới nhất có data cho phương thức này
+        if loai_xet_tuyen in DIEM_CHUAN_PHUONG_THUC:
+            years_available = sorted(DIEM_CHUAN_PHUONG_THUC[loai_xet_tuyen].keys(), reverse=True)
+            return years_available[0] if years_available else 2024
+
+        return 2024
+
+    def tra_cuu_theo_nganh(self, dispatcher: CollectingDispatcher, loai_xet_tuyen: str, nam: int, ten_nganh: str):
+        """Tra cứu điểm theo ngành và phương thức"""
+        ten_nganh_chuan = self.tim_nganh_phu_hop(ten_nganh)
+        if not ten_nganh_chuan:
+            dispatcher.utter_message(text=f"❌ Không tìm thấy thông tin cho ngành '{ten_nganh}'")
+            return []
+
+        # Lấy điểm theo phương thức và năm
+        diem_data = DIEM_CHUAN_PHUONG_THUC.get(loai_xet_tuyen, {})
+        nam_data = diem_data.get(nam, {})
+        diem = nam_data.get(ten_nganh_chuan)
+
+        if not diem:
+            dispatcher.utter_message(
+                text=f"❌ Không tìm thấy điểm {loai_xet_tuyen} cho ngành {ten_nganh_chuan} năm {nam}")
+            return []
+
+        # Xác định thang điểm
+        thang_diem = self._xac_dinh_thang_diem(loai_xet_tuyen)
+
+        response = f"📊 **Điểm chuẩn {loai_xet_tuyen.upper()} {nam}:**\n"
+        response += f"• **{ten_nganh_chuan}:** {diem} {thang_diem}\n\n"
+        response += f"🌐 *Chi tiết: https://tuyensinh.ptit.edu.vn*"
+
+        dispatcher.utter_message(text=response)
+        return [SlotSet("fallback_count", 0)]
+
+    def tra_cuu_theo_khoa(self, dispatcher: CollectingDispatcher, loai_xet_tuyen: str, nam: int, ten_khoa: str):
+        """Tra cứu điểm theo khoa và phương thức"""
+        khoa_lower = ten_khoa.lower().strip()
+        ten_khoa_chuan = KHOA_SYNONYMS.get(khoa_lower, khoa_lower.title())
+
+        if khoa_lower not in KHOA_TO_NGANH:
+            dispatcher.utter_message(text=f"❌ Không tìm thấy thông tin điểm chuẩn cho '{ten_khoa}'")
+            return []
+
+        cac_nganh = KHOA_TO_NGANH[khoa_lower]
+        diem_data = DIEM_CHUAN_PHUONG_THUC.get(loai_xet_tuyen, {})
+        nam_data = diem_data.get(nam, {})
+
+        response = f"📊 **Điểm chuẩn {loai_xet_tuyen.upper()} {nam} - {ten_khoa_chuan}:**\n\n"
+
+        found_data = False
+        for nganh in cac_nganh:
+            diem = nam_data.get(nganh)
+            if diem:
+                icon = self._xac_dinh_icon_nganh(nganh)
+                thang_diem = self._xac_dinh_thang_diem(loai_xet_tuyen)
+                response += f"{icon} **{nganh}:** {diem} {thang_diem}\n"
+                found_data = True
+
+        if not found_data:
+            response = f"❌ Không tìm thấy điểm {loai_xet_tuyen} {nam} cho {ten_khoa_chuan}"
+        else:
+            response += f"\n🌐 *Chi tiết: https://tuyensinh.ptit.edu.vn*"
+
+        dispatcher.utter_message(text=response)
+        return [SlotSet("fallback_count", 0)]
+
+
+class ActionTraCuuDiemChuanTongQuan(BaseDiemChuanAction):
+    """Intent 4: Tra cứu điểm chuẩn tổng quan (xem bảng điểm)"""
+
+    def name(self) -> Text:
+        return "action_tra_cuu_diem_chuan_tong_quan"
+
+    def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+
+        ten_khoa = tracker.get_slot("ten_khoa")
+        nam = tracker.get_slot("nam")
+
+        print(f"🔍 ActionTongQuan - ten_khoa: {ten_khoa}, nam: {nam}")
+
+        # 🔍 KIỂM TRA 1: Chỉ xử lý khoa Điện tử
+        if ten_khoa and ten_khoa.lower().strip() not in KHOA_SYNONYMS:
+            print(f"🔀 Chuyển Gemini: Khoa '{ten_khoa}' không thuộc phạm vi")
+            dispatcher.utter_message(text="Để tôi hỗ trợ bạn tốt hơn với câu hỏi này...")
+            return [FollowupAction("action_fallback_gemini")]
+
+        # 🔍 KIỂM TRA 2: Thiếu năm → HỎI LẠI NĂM
+        if not nam:
+            dispatcher.utter_message(response="utter_hoi_nam_bang_diem")
+            return []
+
+        # ✅ Xử lý bình thường cho khoa Điện tử
+        try:
+            nam_int = int(nam)
+            if nam_int not in [2022, 2023, 2024, 2025]:
+                dispatcher.utter_message(text=f"Hiện chỉ có điểm chuẩn các năm 2022-2025.")
+                return []
+        except ValueError:
+            dispatcher.utter_message(text="Năm không hợp lệ. Vui lòng nhập năm từ 2022-2025.")
+            return []
+
+        # Mặc định khoa Điện tử nếu không có
+        if not ten_khoa:
+            ten_khoa = "khoa điện tử"
+
+        khoa_lower = ten_khoa.lower().strip()
+        ten_khoa_chuan = KHOA_SYNONYMS.get(khoa_lower, khoa_lower.title())
+
+        cac_nganh = KHOA_TO_NGANH.get(khoa_lower, [])
+        data_nam = DIEM_CHUAN_PTIT.get(nam_int, {})
+
+        response = f"📊 **BẢNG ĐIỂM CHUẨN {nam_int} - {ten_khoa_chuan.upper()}**\n\n"
+
+        found_data = False
+        for nganh in cac_nganh:
+            diem = data_nam.get(nganh)
+            if diem:
+                icon = self._xac_dinh_icon_nganh(nganh)
+                response += f"{icon} **{nganh}:** {diem} điểm\n"
+                found_data = True
+
+        if not found_data:
+            response = f"❌ Không tìm thấy điểm chuẩn {nam_int} cho {ten_khoa_chuan}"
+        else:
+            response += f"\n💡 *Điểm theo thang 30, phương thức THPT*"
+            response += f"\n🌐 *Nguồn: https://tuyensinh.ptit.edu.vn/diem-chuan-{nam_int}*"
+
+        dispatcher.utter_message(text=response)
+        return [SlotSet("fallback_count", 0)]
 
 class ActionTraCuuKhaNangTrungTuyen(Action):
 
@@ -1518,3 +2193,30 @@ class ActionTraCuuKetNoiDoanhNghiep(Action):
 
         dispatcher.utter_message(text=message)
         return [SlotSet("ten_nganh", ten_nganh_chuan or ten_nganh)]
+
+
+class ActionKiemTraKeywordGemini(Action):
+    """Action kiểm tra từ khóa Gemini trong tin nhắn"""
+
+    def name(self) -> Text:
+        return "action_kiem_tra_keyword_gemini"
+
+    def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        user_message = tracker.latest_message.get('text', '').lower()
+
+        # 🔥 DANH SÁCH TỪ KHÓA KÍCH HOẠT GEMINI
+        gemini_keywords = [
+            "gọi gemini", "hỏi gemini", "kết nối với gemini",
+            "gemini", "gemini ơi"
+        ]
+
+        # Kiểm tra nếu có từ khóa Gemini
+        has_gemini_keyword = any(keyword in user_message for keyword in gemini_keywords)
+
+        if has_gemini_keyword:
+            print(f"🔍 Phát hiện từ khóa Gemini: {user_message}")
+            dispatcher.utter_message(text="Đang kết nối với Gemini AI...")
+            return [FollowupAction("action_fallback_gemini")]
+
+        # Nếu không có từ khóa, tiếp tục xử lý bình thường
+        return []
