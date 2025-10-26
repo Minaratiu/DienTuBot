@@ -188,7 +188,6 @@ nlu:
     - Ngành [Điều khiển và tự động hóa](ten_nganh) mã bao nhiêu vậy?
     - [Kỹ thuật điện tử - viễn thông](ten_nganh) có mã tuyển sinh là gì?
     - Mã số tuyển sinh của ngành [Công nghệ kỹ thuật điện tử, viễn thông](ten_nganh)
-    - Trường mình có biết mã ngành của [Công nghệ kỹ thuật điện, điện tử](ten_nganh) không?
     - Mình muốn biết mã ngành [Công nghệ thông tin](ten_nganh)
     - [Điện tử viễn thông](ten_nganh) mã là bao nhiêu?
     - Mã ngành học của [Công nghệ kỹ thuật điện, điện tử](ten_nganh)
@@ -196,12 +195,12 @@ nlu:
     - Mã ngành đăng ký xét tuyển của [Công nghệ kỹ thuật điện, điện tử](ten_nganh) là gì?
     - Xin mã ngành [Công nghệ kỹ thuật điện, điện tử](ten_nganh)
     - [Công nghệ kỹ thuật điện, điện tử](ten_nganh) có mã ngành không?
-    - Mã ngành học của [Kỹ thuật điều khiển và tự động hóa](ten_nganh) ở PTIT là gì?
+    - Mã ngành học của [Kỹ thuật điều khiển và tự động hóa](ten_nganh) là gì?
     - Cho em xin mã tuyển sinh ngành [Công nghệ vi mạch bán dẫn](ten_nganh)
     - Mã ngành để đăng ký xét tuyển vào ngành [Điều khiển và tự động hóa](ten_nganh)
     - Mã số ngành [Kỹ thuật điện tử viễn thông](ten_nganh)
     - [Công nghệ thông tin](ten_nganh) có mã ngành mấy vậy ạ?
-    - Cho biết mã ngành của [Công nghệ kỹ thuật điện, điện tử](ten_nganh) bên PTIT
+    - Cho biết mã ngành của [Công nghệ kỹ thuật điện, điện tử](ten_nganh) 
     - Mã ngành của [Kỹ thuật điều khiển và tự động hóa](ten_nganh)
 
 
@@ -480,8 +479,45 @@ nlu:
     - Học bổng khuyến khích học tập năm nay là gì?
     - Học bổng
     - Học bổng như nào
-    - Điều kiện nhận học bổng
-    - Bao nhiêu điểm mới được nhận học bổng
+
+- intent: hoi_dieu_kien_hoc_bong
+  examples: |
+    - Điều kiện để nhận học bổng là gì?
+    - Điều kiện để được học bổng ở học viện
+    - Cách để nhận học bổng
+    - Cho em hỏi điều kiện để nhan học bổng là gì
+    - Cần bao nhiêu điểm để đạt được học bổng
+    - Lấy học bổng có khó không
+    - Làm sao để được học bổng ở PTIT?
+    - Có học bổng nào cho sinh viên năm nhất không?
+    - GPA bao nhiêu thì được học bổng?
+    - Học bổng của PTIT yêu cầu điểm bao nhiêu?
+
+- intent: hoi_ma_truong
+  examples: |
+    - Mã trường PTIT là gì?
+    - Mã tuyển sinh của PTIT là bao nhiêu?
+    - Cho tôi biết mã trường Học viện Công nghệ Bưu chính Viễn thông
+    - Trường PTIT có mã tuyển sinh là gì?
+    - PTIT có mã trường gì?
+    - Mã xét tuyển PTIT là gì?
+    - Mã đăng ký của trường PTIT là bao nhiêu?
+    - Cho biết mã trường của Học viện Công nghệ Bưu chính Viễn thông
+    - Mã trường để đăng ký nguyện vọng của PTIT là gì?
+    - Mã trường PTIT dùng khi xét tuyển là gì?
+    - Mã trường Học viện CN Bưu chính Viễn thông là gì?
+    - Mã viết tắt của trường PTIT là gì?
+    - PTIT có mã là gì trong hệ thống xét tuyển?
+    - Mã trường đại học PTIT là gì?
+    - Mã trường để điền vào phiếu đăng ký đại học của PTIT?
+    - Mã xét tuyển của Học viện Công nghệ Bưu chính Viễn thông?
+    - Mã số trường PTIT?
+    - PTIT có mã bao nhiêu khi nộp hồ sơ?
+    - Mã tuyển sinh của Học viện CN Bưu chính Viễn thông?
+    - BVH có phải là mã trường của PTIT không?
+    - 
+    
+
 
 - intent: hoi_he_dao_tao
   examples: |
@@ -618,6 +654,10 @@ nlu:
     - Điều kiện để đăng ký đề tài NCKH?
     - NCKH có yêu cầu về kỹ năng tin học không?
     - Sinh viên năm 2 có thể tham gia NCKH không?
+    - Em muon lam nghiên cứu khoa học thì cần có điều kiện gì?
+    - Em muốn đăng kí làm nghiên cứu khoa học
+    - Cần có dieu kien gi de được làm nckh
+    
   
 
 - intent: tra_cuu_loi_ich_nghien_cuu_khoa_hoc
@@ -651,8 +691,13 @@ nlu:
     - Có được chứng nhận khi tham gia NCKH không?
     - Tham gia NCKH giúp nâng cao năng lực chuyên môn không?
     - NCKH có lợi khi phỏng vấn xin việc không?
+    - Em co nen dang ki lam nghien cuu khoa hoc khong
+    - Có nên làm nghiên cứu khoa học khong
     - Tham gia NCKH giúp sinh viên thực hành nhiều hơn không?
     - NCKH giúp sinh viên phát triển tư duy sáng tạo không?
+    - Em có nên đăng kí làm nghiên cứu khoa học
+    - Có nên đăng kí làm nckh không
+    
 
 
 - intent: phong_lab_danh_sach
@@ -857,37 +902,6 @@ nlu:
     
     
 
-- intent: hoi_ve_nu_gioi_trong_ky_thuat
-  examples: |
-    - Nữ học ngành [Điện tử](ten_nganh) có phù hợp không?
-    - Con gái học [Tự động hóa](ten_nganh) có khó không?
-    - Ngành [Vi mạch bán dẫn](ten_nganh) thích hợp cho nữ không?
-    - Nữ có nên học [Điều khiển & Tự động hóa](ten_nganh) không?
-    - Nữ có học được ngành [Công nghệ Điện tử](ten_nganh)?
-    - Con gái học kỹ thuật có ổn không?
-    - Phù hợp cho nữ ngành điện tử?
-    - Nữ học [CĐT](ten_nganh) được không?
-    - Ngành [Automation](ten_nganh) có dành cho nữ?
-    - Con gái có theo được ngành [KTĐK-TĐH](ten_nganh)?
-    - Ngành [Điện tử](ten_nganh) có nặng nhọc không?
-    - Con gái học [Tự động hóa](ten_nganh) có phải đi công trình nhiều?
-    - Công việc ngành [Vi mạch](ten_nganh) vất vả không?
-    - Nữ làm [Điện tử](ten_nganh) gặp khó khăn không?
-    - Công việc yêu cầu thể lực không
-    - Điều kiện làm việc cho nữ ra sao?
-    - Có rủi ro với nữ khi làm [Điện, điện tử](ten_nganh)?
-    - Nữ làm ngành [Công nghệ Điện tử](ten_nganh) có mệt không?
-    - Công việc ngành [Tự động hóa](ten_nganh) có nặng không?
-    - Nữ trong ngành kỹ thuật điện tử?
-    - Vấn đề của con gái học điện tử?
-    - Khó khăn khi nữ học kỹ thuật?
-    - Lời khuyên cho nữ học ngành này?
-    - Có nữ sinh viên điện tử không?
-    - Tỷ lệ nữ trong ngành là bao nhiêu?
-    - Trải nghiệm của nữ trong ngành kỹ thuật?
-    - Con gái học ngành này có ổn không?
-    - Nữ có phù hợp ngành [KTĐK-TĐH]?
-    - Nữ ngành [Vi mạch] có thuận lợi gì?
 
 
 - intent: hoi_danh_sach_cau_lac_bo
@@ -1136,6 +1150,9 @@ nlu:
     - Cơ sở đào tạo
     - Co so dao tao ptit
     - Co so dao tao
+    - Trường có cơ sở ở TP.HCM không
+    
+  
 
 - intent: hoi_co_so_vat_chat
   examples: |
@@ -1215,8 +1232,7 @@ nlu:
     - zxcvbnm
     
     
-  
-# Intent 1: Tra cứu điểm chuẩn theo ngành (không năm, không phương thức)
+
 - intent: tra_cuu_diem_chuan_theo_nganh
   examples: |
     - điểm chuẩn ngành [Kỹ thuật điều khiển và tự động hóa](ten_nganh)
@@ -1245,7 +1261,6 @@ nlu:
     - [vi mạch](ten_nganh) năm nay bao nhiêu điểm?
     - điểm chuẩn ngành [điều khiển tự động hóa](ten_nganh)
 
-  # Intent 2: Tra cứu điểm chuẩn theo năm (đã có)
 - intent: tra_cuu_diem_chuan_theo_nam
   examples: |
     - điểm chuẩn [2023](nam) ngành [Kỹ thuật điều khiển và tự động hóa](ten_nganh)
@@ -1273,35 +1288,7 @@ nlu:
     - năm [2025](nam) [kỹ thuật điều khiển](ten_nganh) điểm chuẩn
     - điểm [2022](nam) [khoa đt](ten_khoa)
     - [2023](nam) [công nghệ vi mạch bán dẫn](ten_nganh) lấy mấy điểm?
-- intent: tra_cuu_diem_chuan_theo_phuong_thuc
-  examples: |
-    - điểm [SAT](loai_xet_tuyen) ngành [Kỹ thuật điều khiển và tự động hóa](ten_nganh)
-    - [THPT](loai_xet_tuyen) [công nghệ vi mạch bán dẫn](ten_nganh) bao nhiêu điểm?
-    - điểm [HSA](loai_xet_tuyen) của ngành [điện điện tử](ten_nganh)
-    - [ACT](loai_xet_tuyen) [tự động hóa](ten_nganh) cần bao nhiêu?
-    - điểm [tài năng](loai_xet_tuyen) ngành [vi mạch](ten_nganh)
-    - [xét tuyển kết hợp](loai_xet_tuyen) [điều khiển tự động](ten_nganh)
-    - thi [SAT](loai_xet_tuyen) vào [điện tử](ten_nganh) được bao nhiêu điểm?
-    - [THPT](loai_xet_tuyen) năm [2024](nam) [tự động hóa](ten_nganh) mấy điểm?
-    - em định xét [học bạ](loai_xet_tuyen) ngành [vi mạch](ten_nganh) thì cần bao nhiêu?
-    - điểm [thi đánh giá năng lực](loai_xet_tuyen) [2023](nam) [điện điện tử](ten_nganh)
-    - xét [tài năng](loai_xet_tuyen) năm nay [khoa điện tử](ten_khoa) bao nhiêu điểm?
-    - [SAT](loai_xet_tuyen) [2024](nam) [khoa đt](ten_khoa) lấy mấy điểm?
-    - điểm chuẩn [ACT](loai_xet_tuyen) ngành [điều khiển](ten_nganh) [2025](nam)
-    - [HSA](loai_xet_tuyen) năm ngoái [công nghệ vi mạch](ten_nganh) bao nhiêu?
-    - xét [học bạ](loai_xet_tuyen) vào [khoa ktđt](ten_khoa) cần mấy điểm?
-    - [thi đánh giá năng lực](loai_xet_tuyen) [2024](nam) [tự động hóa](ten_nganh)
-    - điểm [xét tuyển kết hợp](loai_xet_tuyen) [khoa điện tử](ten_khoa) năm [2023](nam)
-    - [APT](loai_xet_tuyen) [2025](nam) [điện tử](ten_nganh) bao nhiêu điểm?
-    - [TSA](loai_xet_tuyen) ngành [điều khiển tự động](ten_nganh) cần bao nhiêu?
-    - điểm [học bạ](loai_xet_tuyen) [2024](nam) [công nghệ vi mạch](ten_nganh)
-    - xét [tài năng](loai_xet_tuyen) [khoa đt](ten_khoa) năm [2023](nam) mấy điểm?
-    - [SAT](loai_xet_tuyen) cho ngành [bán dẫn](ten_nganh) bao nhiêu?
-    - điểm [ACT](loai_xet_tuyen) [2025](nam) [khoa ktđt 1](ten_khoa)
-    - [THPT](loai_xet_tuyen) [khoa điện tử](ten_khoa) [2024](nam) lấy bao nhiêu?
-    - xét [học bạ](loai_xet_tuyen) ngành [tự động hóa](ten_nganh) cần mấy điểm?
 
-# Intent 4: Tra cứu điểm chuẩn tổng quan (xem bảng điểm)
 - intent: tra_cuu_diem_chuan_tong_quan
   examples: |
     - cho xem bảng điểm chuẩn khoa điện tử

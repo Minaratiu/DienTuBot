@@ -1,0 +1,18 @@
+[
+  {
+    "name": "ten_nganh",
+    "pattern": "(\\bKỹ\\ thuật\\ điều\\ khiển\\ và\\ tự\\ động\\ hóa\\b|\\bCông\\ nghệ\\ kỹ\\ thuật\\ điện,\\ điện\\ tử\\b|\\bCông\\ nghệ\\ vi\\ mạch\\ bán\\ dẫn\\b|\\bđiều\\ khiển\\ tự\\ động\\b|\\bđiện\\ điện\\ tử\\b|\\bvi\\ mạch\\ bán\\ dẫn\\b|\\btự\\ động\\ hóa\\b|\\bkỹ\\ thuật\\ điều\\ khiển\\b|\\bcông\\ nghệ\\ vi\\ mạch\\b|\\bbán\\ dẫn\\b|\\bđiện\\ tử\\b|\\bđiều\\ khiển\\b|\\bcông\\ nghệ\\ điện\\ điện\\ tử\\b|\\bkỹ\\ thuật\\ tự\\ động\\ hóa\\b|\\bđiện\\ tử\\ viễn\\ thông\\b|\\bcông\\ nghệ\\ bán\\ dẫn\\b|\\bvi\\ mạch\\b)"
+  },
+  {
+    "name": "co_so",
+    "pattern": "(\\bHà\\ Nội\\b|\\bHN\\b|\\bHà\\ Đông\\b|\\bHòa\\ Lạc\\b|\\bTP\\ HCM\\b|\\bHCM\\b|\\bcơ\\ sở\\ phía\\ Nam\\b|\\bcơ\\ sở\\ Bắc\\b|\\bmiền\\ Bắc\\b|\\bmiền\\ Nam\\b)"
+  },
+  {
+    "name": "loai_xet_tuyen",
+    "pattern": "(\\bTHPT\\b|\\bSAT\\b|\\bACT\\b|\\bHSA\\b|\\bTSA\\b|\\bAPT\\b|\\btài\\ năng\\b|\\bxét\\ tuyển\\ kết\\ hợp\\b|\\bhọc\\ bạ\\b|\\bthi\\ đánh\\ giá\\ năng\\ lực\\b)"
+  },
+  {
+    "name": "ten_khoa",
+    "pattern": "(\\bkhoa\\ điện\\ tử\\b|\\bkhoa\\ kỹ\\ thuật\\ điện\\ tử\\ 1\\b|\\bkhoa\\ đt\\b|\\bkhoa\\ ktđt\\ 1\\b|\\bkhoa\\ ktđt\\b|\\bkhoa\\ dt\\b)"
+  }
+]

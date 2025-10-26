@@ -194,10 +194,6 @@ rules:
   - action: action_tra_cuu_ket_noi_doanh_nghiep
 
 
-- rule: Hỏi về nữ giới trong kỹ thuật
-  steps:
-  - intent: hoi_ve_nu_gioi_trong_ky_thuat
-  - action: utter_hoi_ve_nu_gioi_trong_ky_thuat
 
 
 - rule: Danh sách câu lạc bộ
@@ -273,21 +269,14 @@ rules:
     - ten_nganh
   - action: action_tra_cuu_diem_chuan_theo_nam
 
-- rule: Xử lý trả lời năm cho phương thức
-  condition:
-  - slot_was_set:
-    - awaiting_year_phuong_thuc: true
-  steps:
-  - intent: tra_cuu_diem_chuan_theo_nam
-    entities:
-    - nam
-  - action: action_tra_cuu_diem_chuan_theo_phuong_thuc
 
-- rule: Fallback đến Gemini
-  steps:
-  - intent: fallback_gemini
-  - action: action_fallback_gemini
 
-- rule: Gọi Gemini khi có từ khóa trong tin nhắn
+- rule: Trả lời điều kiện học bổng
   steps:
-  - action: action_kiem_tra_keyword_gemini
+    - intent: hoi_dieu_kien_hoc_bong
+    - action: utter_hoi_dieu_kien_hoc_bong
+
+- rule: Trả lời mã trường
+  steps:
+    - intent: hoi_ma_truong
+    - action: utter_hoi_ma_truong

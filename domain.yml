@@ -22,7 +22,6 @@ intents:
   - tra_cuu_ma_nganh
   - tra_cuu_diem_chuan_theo_nganh
   - tra_cuu_diem_chuan_theo_nam
-  - tra_cuu_diem_chuan_theo_phuong_thuc
   - tra_cuu_diem_chuan_tong_quan
   - tra_cuu_kha_nang_trung_tuyen
   - xet_tuyen_dieu_kien_dien_tu
@@ -45,7 +44,6 @@ intents:
   - phong_lab_lien_he
   - tra_cuu_co_hoi_viec_lam
   - tra_cuu_ket_noi_doanh_nghiep
-  - hoi_ve_nu_gioi_trong_ky_thuat
   - hoi_danh_sach_cau_lac_bo
   - hoi_clb_theo_nganh_hoc
   - ktx_co_khong
@@ -55,6 +53,8 @@ intents:
   - hoi_co_so_vat_chat
   - hoi_danh_gia_chat_luong
   - nlu_fallback
+  - hoi_dieu_kien_hoc_bong
+  - hoi_ma_truong
 
 
 
@@ -132,6 +132,8 @@ slots:
     influence_conversation: true
     initial_value: false
 
+
+
   fallback_count:
     type: float
     initial_value: 0
@@ -147,7 +149,6 @@ actions:
   - action_tra_cuu_ma_nganh
   - action_tra_cuu_diem_chuan_theo_nganh
   - action_tra_cuu_diem_chuan_theo_nam
-  - action_tra_cuu_diem_chuan_theo_phuong_thuc
   - action_tra_cuu_diem_chuan_tong_quan
   - action_tra_cuu_kha_nang_trung_tuyen
   - action_xet_tuyen_dieu_kien_dien_tu
@@ -165,7 +166,6 @@ actions:
   - action_fallback_gemini
   - action_default_fallback
   - action_reset_fallback_count
-  - action_kiem_tra_keyword_gemini
 
 
 forms:
@@ -186,31 +186,6 @@ responses:
     - text: "Xin chào! Bạn cần tư vấn thông tin gì về các ngành của Khoa Điện tử PTIT ạ?"
     - text: "Xin chào! Tôi là bot tư vấn tuyển sinh khoa Điện tử - Học viện Công nghệ Bưu chính Viễn thông. Rất vui được hỗ trợ bạn!"
 
-  utter_fallback:
-    - text: "Để tôi hỗ trợ bạn tốt hơn với câu hỏi này..."
-
-  utter_hoi_nam:
-    - text: "Bạn muốn tra cứu điểm chuẩn năm nào? PTIT có dữ liệu từ 2022-2025."
-    - text: "Bạn quan tâm đến điểm chuẩn năm nào? (2022, 2023, 2024, 2025)"
-    - text: "Năm nào bạn muốn tra cứu? Mình có điểm chuẩn các năm 2022, 2023, 2024, 2025."
-
-  utter_hoi_nam_bang_diem:
-    - text: "Bạn muốn xem bảng điểm chuẩn năm nào? Mình có dữ liệu từ 2022-2025."
-    - text: "Năm nào bạn muốn xem bảng điểm tổng quan? (2022-2025)"
-
-  utter_hoi_ten_nganh:
-    - text: "Bạn muốn tra cứu điểm chuẩn ngành nào trong khoa Điện tử?"
-    - text: "Khoa Điện tử có 3 ngành: Kỹ thuật Điều khiển và Tự động hóa, Công nghệ Kỹ thuật Điện, Điện tử, Công nghệ Vi mạch Bán dẫn. Bạn quan tâm ngành nào?"
-    - text: "Ngành nào bạn muốn hỏi điểm? Khoa Điện tử có các ngành: Điều khiển tự động, Điện điện tử, Vi mạch bán dẫn."
-
-  utter_hoi_nganh_hoac_khoa:
-    - text: "Bạn muốn tra cứu điểm chuẩn cho ngành nào hoặc khoa nào?"
-    - text: "Mình cần biết bạn quan tâm ngành cụ thể nào hoặc khoa nào để tra cứu điểm chuẩn."
-    - text: "Bạn có thể cho mình biết tên ngành hoặc khoa bạn muốn tra cứu điểm không?"
-
-  utter_hoi_loai_xet_tuyen:
-    - text: "Bạn muốn tra cứu điểm theo phương thức nào? (THPT, SAT, ACT, HSA, TSA, APT, tài năng, xét tuyển kết hợp, học bạ, thi đánh giá năng lực)"
-    - text: "PTIT có các phương thức xét tuyển: THPT, SAT, ACT, tài năng, học bạ... Bạn quan tâm phương thức nào?"
 
   utter_tam_biet:
     - text: "Tạm biệt bạn! Chúc bạn một ngày tốt lành!"
@@ -248,7 +223,7 @@ responses:
   utter_tra_cuu_khai_niem_nghien_cuu_khoa_hoc:
     - text: "Nghiên cứu khoa học (NCKH) là hoạt động tìm tòi, khám phá bản chất, quy luật của sự vật, hiện tượng; phát triển nhận thức về thế giới tự nhiên và xã hội; sáng tạo giải pháp, công nghệ, sản phẩm mới phục vụ đời sống."
     - text: "NCKH là quá trình khám phá tri thức mới thông qua các phương pháp khoa học, nhằm giải quyết các vấn đề thực tiễn hoặc mở rộng hiểu biết của con người."
-    - text: "Nghiên cứu khoa học giúp sinh viên phát triển tư duy phản biện, kỹ năng giải quyết vấn đề và khả năng sáng tạo thông qua việc thực hiện các đề tài nghiên cứu chuyên sâu."
+    - text: "Nghiên cứu khoa học phát triển tư duy phản biện, kỹ năng giải quyết vấn đề và khả năng sáng tạo thông qua việc thực hiện các đề tài nghiên cứu chuyên sâu."
 
   utter_tra_cuu_dieu_kien_nghien_cuu_khoa_hoc:
     - text: "Điều kiện tham gia NCKH:\n- Sinh viên từ năm 2 trở lên\n- GPA từ 2.0 trở lên\n- Có giảng viên hướng dẫn\n- Đăng ký đề tài qua hệ thống\n- Tham gia khóa học an toàn lab (nếu có)"
@@ -280,10 +255,6 @@ responses:
     - text: "Thông tin liên hệ lab:\n👨‍💼 Quản lý: ThS. Nguyễn Văn A\n📧 Email: lab.dientu@ptit.edu.vn\n📞 Điện thoại: 024.1234.5680\n⏰ Giờ làm: 8h-17h (T2-T6)\n📍 Vị trí: Tầng 3, nhà A1"
     - text: "Liên hệ lab Điện tử:\n• Người phụ trách: ThS. Nguyễn Văn A\n• Email: lab.dientu@ptit.edu.vn\n• ĐT: 024 1234 5680\n• Giờ: 8h00-17h00 T2-T6\n• Địa chỉ: Tầng 3, tòa A1"
 
-  utter_hoi_ve_nu_gioi_trong_ky_thuat:
-    - text: "Nữ giới hoàn toàn phù hợp với ngành kỹ thuật! Hiện nay có rất nhiều nữ sinh viên xuất sắc trong các ngành Điện tử, Tự động hóa, Vi mạch. Công việc kỹ thuật hiện đại không nặng nhọc, tập trung vào trí tuệ và sáng tạo."
-    - text: "Nữ giới ngày càng thành công trong lĩnh vực kỹ thuật! Các ngành như Điện tử, Tự động hóa rất phù hợp với sự tỉ mỉ, sáng tạo của nữ. Tỷ lệ nữ sinh viên kỹ thuật đang tăng lên hàng năm."
-    - text: "Kỹ thuật không phân biệt giới tính! Nữ giới có nhiều lợi thế trong các ngành đòi hỏi sự tỉ mỉ, sáng tạo như thiết kế vi mạch, lập trình hệ thống nhúng. Rất nhiều cựu nữ sinh viên PTIT đang thành công trong ngành."
 
   utter_hoi_danh_sach_cau_lac_bo:
     - text: "Các CLB nổi bật tại Học viện:\n- CLB Robotics và AI\n- CLB Lập trình PTIT\n- CLB Điện tử - Viễn thông\n- CLB Nghiên cứu Khoa học\n- CLB Tiếng Anh\n- CLB Văn nghệ, Thể thao\n- CLB Tình nguyện"
@@ -296,9 +267,9 @@ responses:
     - text: "Gợi ý CLB theo ngành:\n• Tự động hóa → CLB Robotics & AI\n• Điện tử → CLB Điện tử Viễn thông\n• Vi mạch → CLB Nghiên cứu KH\n• Tất cả → CLB Lập trình để rèn kỹ năng coding"
 
   utter_ktx_co_khong:
-    - text: "Có, Học viện có ký túc xá cho sinh viên. KTX được trang bị đầy đủ tiện nghi, wifi, điều hòa, khu vực sinh hoạt chung. Sinh viên năm nhất được ưu tiên đăng ký."
+    - text: "Học viện có ký túc xá cho sinh viên. KTX được trang bị đầy đủ tiện nghi, wifi, điều hòa, khu vực sinh hoạt chung. Sinh viên năm nhất được ưu tiên đăng ký."
     - text: "Chắc chắn rồi! PTIT có ký túc xá khang trang với đầy đủ tiện nghi: wifi, điều hòa, khu vực sinh hoạt chung. SV năm nhất được ưu tiên ở KTX."
-    - text: "Có bạn nhé! KTX PTIT rất tiện nghi với wifi, máy lạnh, phòng sinh hoạt chung. Tân sinh viên sẽ được ưu tiên trong đăng ký."
+    - text: " KTX PTIT rất tiện nghi với wifi, máy lạnh, phòng sinh hoạt chung. Tân sinh viên sẽ được ưu tiên trong đăng ký."
 
   utter_ktx_dang_ky:
     - text: "Cách đăng ký KTX:\n1. Đăng ký online qua cổng thông tin sinh viên\n2. Nộp hồ sơ (CMND, ảnh 3x4, đơn đăng ký)\n3. Đóng phí KTX theo quy định\n4. Nhận giấy xác nhận và bàn giao phòng\nThời gian đăng ký: Trước mỗi học kỳ 2 tuần"
@@ -310,9 +281,9 @@ responses:
     - text: "Giá KTX:\n🏠 Phòng 4 người: 800k/tháng\n🏠 Phòng 6 người: 600k/tháng\n💡 Bao gồm điện, nước, wifi\n📅 Đóng theo học kỳ\n🤝 Hỗ trợ SV hoàn cảnh khó khăn"
     - text: "Chi phí ở KTX:\n• Phòng 4: 800.000đ/tháng\n• Phòng 6: 600.000đ/tháng\n• Đã gồm điện nước internet\n• Thanh toán theo học kỳ\n• Có chính sách hỗ trợ đặc biệt"
   utter_hoi_hoc_phi_chung:
-    - text: "Học phí tại Học viện dao động từ 18-25 triệu đồng/năm tùy ngành học. Học phí được thu theo tín chỉ, mỗi tín chỉ khoảng 300.000 - 450.000đ. Học viện có nhiều chính sách hỗ trợ và học bổng cho sinh viên."
-    - text: "Mức học phí PTIT:\n💰 18-25 triệu/năm (tùy ngành)\n💰 300.000-450.000đ/tín chỉ\n💵 Thu theo tín chỉ\n🎓 Nhiều học bổng hỗ trợ"
-    - text: "Thông tin học phí:\n• Trung bình: 18-25 triệu/năm\n• Mỗi tín chỉ: 300-450k\n• Hình thức thu: Theo tín chỉ\n• Hỗ trợ: Nhiều loại học bổng\n• Chính sách: Trả góp, giảm học phí"
+    - text: "Học phí tại Học viện dao động từ 25-55 triệu đồng/năm tùy ngành học. Học phí được thu theo tín chỉ, mỗi tín chỉ khoảng 700.000 - 1.500.000đ. Học viện có nhiều chính sách hỗ trợ và học bổng cho sinh viên."
+    - text: "Mức học phí PTIT:\n💰 25-55 triệu/năm (tùy ngành)\n💰 700.000-1.500.000đ/tín chỉ\n💵 Thu theo tín chỉ\n🎓 Nhiều học bổng hỗ trợ"
+    - text: "Thông tin học phí:\n• Trung bình: 25-55 triệu/năm\n• Mỗi tín chỉ: 700-1.500k\n• Hình thức thu: Theo tín chỉ\n• Hỗ trợ: Nhiều loại học bổng\n• Chính sách: Trả góp, giảm học phí"
 
   utter_hoi_hoc_bong_chung:
     - text: "Học viện có nhiều loại học bổng:\n- Học bổng khuyến khích học tập\n- Học bổng cho sinh viên xuất sắc\n- Học bổng do doanh nghiệp tài trợ\n- Học bổng hỗ trợ sinh viên khó khăn\nGiá trị từ 2-10 triệu đồng/học kỳ."
@@ -418,6 +389,55 @@ responses:
 
       Chất lượng đào tạo được khẳng định qua nhiều thế hệ sinh viên thành công.
         
+
+  utter_hoi_ma_truong:
+    - text: |
+        Mã trường của Học viện Công nghệ Bưu chính Viễn thông (PTIT) là:
+        - Cơ sở phía Bắc: BVH
+        - Cơ sở phía Nam: BVS
+
+        Khi đăng ký nguyện vọng đại học trên hệ thống của Bộ Giáo dục và Đào tạo, thí sinh cần chọn đúng mã theo cơ sở dự định theo học.
+
+    - text: |
+        PTIT có hai mã trường khác nhau tùy theo cơ sở đào tạo:
+        - Phía Bắc: BVH
+        - Phía Nam: BVS
+
+        Em nhớ chọn đúng mã khi điền nguyện vọng để đảm bảo hồ sơ được ghi nhận chính xác nhé.
+
+  utter_hoi_dieu_kien_hoc_bong:
+    - text: |
+        Chính sách học bổng tuyển sinh của PTIT năm 2025:
+
+        1. Học bổng toàn phần (tối đa 250 triệu đồng/suất)
+        - Dành cho thí sinh đạt từ 28,5 điểm trở lên (không tính ưu tiên) trong kỳ thi THPT.
+        - Hoặc đạt giải Khuyến khích trở lên trong kỳ thi Học sinh giỏi quốc gia các môn Toán, Vật lý, Tin học.
+        - Điều kiện duy trì: Điểm trung bình chung tích lũy hằng năm đạt loại Giỏi trở lên.
+
+        2. Học bổng bán phần
+        - Dành cho thí sinh đạt từ 28,0 điểm trở lên.
+        - Giá trị học bổng tương đương 50% học phí toàn khóa.
+
+        3. Học bổng đặc biệt (tới 500 triệu đồng)
+        - Dành cho thí sinh có từ 29,0 điểm trở lên hoặc đạt giải cao cấp quốc gia/quốc tế.
+        - Bao gồm toàn bộ học phí và hỗ trợ nghiên cứu, khởi nghiệp.
+
+        4. Học bổng khuyến khích học tập dành cho sinh viên đang học
+        - Áp dụng cho sinh viên có GPA từ 3.2/4.0 trở lên và điểm rèn luyện loại Khá trở lên.
+        - Xét theo từng học kỳ, dựa trên kết quả học tập và rèn luyện.
+
+        Tổng giá trị học bổng PTIT cấp trong năm 2025 là hơn 41 tỷ đồng.
+
+    - text: |
+        Để nhận được học bổng PTIT
+        Cụ thể:
+        - Nếu em đạt từ 28,5 điểm trở lên hoặc có giải học sinh giỏi quốc gia, em có thể nhận học bổng toàn phần trị giá đến 250 triệu đồng.
+        - Từ 28,0 điểm trở lên có thể nhận học bổng bán phần, tương đương 50% học phí.
+        - Trên 29 điểm hoặc có giải cao hơn sẽ có cơ hội học bổng đặc biệt tới 500 triệu đồng.
+        - Khi đã học tại trường, nếu giữ GPA trên 3.2 và điểm rèn luyện loại Khá trở lên thì vẫn được xét học bổng khuyến khích học tập mỗi học kỳ.
+
+        Thông tin chi tiết được đăng tải công khai tại: https://tuyensinh.ptit.edu.vn
+
 
 session_config:
   session_expiration_time: 60
